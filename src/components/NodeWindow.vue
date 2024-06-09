@@ -1,11 +1,12 @@
 <!-- Setting up a two-way bind between the MainWindow and NodeWindow over the shoWindow variable, which will control if the NodeWindow is in view, and for which node -->
 <script setup>
     const modelValue = defineModel();
+    const classInactive = "inactive";   // Used to switch the class of the node window on the click of the close button
 
     const props = defineProps({
         nodeType: String,
         nodeName: String,
-        modelValue: {
+        showWindow: {
             type: String,
             required: true
         }
@@ -13,10 +14,11 @@
 </script>
 
 <template>
-    <div id="nodeWindow" >
+    <div id="nodeWindow" :class="modelValue">
         <div class="windowHeader">
             <img src='../assets/close_icon.svg' 
-                class="closeButton"/>
+                class="closeButton"
+                @click="$emit('update:modelValue', classInactive)"/>
             <h2 class="windowTitle"> {{ nodeName }} </h2>
             <img src="../assets/yellow_circle.svg" class="nodeImg" />
 
@@ -67,7 +69,6 @@ export default {
     name: 'NodeWindow',
 }
 
-const classInactive = "inactive";   // Used to switch the class of the node window on the click of the close button
 
 </script>
 
@@ -77,7 +78,6 @@ const classInactive = "inactive";   // Used to switch the class of the node wind
     #nodeWindow {
         position: absolute;
         bottom: 0;
-        right: -3vw;
         background-color: lightgrey;
         width: 35%;
         height: 100%;
@@ -86,7 +86,12 @@ const classInactive = "inactive";   // Used to switch the class of the node wind
         border-radius: 5%;
         transition: 0.4s
     }
-
+    .active {
+        right: -3vw;
+    }
+    .inactive {
+        right: -40vw;
+    }
     .windowHeader {
         width: 90%;
         height: 15%;

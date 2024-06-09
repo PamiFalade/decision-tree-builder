@@ -8,12 +8,15 @@
 
 <template>
     <div id='body'>
-        <NodeWindow nodeType="Chance" nodeName="Largest Machine" />
+        <button id="testButton" @click="showWindow='active'">Open Window</button>
+        <NodeWindow v-model="showWindow" nodeType="Chance" nodeName="Largest Machine" />
     </div>
 </template>
 
 <script>
     import NodeWindow from './NodeWindow.vue';
+
+    
 
     const placeholderData = [
         {
@@ -40,7 +43,7 @@
         name: 'MainWindow',
         components: {
             NodeWindow
-        }
+        },
     }
 
 </script>
@@ -55,5 +58,11 @@
         flex-direction: row;
     }
 
+    #testButton {
+        background-color: white;
+        width: 150px;
+        height: 100px;
+        border: solid 2px black;
+    }
 
 </style>
