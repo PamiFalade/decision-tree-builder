@@ -3,7 +3,7 @@
     <div id="mainTaskBar">
         <div id="taskBarComponents">
             <div class="imgBtn">
-                <img src="../assets/clear_icon.png"/>
+                <img src="../assets/clear_icon.svg"/>
             </div>
 
             <h2>{{ title }}</h2>
@@ -19,7 +19,7 @@
             </div>
 
             <div class="imgBtn">
-                <img class="imgBtn" src="../assets/save_icon.png"/>
+                <img class="imgBtn" src="../assets/save_icon.svg"/>
             </div>
         </div>
     </div>
