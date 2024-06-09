@@ -8,12 +8,12 @@
 
 <template>
     <div id='body'>
-        <!-- <NodeWindow v-model="showWindow" nodeType="Chance" nodeName="Largest Machine" /> -->
+        <NodeWindow nodeType="Chance" nodeName="Largest Machine" />
     </div>
 </template>
 
 <script>
-    // import NodeWindow from './NodeWindow.vue';
+    import NodeWindow from './NodeWindow.vue';
 
     const placeholderData = [
         {
