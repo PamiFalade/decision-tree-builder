@@ -1,20 +1,20 @@
 <template>
   <div id="mainPage">
     <TaskBar title="Decision Tree #1"/>
-    <!-- <MainWindow /> -->
+    <MainWindow />
   </div>
 </template>
 
 <script>
 
   import TaskBar from './components/TaskBar.vue';
-  // import MainWindow from './components/MainWindow.vue';
+  import MainWindow from './components/MainWindow.vue';
 
   export default {
     name: 'App',
     components: {
       TaskBar,
-      // MainWindow
+      MainWindow,
     }
   }
 </script>
