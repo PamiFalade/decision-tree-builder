@@ -10,45 +10,47 @@
             nodeChildren: Array,
         },
         showWindow: {
-            type: String,
+            type: Boolean,
             required: true
         }
     });
 </script>
 
 <template>
-    <div id="nodeWindow" :class="showWindow">
-        <div class="windowHeader">
-            <img src='../assets/close_icon.svg' 
-                class="closeButton"
-                @click="$emit('update:showWindow', classInactive)"/>
-            <h2 class="windowTitle"> {{ selectedNode.nodeName }} </h2>
-            <img src="../assets/yellow_circle.svg" class="nodeImg" />
+    <Transition>
+        <div id="nodeWindow" v-if="showWindow" >
+            <div class="windowHeader">
+                <img src='../assets/close_icon.svg' 
+                    class="closeButton"
+                    @click="$emit('update:showWindow', false)"/>
+                <h2 class="windowTitle"> {{ selectedNode.nodeName }} </h2>
+                <img src="../assets/yellow_circle.svg" class="nodeImg" />
+
+            </div>
+
+            <div class="windowBody">
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Type</th>
+                        <th>Name</th>
+                        <th>EV</th>
+                        <th>p</th>
+                    </tr>
+                    <tr v-for="(childNode, index) in selectedNode.nodeChildren">
+                        <td>{{ index + 1 }}</td>
+                        <td>{{ childNode.nodeType }}</td>
+                        <td>{{ childNode.nodeName }}</td>
+                        <td>{{ childNode.expectedValue }}</td>
+                        <td>{{ childNode.probability }}</td>
+                    </tr>
+                </table>
+
+                <button id="addNodeButton">Add Nodes</button>
+            </div>
 
         </div>
-
-        <div class="windowBody">
-            <table>
-                <tr>
-                    <th>#</th>
-                    <th>Type</th>
-                    <th>Name</th>
-                    <th>EV</th>
-                    <th>p</th>
-                </tr>
-                <tr v-for="(childNode, index) in selectedNode.nodeChildren">
-                    <td>{{ index + 1 }}</td>
-                    <td>{{ childNode.nodeType }}</td>
-                    <td>{{ childNode.nodeName }}</td>
-                    <td>{{ childNode.expectedValue }}</td>
-                    <td>{{ childNode.probability }}</td>
-                </tr>
-            </table>
-
-            <button id="addNodeButton">Add Nodes</button>
-        </div>
-
-    </div>
+    </Transition>
 </template>
 
 
@@ -67,6 +69,7 @@ export default {
     #nodeWindow {
         position: absolute;
         bottom: 0;
+        right: -3vw;
         background-color: lightgrey;
         width: 35%;
         height: 100%;
@@ -75,12 +78,22 @@ export default {
         border-radius: 5%;
         transition: 0.4s
     }
-    .active {
-        right: -3vw;
+    /* Slide-in and slide-out animation for nodeWindow */
+    .v-enter-from {
+        translate: 150vw 0;
     }
-    .inactive {
-        right: -40vw;
+    .v-enter-to {
+        translate: 97vw 0;
     }
+    .v-leave-from {
+        translate: 97vw 0;
+    }
+    .v-leave-to {
+        translate: 150vw 0;
+    }
+    /* End lide-in and slide-out animation for nodeWindow */
+
+
     .windowHeader {
         width: 90%;
         height: 15%;

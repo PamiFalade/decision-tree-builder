@@ -2,7 +2,7 @@
 <script setup>
     import { ref } from 'vue';
 
-    const showWindow = ref('inactive');
+    const showWindow = ref(false);
 
     const selectedNode = ref({
         nodeType: "chance",
@@ -40,7 +40,7 @@
 
 <template>
     <div id='body'>
-        <button id="testButton" @click="showWindow='active'">Open Window</button>
+        <button id="testButton" @click="showWindow=true">Open Window</button>
         <NodeWindow v-model:showWindow="showWindow" v-model:selectedNode="selectedNode" />
     </div>
 </template>
