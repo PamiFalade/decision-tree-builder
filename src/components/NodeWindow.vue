@@ -4,8 +4,11 @@
     const classInactive = "inactive";   // Used to switch the class of the node window on the click of the close button
 
     const props = defineProps({
-        nodeType: String,
-        nodeName: String,
+        selectedNode: {
+            nodeType: String,
+            nodeName: String,
+            nodeChildren: Array,
+        },
         showWindow: {
             type: String,
             required: true
@@ -14,12 +17,12 @@
 </script>
 
 <template>
-    <div id="nodeWindow" :class="modelValue">
+    <div id="nodeWindow" :class="showWindow">
         <div class="windowHeader">
             <img src='../assets/close_icon.svg' 
                 class="closeButton"
-                @click="$emit('update:modelValue', classInactive)"/>
-            <h2 class="windowTitle"> {{ nodeName }} </h2>
+                @click="$emit('update:showWindow', classInactive)"/>
+            <h2 class="windowTitle"> {{ selectedNode.nodeName }} </h2>
             <img src="../assets/yellow_circle.svg" class="nodeImg" />
 
         </div>
@@ -33,26 +36,12 @@
                     <th>EV</th>
                     <th>p</th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td>Terminal</td>
-                    <td>High Demand</td>
-                    <td>$300</td>
-                    <td>0.2</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Terminal</td>
-                    <td>Medium Demand</td>
-                    <td>$50</td>
-                    <td>0.5</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>Terminal</td>
-                    <td>Low Demand</td>
-                    <td>($100)</td>
-                    <td>0.3</td>
+                <tr v-for="(childNode, index) in selectedNode.nodeChildren">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ childNode.nodeType }}</td>
+                    <td>{{ childNode.nodeName }}</td>
+                    <td>{{ childNode.expectedValue }}</td>
+                    <td>{{ childNode.probability }}</td>
                 </tr>
             </table>
 

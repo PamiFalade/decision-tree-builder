@@ -4,40 +4,49 @@
 
     const showWindow = ref('inactive');
 
+    const selectedNode = ref({
+        nodeType: "chance",
+        nodeName: "Selected Node #1",
+        nodeChildren: [
+                        {
+                            nodeType: "Terminal",
+                            nodeName: "High Demand",
+                            expectedValue: "$300",
+                            probability: "0.2"
+                        },
+                        {
+                            nodeType: "Terminal",
+                            nodeName: "Medium Demand",
+                            expectedValue: "$50",
+                            probability: "0.5"
+                        },
+                        {
+                            nodeType: "Terminal",
+                            nodeName: "Low Demand",
+                            expectedValue: "($100)",
+                            probability: "0.2"
+                        },
+                        {
+                            nodeType: "Terminal",
+                            nodeName: "Zero Demand",
+                            expectedValue: "($500)",
+                            probability: "0.1"
+                        }
+                    ],
+    })
+
+
 </script>
 
 <template>
     <div id='body'>
         <button id="testButton" @click="showWindow='active'">Open Window</button>
-        <NodeWindow v-model="showWindow" nodeType="Chance" nodeName="Largest Machine" />
+        <NodeWindow v-model:showWindow="showWindow" v-model:selectedNode="selectedNode" />
     </div>
 </template>
 
 <script>
     import NodeWindow from './NodeWindow.vue';
-
-    
-
-    const placeholderData = [
-        {
-            nodeType: "Terminal",
-            nodeName: "High Demand",
-            expectedValue: "$300",
-            probability: "0.2"
-        },
-        {
-            nodeType: "Terminal",
-            nodeName: "Medium Demand",
-            expectedValue: "$50",
-            probability: "0.5"
-        },
-        {
-            nodeType: "Terminal",
-            nodeName: "Low Demand",
-            expectedValue: "($100)",
-            probability: "0.3"
-        }
-    ];
 
     export default {
         name: 'MainWindow',
