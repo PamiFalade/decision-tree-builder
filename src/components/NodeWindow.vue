@@ -9,20 +9,15 @@
             nodeName: String,
             nodeChildren: Array,
         },
-        showWindow: {
-            type: Boolean,
-            required: true
-        }
     });
 </script>
 
 <template>
-    <Transition>
-        <div id="nodeWindow" v-if="showWindow" >
+        <div id="nodeWindow">
             <div class="windowHeader">
                 <img src='../assets/close_icon.svg' 
                     class="closeButton"
-                    @click="$emit('update:showWindow', false)"/>
+                    @click="closeWindow"/>
                 <h2 class="windowTitle"> {{ selectedNode.nodeName }} </h2>
                 <img src="../assets/yellow_circle.svg" class="nodeImg" />
 
@@ -37,7 +32,7 @@
                         <th>EV</th>
                         <th>p</th>
                     </tr>
-                    <tr v-for="(childNode, index) in selectedNode.nodeChildren">
+                    <tr v-for="(childNode, index) in selectedNode.nodeChildren" :key="index">
                         <td>{{ index + 1 }}</td>
                         <td>{{ childNode.nodeType }}</td>
                         <td>{{ childNode.nodeName }}</td>
@@ -50,7 +45,6 @@
             </div>
 
         </div>
-    </Transition>
 </template>
 
 
@@ -58,6 +52,13 @@
 
 export default {
     name: 'NodeWindow',
+    components: {
+    },
+    methods: {
+        closeWindow(){
+            this.$emit('closeNodeWindow');
+        }
+    }
 }
 
 
@@ -78,20 +79,6 @@ export default {
         border-radius: 5%;
         transition: 0.4s
     }
-    /* Slide-in and slide-out animation for nodeWindow */
-    .v-enter-from {
-        translate: 150vw 0;
-    }
-    .v-enter-to {
-        translate: 97vw 0;
-    }
-    .v-leave-from {
-        translate: 97vw 0;
-    }
-    .v-leave-to {
-        translate: 150vw 0;
-    }
-    /* End lide-in and slide-out animation for nodeWindow */
 
 
     .windowHeader {

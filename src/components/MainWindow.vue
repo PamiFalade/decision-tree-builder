@@ -2,8 +2,6 @@
 <script setup>
     import { ref } from 'vue';
 
-    const showWindow = ref(false);
-
     const selectedNode = ref({
         nodeType: "chance",
         nodeName: "Selected Node #1",
@@ -33,16 +31,17 @@
                             probability: "0.1"
                         }
                     ],
-    })
-
+    });
 
 </script>
 
 <template>
-    <div id='body'>
-        <button id="testButton" @click="showWindow=true">Open Window</button>
-        <NodeWindow v-model:showWindow="showWindow" v-model:selectedNode="selectedNode" />
-    </div>
+    <body>
+        <button id="testButton" @click="toggleShowNodeWindow">Open Window</button>
+        <Transition>
+            <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
+        </Transition>
+    </body>
 </template>
 
 <script>
@@ -51,13 +50,23 @@
     export default {
         name: 'MainWindow',
         components: {
-            NodeWindow
+            NodeWindow,
         },
+        data() {
+            return {
+                showNodeWindow: false
+            }
+        },
+        methods: {
+            toggleShowNodeWindow() {
+                this.showNodeWindow = !this.showNodeWindow;
+            } 
+        }
     }
 
 </script>
 
-<style>
+<style scoped>
 
     #body {
         position: relative;
@@ -66,6 +75,21 @@
         display: flex;
         flex-direction: row;
     }
+
+     /* Slide-in and slide-out animation for nodeWindow */
+     .v-enter-from {
+        translate: 150vw 0;
+    }
+    .v-enter-to {
+        translate: 97vw 0;
+    }
+    .v-leave-from {
+        translate: 97vw 0;
+    }
+    .v-leave-to {
+        translate: 150vw 0;
+    }
+    /* End lide-in and slide-out animation for nodeWindow */
 
     #testButton {
         background-color: white;
