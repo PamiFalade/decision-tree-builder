@@ -36,7 +36,9 @@
 </script>
 
 <template>
-    <body>
+     <body>
+        <Tree id="decisionTree" :decisionTree="decisionTree"/>
+
         <button id="testButton" @click="toggleShowNodeWindow">Open Window</button>
         <Transition>
             <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
@@ -47,14 +49,53 @@
 <script>
     import NodeWindow from './NodeWindow.vue';
 
+    import { applyReactInVue } from 'veaury';
+    import DecisionTree from './ReactD3Tree';
+
     export default {
         name: 'MainWindow',
         components: {
             NodeWindow,
+            Tree: applyReactInVue(DecisionTree),
         },
         data() {
             return {
-                showNodeWindow: false
+                showNodeWindow: false,
+                decisionTree: {
+                    name: 'CEO',
+                    children: [
+                    {
+                        name: 'Manager',
+                        attributes: {
+                        department: 'Production',
+                        },
+                        children: [
+                        {
+                            name: 'Foreman',
+                            attributes: {
+                            department: 'Fabrication',
+                            },
+                            children: [
+                            {
+                                name: 'Worker',
+                            },
+                            ],
+                        },
+                        {
+                            name: 'Foreman',
+                            attributes: {
+                            department: 'Assembly',
+                            },
+                            children: [
+                            {
+                                name: 'Worker',
+                            },
+                            ],
+                        },
+                        ],
+                    },
+                    ],
+                }
             }
         },
         methods: {
