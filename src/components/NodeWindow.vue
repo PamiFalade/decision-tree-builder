@@ -7,7 +7,7 @@
         selectedNode: {
             nodeType: String,
             nodeName: String,
-            nodeChildren: Array,
+            children: Array,
         },
     });
 </script>
@@ -32,7 +32,7 @@
                         <th>EV</th>
                         <th>p</th>
                     </tr>
-                    <tr v-for="(childNode, index) in selectedNode.nodeChildren" :key="index">
+                    <tr v-for="(childNode, index) in selectedNode.children" :key="index">
                         <td>{{ index + 1 }}</td>
                         <td>{{ childNode.nodeType }}</td>
                         <td>{{ childNode.nodeName }}</td>

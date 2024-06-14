@@ -1,43 +1,6 @@
-<!-- Setting up a two-way bind between the MainWindow and NodeWindow over the shoWindow variable, which will control if the NodeWindow is in view, and for which node -->
-<script setup>
-    import { ref } from 'vue';
-
-    const selectedNode = ref({
-        nodeType: "chance",
-        nodeName: "Selected Node #1",
-        nodeChildren: [
-                        {
-                            nodeType: "Terminal",
-                            nodeName: "High Demand",
-                            expectedValue: "$300",
-                            probability: "0.2"
-                        },
-                        {
-                            nodeType: "Terminal",
-                            nodeName: "Medium Demand",
-                            expectedValue: "$50",
-                            probability: "0.5"
-                        },
-                        {
-                            nodeType: "Terminal",
-                            nodeName: "Low Demand",
-                            expectedValue: "($100)",
-                            probability: "0.2"
-                        },
-                        {
-                            nodeType: "Terminal",
-                            nodeName: "Zero Demand",
-                            expectedValue: "($500)",
-                            probability: "0.1"
-                        }
-                    ],
-    });
-
-</script>
-
 <template>
      <body>
-        <Tree id="decisionTree" :decisionTree="decisionTree"/>
+        <Tree id="decisionTree" :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode"/>
 
         <button id="testButton" @click="toggleShowNodeWindow">Open Window</button>
         <Transition>
@@ -61,34 +24,64 @@
         data() {
             return {
                 showNodeWindow: false,
+                selectedNode: {},
                 decisionTree: {
                     name: 'CEO',
+                    attributes: {
+                        type: "root",
+                        expectedValue: 10,
+                        probability: 1.0,
+                    },
                     children: [
                     {
                         name: 'Manager',
                         attributes: {
-                        department: 'Production',
+                            type: "chance",
+                            expectedValue: 11,
+                            probability: 0.9,
                         },
                         children: [
                         {
                             name: 'Foreman',
                             attributes: {
-                            department: 'Fabrication',
+                                type: "chance",
+                                expectedValue: 12,
+                                probability: 0.8,
                             },
                             children: [
                             {
                                 name: 'Worker',
+                                attributes: {
+                                    type: "terminal",
+                                    expectedValue: 13,
+                                    probability: 0.7,
+                                }
+                            },
+                            {
+                                name: 'Worker 2',
+                                attributes: {
+                                    type: "terminal",
+                                    expectedValue: 13.5,
+                                    probability: 0.65,
+                                }
                             },
                             ],
                         },
                         {
                             name: 'Foreman',
                             attributes: {
-                            department: 'Assembly',
+                                type: "chance",
+                                expectedValue: 14,
+                                probability: 0.6,
                             },
                             children: [
                             {
                                 name: 'Worker',
+                                attributes: {
+                                    type: "terminal",
+                                    expectedValue: 15,
+                                    probability: 0.5,
+                                },
                             },
                             ],
                         },
@@ -101,7 +94,24 @@
         methods: {
             toggleShowNodeWindow() {
                 this.showNodeWindow = !this.showNodeWindow;
-            } 
+            }, 
+            updateSelectedNode(node) {
+                console.log(node);
+                this.selectedNode = {
+                nodeName: node.data.name,
+                nodeType: node.data.attributes.type,
+                expectedValue: node.data.attributes.expectedValue,
+                probability: node.data.attributes.probability,
+                children: node.children === undefined ? [] : node.children.map((childNode) => { 
+                                                                                return {
+                                                                                    nodeName: childNode.data.name,
+                                                                                    nodeType: childNode.data.attributes.type,
+                                                                                    expectedValue: childNode.data.attributes.expectedValue,
+                                                                                    probability: childNode.data.attributes.probability,
+                                                                                }})
+                };
+                this.toggleShowNodeWindow;
+            },
         }
     }
 
