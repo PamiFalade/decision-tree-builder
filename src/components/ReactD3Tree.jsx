@@ -6,6 +6,7 @@ import './ReactD3TreeStyles.css';
 const DecisionTree = ({ decisionTree, updateSelectedNode }) => {
 
   const handleOnNodeClick = (node) => {
+    console.log(node);
     updateSelectedNode(node);
   }
 
