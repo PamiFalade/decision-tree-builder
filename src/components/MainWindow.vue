@@ -110,7 +110,7 @@
                                                                                     probability: childNode.data.attributes.probability,
                                                                                 }})
                 };
-                this.toggleShowNodeWindow;
+                this.toggleShowNodeWindow();
             },
         }
     }
