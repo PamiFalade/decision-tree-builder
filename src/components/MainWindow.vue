@@ -96,7 +96,6 @@
                 this.showNodeWindow = !this.showNodeWindow;
             }, 
             updateSelectedNode(node) {
-                console.log(node);
                 this.selectedNode = {
                 nodeName: node.data.name,
                 nodeType: node.data.attributes.type,
