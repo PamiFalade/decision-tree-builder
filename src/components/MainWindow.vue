@@ -2,7 +2,6 @@
      <body>
         <Tree id="decisionTree" :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode"/>
         <NodePopup v-show="showNodePopup" @toggleNodeWindow="toggleShowNodeWindow" :xPos="this.selectedNode.xPos" :yPos="this.selectedNode.yPos" />
-        <button id="testButton" @click="toggleShowNodeWindow">Open Window</button>
         <Transition>
             <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
         </Transition>
@@ -153,12 +152,5 @@
         translate: 150vw 0;
     }
     /* End lide-in and slide-out animation for nodeWindow */
-
-    #testButton {
-        background-color: white;
-        width: 150px;
-        height: 100px;
-        border: solid 2px black;
-    }
 
 </style>
