@@ -1,5 +1,5 @@
 <template>
-    <div class="popups">
+    <div class="popups" :style="cssProps" >
         <img src="../assets/close_icon_red.svg" />
         <div id="popupNodeButtons">
             <img src="../assets/red_square.svg" />
@@ -25,8 +25,8 @@
         computed: {
             cssProps(){
                 return{
-                    '--x-Coordinate': (this.xPos  + 64) + "px",
-                    '--y-Coordinate': (this.yPos  + 376) + "px"
+                    '--x-Coordinate': (this.yPos  + 64 - 30) + "px",    // It's this way because of how the d3 tree API does not change the coordinate system for horizontal trees
+                    '--y-Coordinate': (this.xPos  + 376 - 40) + "px"
                 }
             }
         }
@@ -35,24 +35,13 @@
 
 
 <style scoped>
-.dot{
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: greenyellow;
-    position: absolute;
-    top: 376px;
-    left: 64px;
-    /* top: var(--x-Coordinate); */
-    /* left: var(--y-Coordinate); */
-}
 
 .popups {
     width: 160px;
     height: 25px;
     position: absolute;
-    top: 335px;
-    left: 30px;
+    top: var(--y-Coordinate);
+    left: var(--x-Coordinate);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
