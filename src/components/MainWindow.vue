@@ -1,7 +1,7 @@
 <template>
      <body>
         <Tree id="decisionTree" :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode"/>
-        <NodePopup />
+        <NodePopup :xPos="this.selectedNode.xPos" :yPos="this.selectedNode.yPos" />
         <button id="testButton" @click="toggleShowNodeWindow">Open Window</button>
         <Transition>
             <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
@@ -37,62 +37,62 @@
                         xPos: 0,
                         yPos: 0
                     },
-                    // children: [
-                    // {
-                    //     name: 'Manager',
-                    //     attributes: {
-                    //         type: "chance",
-                    //         expectedValue: 11,
-                    //         probability: 0.9,
-                    //     },
-                    //     children: [
-                    //     {
-                    //         name: 'Foreman',
-                    //         attributes: {
-                    //             type: "chance",
-                    //             expectedValue: 12,
-                    //             probability: 0.8,
-                    //         },
-                    //         children: [
-                    //         {
-                    //             name: 'Worker',
-                    //             attributes: {
-                    //                 type: "terminal",
-                    //                 expectedValue: 13,
-                    //                 probability: 0.7,
-                    //             }
-                    //         },
-                    //         {
-                    //             name: 'Worker 2',
-                    //             attributes: {
-                    //                 type: "terminal",
-                    //                 expectedValue: 13.5,
-                    //                 probability: 0.65,
-                    //             }
-                    //         },
-                    //         ],
-                    //     },
-                    //     {
-                    //         name: 'Foreman',
-                    //         attributes: {
-                    //             type: "chance",
-                    //             expectedValue: 14,
-                    //             probability: 0.6,
-                    //         },
-                    //         children: [
-                    //         {
-                    //             name: 'Worker',
-                    //             attributes: {
-                    //                 type: "terminal",
-                    //                 expectedValue: 15,
-                    //                 probability: 0.5,
-                    //             },
-                    //         },
-                    //         ],
-                    //     },
-                    //     ],
-                    // },
-                    // ],
+                    children: [
+                    {
+                        name: 'Manager',
+                        attributes: {
+                            type: "chance",
+                            expectedValue: 11,
+                            probability: 0.9,
+                        },
+                        children: [
+                        {
+                            name: 'Foreman',
+                            attributes: {
+                                type: "chance",
+                                expectedValue: 12,
+                                probability: 0.8,
+                            },
+                            children: [
+                            {
+                                name: 'Worker',
+                                attributes: {
+                                    type: "terminal",
+                                    expectedValue: 13,
+                                    probability: 0.7,
+                                }
+                            },
+                            {
+                                name: 'Worker 2',
+                                attributes: {
+                                    type: "terminal",
+                                    expectedValue: 13.5,
+                                    probability: 0.65,
+                                }
+                            },
+                            ],
+                        },
+                        {
+                            name: 'Foreman',
+                            attributes: {
+                                type: "chance",
+                                expectedValue: 14,
+                                probability: 0.6,
+                            },
+                            children: [
+                            {
+                                name: 'Worker',
+                                attributes: {
+                                    type: "terminal",
+                                    expectedValue: 15,
+                                    probability: 0.5,
+                                },
+                            },
+                            ],
+                        },
+                        ],
+                    },
+                    ],
                 }
             }
         },
@@ -106,14 +106,16 @@
                 nodeType: node.data.attributes.type,
                 expectedValue: node.data.attributes.expectedValue,
                 probability: node.data.attributes.probability,
+                xPos: node.x,
+                yPos: node.y,
                 children: node.children === undefined ? [] : node.children.map((childNode) => { 
                                                                                 return {
                                                                                     nodeName: childNode.data.name,
                                                                                     nodeType: childNode.data.attributes.type,
                                                                                     expectedValue: childNode.data.attributes.expectedValue,
                                                                                     probability: childNode.data.attributes.probability,
-                                                                                    xPos: node.x,
-                                                                                    yPos: node.y
+                                                                                    xPos: childNode.x,
+                                                                                    yPos: childNode.y
                                                                                 }})
                 };
                 this.toggleShowNodeWindow();

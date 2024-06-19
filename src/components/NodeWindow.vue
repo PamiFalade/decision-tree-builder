@@ -15,7 +15,7 @@
 <template>
         <div id="nodeWindow">
             <div class="windowHeader">
-                <img src='../assets/close_icon.svg' 
+                <img src='../assets/close_icon_black.svg' 
                     class="closeButton"
                     @click="closeWindow"/>
                 <h2 class="windowTitle"> {{ selectedNode.nodeName }} </h2>
