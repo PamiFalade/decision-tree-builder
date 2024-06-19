@@ -1,5 +1,4 @@
 <template>
-    <div class="dot"></div>
     <div class="popups">
         <img src="../assets/close_icon_red.svg" />
         <div id="popupNodeButtons">
@@ -7,7 +6,7 @@
             <img src="../assets/yellow_circle.svg" />
             <img src="../assets/green_triangle.svg" />
             <div class="vLine"></div>
-            <img src="../assets/info_icon.svg" />
+            <img src="../assets/info_icon.svg" @click="toggleNodeWindow"/>
         </div>
     </div>
 </template>
@@ -17,6 +16,11 @@
         props: {
             xPos: Number,
             yPos: Number
+        },
+        methods: {
+            toggleNodeWindow() {
+                this.$emit('toggleNodeWindow');
+            }
         },
         computed: {
             cssProps(){

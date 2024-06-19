@@ -1,7 +1,7 @@
 <template>
      <body>
         <Tree id="decisionTree" :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode"/>
-        <NodePopup :xPos="this.selectedNode.xPos" :yPos="this.selectedNode.yPos" />
+        <NodePopup v-show="showNodePopup" @toggleNodeWindow="toggleShowNodeWindow" :xPos="this.selectedNode.xPos" :yPos="this.selectedNode.yPos" />
         <button id="testButton" @click="toggleShowNodeWindow">Open Window</button>
         <Transition>
             <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
@@ -27,6 +27,7 @@
         data() {
             return {
                 showNodeWindow: false,
+                showNodePopup: false,
                 selectedNode: {},
                 decisionTree: {
                     name: 'CEO',
@@ -100,6 +101,9 @@
             toggleShowNodeWindow() {
                 this.showNodeWindow = !this.showNodeWindow;
             }, 
+            toggleShowNodePopup() {
+                this.showNodePopup = !this.showNodePopup;
+            }, 
             updateSelectedNode(node) {
                 this.selectedNode = {
                 nodeName: node.data.name,
@@ -118,7 +122,7 @@
                                                                                     yPos: childNode.y
                                                                                 }})
                 };
-                this.toggleShowNodeWindow();
+                this.toggleShowNodePopup();
             },
         }
     }
