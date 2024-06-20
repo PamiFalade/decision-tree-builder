@@ -1,12 +1,12 @@
 <template>
     <div class="popups" :style="cssProps" >
-        <img src="../assets/close_icon_red.svg" />
+        <img src="../assets/close_icon_red.svg" class="imgButton" />
         <div id="popupNodeButtons">
-            <img src="../assets/red_square.svg" />
-            <img src="../assets/yellow_circle.svg" />
-            <img src="../assets/green_triangle.svg" />
+            <img src="../assets/red_square.svg" class="imgButton" @click="addDecisionChildNode" />
+            <img src="../assets/yellow_circle.svg" class="imgButton"  />
+            <img src="../assets/green_triangle.svg" class="imgButton" />
             <div class="vLine"></div>
-            <img src="../assets/info_icon.svg" @click="toggleNodeWindow"/>
+            <img src="../assets/info_icon.svg" @click="toggleNodeWindow" class="imgButton" />
         </div>
     </div>
 </template>
@@ -20,7 +20,16 @@
         methods: {
             toggleNodeWindow() {
                 this.$emit('toggleNodeWindow');
-            }
+            },
+            addDecisionChildNode() {
+                this.$emit('addDecisionNode');
+            },
+            addChanceChildNode() {
+                this.$emit('addChanceNode');
+            },
+            addTerminalChildNode() {
+                this.$emit('addTerminalNode');
+            },
         },
         computed: {
             cssProps(){
@@ -36,45 +45,48 @@
 
 <style scoped>
 
-.popups {
-    width: 160px;
-    height: 25px;
-    position: absolute;
-    top: var(--y-Coordinate);
-    left: var(--x-Coordinate);
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
+    .popups {
+        width: 160px;
+        height: 25px;
+        position: absolute;
+        top: var(--y-Coordinate);
+        left: var(--x-Coordinate);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.popups > * {
-    height: 80%;
-}
+    .popups > * {
+        height: 80%;
+    }
 
-#popupNodeButtons {
-    height: 100%;
-    width: 70%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: lightgrey;
-    border: 1px solid black;
-    border-radius: 7%;
-    padding: 2px;
-}
+    #popupNodeButtons {
+        height: 100%;
+        width: 70%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background-color: lightgrey;
+        border: 1px solid black;
+        border-radius: 7%;
+        padding: 2px;
+    }
 
-.vLine {
-    height: 90%;
-    width: 1px;
-    background-color: black;
-    border: solid 1px black;
-}
+    .vLine {
+        height: 90%;
+        width: 1px;
+        background-color: black;
+        border: solid 1px black;
+    }
 
-#popupNodeButtons > * {
-    height: 80%;
-    margin-left: 3px;
-}
+    #popupNodeButtons > * {
+        height: 80%;
+        margin-left: 3px;
+    }
 
+    .imgButton:hover {
+        cursor: pointer;
+    }
 </style>

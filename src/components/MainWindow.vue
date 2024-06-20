@@ -1,7 +1,14 @@
 <template>
+    <header>
+        <p>{{ bfs }}</p>
+    </header>
      <body>
         <Tree id="decisionTree" :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode"/>
-        <NodePopup v-show="showNodePopup" @toggleNodeWindow="toggleShowNodeWindow" :xPos="this.selectedNode.xPos" :yPos="this.selectedNode.yPos" />
+        <NodePopup v-show="showNodePopup" 
+                    @toggleNodeWindow="toggleShowNodeWindow" 
+                    @addDecisionNode="addDecisionNode"
+                    :xPos="this.selectedNode.xPos" 
+                    :yPos="this.selectedNode.yPos" />
         <Transition>
             <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
         </Transition>
@@ -30,6 +37,7 @@
                 selectedNode: {},
                 decisionTree: {
                     name: 'CEO',
+                    id: 1,
                     attributes: {
                         type: "root",
                         expectedValue: 10,
@@ -40,6 +48,7 @@
                     children: [
                     {
                         name: 'Manager',
+                        id: 2,
                         attributes: {
                             type: "chance",
                             expectedValue: 11,
@@ -47,7 +56,8 @@
                         },
                         children: [
                         {
-                            name: 'Foreman',
+                            name: 'Foreman 1',
+                            id: 3,
                             attributes: {
                                 type: "chance",
                                 expectedValue: 12,
@@ -55,7 +65,8 @@
                             },
                             children: [
                             {
-                                name: 'Worker',
+                                name: 'Worker 1',
+                                id: 5,
                                 attributes: {
                                     type: "terminal",
                                     expectedValue: 13,
@@ -64,6 +75,7 @@
                             },
                             {
                                 name: 'Worker 2',
+                                id: 6,
                                 attributes: {
                                     type: "terminal",
                                     expectedValue: 13.5,
@@ -73,7 +85,8 @@
                             ],
                         },
                         {
-                            name: 'Foreman',
+                            name: 'Foreman 2',
+                            id: 4,
                             attributes: {
                                 type: "chance",
                                 expectedValue: 14,
@@ -81,7 +94,8 @@
                             },
                             children: [
                             {
-                                name: 'Worker',
+                                name: 'Worker 3',
+                                id: 7,
                                 attributes: {
                                     type: "terminal",
                                     expectedValue: 15,
@@ -92,8 +106,19 @@
                         },
                         ],
                     },
+                    {
+                        name: 'Manager 2',
+                        id: 12,
+                        attributes: {
+                            type: "chance",
+                            expectedValue: 11,
+                            probability: 0.9,
+                        },
+                        children: []
+                    }
                     ],
-                }
+                },
+                numberOfNodes: 1
             }
         },
         methods: {
@@ -122,6 +147,68 @@
                                                                                 }})
                 };
                 this.toggleShowNodePopup();
+            },
+        },
+        computed: {
+            bfs(){
+                let idToFind = 5;
+                let nodeToFind = null;
+                let queue = [...this.decisionTree.children];
+                let traversal = [];
+
+                for(let i=0; i<queue.length; i++){
+                    if(queue[i].id === idToFind){
+                        nodeToFind = queue[i];
+                        break;
+                    }
+                    traversal.push(queue[i].name);
+                    queue[i].children?.forEach(child => {
+                        queue.push(child);
+                    });
+                }
+                return nodeToFind;
+                
+            },
+            addDecisionNode() {
+                // Step 1: Find the selected node in the tree
+
+                // Step 2: Add nodes to that node's children array
+                if(this.selectedNode.children) {
+                    this.selectedNode.children.push({
+                        nodeName: "New Decision " + this.selectedNode.children.length + 1,
+                        nodeType: "Decision",
+                        expectedValue: 0,
+                        probability: undefined,
+                        children: []
+                    });
+                    console.log(this.selectedNode);
+                }
+            },
+
+            addChanceNode() {
+                if(this.selectedNode.children){
+                    this.selectedNode.children.push({
+                        nodeName: "New Chance " + this.selectedNode.children.length + 1,
+                        nodeType: "Chance",
+                        expectedValue: 0,
+                        probability: 1.0/this.selectedNode.children.length,
+                        children: []
+                    });
+                    console.log(this.selectedNode);
+                }
+            },
+
+            addTerminalNode() {
+                if(this.selectedNode.children){
+                    this.selectedNode.children.push({
+                        nodeName: "New Terminal " + this.selectedNode.children.length + 1,
+                        nodeType: "Terminal",
+                        expectedValue: 0,
+                        probability: 1.0/this.selectedNode.children.length,
+                        children: undefined
+                    });
+                    console.log(this.selectedNode);
+                }
             },
         }
     }
