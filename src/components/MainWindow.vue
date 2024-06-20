@@ -1,9 +1,6 @@
 <template>
-    <header>
-        <p>{{ bfs }}</p>
-    </header>
      <body>
-        <Tree id="decisionTree" :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode"/>
+        <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :dataKey="d3TreeDataKey"/>
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
@@ -34,6 +31,7 @@
             return {
                 showNodeWindow: false,
                 showNodePopup: false,
+                d3TreeDataKey: '1',
                 selectedNode: {},
                 decisionTree: {
                     name: 'CEO',
@@ -42,8 +40,6 @@
                         type: "root",
                         expectedValue: 10,
                         probability: 1.0,
-                        xPos: 0,
-                        yPos: 0
                     },
                     children: [
                     {
@@ -129,26 +125,38 @@
                 this.showNodePopup = !this.showNodePopup;
             }, 
             updateSelectedNode(node) {
-                this.selectedNode = {
-                nodeName: node.data.name,
-                nodeType: node.data.attributes.type,
-                expectedValue: node.data.attributes.expectedValue,
-                probability: node.data.attributes.probability,
-                xPos: node.x,
-                yPos: node.y,
-                children: node.children === undefined ? [] : node.children.map((childNode) => { 
-                                                                                return {
-                                                                                    nodeName: childNode.data.name,
-                                                                                    nodeType: childNode.data.attributes.type,
-                                                                                    expectedValue: childNode.data.attributes.expectedValue,
-                                                                                    probability: childNode.data.attributes.probability,
-                                                                                    xPos: childNode.x,
-                                                                                    yPos: childNode.y
-                                                                                }})
-                };
+                // this.selectedNode = {
+                // nodeName: node.data.name,
+                // nodeID: node.data.id,
+                // nodeType: node.data.attributes.type,
+                // expectedValue: node.data.attributes.expectedValue,
+                // probability: node.data.attributes.probability,
+                // xPos: node.x,
+                // yPos: node.y,
+                // children: node.children === undefined ? [] : node.children.map((childNode) => { 
+                //                                                                 return {
+                //                                                                     nodeName: childNode.data.name,
+                //                                                                     nodeID: childNode.data.id,
+                //                                                                     nodeType: childNode.data.attributes.type,
+                //                                                                     expectedValue: childNode.data.attributes.expectedValue,
+                //                                                                     probability: childNode.data.attributes.probability,
+                //                                                                     xPos: childNode.x,
+                //                                                                     yPos: childNode.y
+                //                                                                 }})
+                // };
+                this.selectedNode = this.bfs(node.data.id);
+                this.selectedNode.xPos = node.x;
+                this.selectedNode.yPos = node.y;
+                console.log(this.selectedNode);
+                
                 this.toggleShowNodePopup();
             },
+
             bfs(idToFind){
+                if(idToFind === 1){
+                    return this.decisionTree;
+                }
+
                 let nodeToFind = null;
                 let queue = [];
                 for(let i=0; i<this.decisionTree.children.length; i++){
@@ -166,22 +174,27 @@
                         queue.push(child);
                     });
                 }
+                console.log(nodeToFind);
                 return nodeToFind;
-                
             },
-            addDecisionNode() {
-                // Step 1: Find the selected node in the tree
-                console.log(this.selectedNode);
 
-                // Step 2: Add nodes to that node's children array
-                this.selectedNode.children.push({
-                    nodeName: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
-                    nodeType: "Decision",
-                    expectedValue: 0,
-                    probability: undefined,
+            reRenderTree() {
+                this.dataKey = `${parseInt(this.dataKey) + 1}`;
+            },
+
+            addDecisionNode() {
+               this.selectedNode.children.push({
+                    name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
+                    nodeID: `${this.selectedNode.nodeID}` + this.selectedNode.children.length,
+                    attributes: {
+                        type: "Decision",
+                        expectedValue: 0,
+                        probability: 0,
+                    },
                     children: []
                 });
-                console.log(this.selectedNode);
+                this.reRenderTree();
+                console.log(this.decisionTree);
             },
 
             // addChanceNode() {
@@ -210,8 +223,6 @@
             //     }
             // },
         },
-        computed: {
-        }
     }
 
 </script>

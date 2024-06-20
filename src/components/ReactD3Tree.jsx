@@ -3,7 +3,7 @@ import Tree from 'react-d3-tree';
 import './ReactD3TreeStyles.css';
 
 
-const DecisionTree = ({ decisionTree, updateSelectedNode }) => {
+const DecisionTree = ({ decisionTree, updateSelectedNode, dataKey }) => {
 
   const handleOnNodeClick = (node) => {
     console.log(node);
@@ -13,7 +13,8 @@ const DecisionTree = ({ decisionTree, updateSelectedNode }) => {
   return (
       // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
       <div id="treeWrapper" style={{ width: '100vw', height: '100vh',}}>
-        <Tree data={decisionTree} 
+        <Tree data={decisionTree}
+          dataKey={dataKey} 
           rootNodeClassName="node__root"
           branchNodeClassName="node__branch"
           leafNodeClassName="node__leaf"
