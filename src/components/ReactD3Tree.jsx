@@ -3,22 +3,22 @@ import Tree from 'react-d3-tree';
 import './ReactD3TreeStyles.css';
 
 
-const DecisionTree = ({ decisionTree, updateSelectedNode, dataKey }) => {
+// DecisionTree component, which acts as a wrapper for the react-d3-tree package that was imported via npm
+// Normally, this component would be the top-most component in the DOM. This is because a lot of state changes happen here,
+// and you want the state, and notifications of any changes, to be "lifted up".
+// However, because of the circumstances (this must be a Vue project; it is not allowed to be a React project. And there is no 
+// Vue.js 3 package for d3-tree), I was forced towards having this component be a child component. Hence, the workarounds with triggering
+// functions to re-render the tree from the parent component (the Vue3 app)/
+const DecisionTree = ({ decisionTree, updateSelectedNode }) => {
 
 
   // State variable for the tree data
   const [treeData, setTreeData] = useState(decisionTree);
 
-  const [updateCount, setUpdateCount] = useState(0);
-  const increaseUpdateCount = () => {
-    setUpdateCount(updateCount + 1);
-  }
-
   // Node that is clicked becomes the selected node. This means that this will be the node of focus when 
   // adding children nodes, deleting a node, and showing node data in the NodeWindow
   const handleOnNodeClick = (node) => {
     updateSelectedNode(node);
-    setUpdateCount(updateCount+1);
     console.log(decisionTree);
   }
 
@@ -26,7 +26,7 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, dataKey }) => {
     useEffect(() => {
       console.log(decisionTree);
       setTreeData({...decisionTree});
-    }, [decisionTree, updateCount]);
+    }, [JSON.stringify(decisionTree)]);
 
   return (
       // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
