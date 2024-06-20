@@ -31,7 +31,7 @@
             return {
                 showNodeWindow: false,
                 showNodePopup: false,
-                d3TreeDataKey: '1',
+                d3TreeDataKey: 4,
                 selectedNode: {},
                 decisionTree: {
                     name: 'CEO',
@@ -125,29 +125,9 @@
                 this.showNodePopup = !this.showNodePopup;
             }, 
             updateSelectedNode(node) {
-                // this.selectedNode = {
-                // nodeName: node.data.name,
-                // nodeID: node.data.id,
-                // nodeType: node.data.attributes.type,
-                // expectedValue: node.data.attributes.expectedValue,
-                // probability: node.data.attributes.probability,
-                // xPos: node.x,
-                // yPos: node.y,
-                // children: node.children === undefined ? [] : node.children.map((childNode) => { 
-                //                                                                 return {
-                //                                                                     nodeName: childNode.data.name,
-                //                                                                     nodeID: childNode.data.id,
-                //                                                                     nodeType: childNode.data.attributes.type,
-                //                                                                     expectedValue: childNode.data.attributes.expectedValue,
-                //                                                                     probability: childNode.data.attributes.probability,
-                //                                                                     xPos: childNode.x,
-                //                                                                     yPos: childNode.y
-                //                                                                 }})
-                // };
                 this.selectedNode = this.bfs(node.data.id);
                 this.selectedNode.xPos = node.x;
                 this.selectedNode.yPos = node.y;
-                console.log(this.selectedNode);
                 
                 this.toggleShowNodePopup();
             },
@@ -174,12 +154,12 @@
                         queue.push(child);
                     });
                 }
-                console.log(nodeToFind);
+
                 return nodeToFind;
             },
 
             reRenderTree() {
-                this.dataKey = `${parseInt(this.dataKey) + 1}`;
+                this.d3TreeDataKey++;
             },
 
             addDecisionNode() {
@@ -194,7 +174,6 @@
                     children: []
                 });
                 this.reRenderTree();
-                console.log(this.decisionTree);
             },
 
             // addChanceNode() {
