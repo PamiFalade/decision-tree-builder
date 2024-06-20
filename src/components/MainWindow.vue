@@ -148,12 +148,12 @@
                 };
                 this.toggleShowNodePopup();
             },
-        },
-        computed: {
-            bfs(){
-                let idToFind = 5;
+            bfs(idToFind){
                 let nodeToFind = null;
-                let queue = [...this.decisionTree.children];
+                let queue = [];
+                for(let i=0; i<this.decisionTree.children.length; i++){
+                    queue.push(this.decisionTree.children[i]);
+                }
                 let traversal = [];
 
                 for(let i=0; i<queue.length; i++){
@@ -171,45 +171,46 @@
             },
             addDecisionNode() {
                 // Step 1: Find the selected node in the tree
+                console.log(this.selectedNode);
 
                 // Step 2: Add nodes to that node's children array
-                if(this.selectedNode.children) {
-                    this.selectedNode.children.push({
-                        nodeName: "New Decision " + this.selectedNode.children.length + 1,
-                        nodeType: "Decision",
-                        expectedValue: 0,
-                        probability: undefined,
-                        children: []
-                    });
-                    console.log(this.selectedNode);
-                }
+                this.selectedNode.children.push({
+                    nodeName: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
+                    nodeType: "Decision",
+                    expectedValue: 0,
+                    probability: undefined,
+                    children: []
+                });
+                console.log(this.selectedNode);
             },
 
-            addChanceNode() {
-                if(this.selectedNode.children){
-                    this.selectedNode.children.push({
-                        nodeName: "New Chance " + this.selectedNode.children.length + 1,
-                        nodeType: "Chance",
-                        expectedValue: 0,
-                        probability: 1.0/this.selectedNode.children.length,
-                        children: []
-                    });
-                    console.log(this.selectedNode);
-                }
-            },
+            // addChanceNode() {
+            //     if(this.selectedNode.children){
+            //         this.selectedNode.children.push({
+            //             nodeName: "New Chance " + this.selectedNode.children.length + 1,
+            //             nodeType: "Chance",
+            //             expectedValue: 0,
+            //             probability: 1.0/this.selectedNode.children.length,
+            //             children: []
+            //         });
+            //         console.log(this.selectedNode);
+            //     }
+            // },
 
-            addTerminalNode() {
-                if(this.selectedNode.children){
-                    this.selectedNode.children.push({
-                        nodeName: "New Terminal " + this.selectedNode.children.length + 1,
-                        nodeType: "Terminal",
-                        expectedValue: 0,
-                        probability: 1.0/this.selectedNode.children.length,
-                        children: undefined
-                    });
-                    console.log(this.selectedNode);
-                }
-            },
+            // addTerminalNode() {
+            //     if(this.selectedNode.children){
+            //         this.selectedNode.children.push({
+            //             nodeName: "New Terminal " + this.selectedNode.children.length + 1,
+            //             nodeType: "Terminal",
+            //             expectedValue: 0,
+            //             probability: 1.0/this.selectedNode.children.length,
+            //             children: undefined
+            //         });
+            //         console.log(this.selectedNode);
+            //     }
+            // },
+        },
+        computed: {
         }
     }
 
