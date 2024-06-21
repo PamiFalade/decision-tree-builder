@@ -1,12 +1,12 @@
 <template>
     <div class="popups" :style="cssProps" >
-        <img src="../assets/close_icon_red.svg" class="imgButton" />
+        <img src="../assets/close_icon_red.svg" class="imgButton" @click="deleteChildNode" />
         <div id="popupNodeButtons">
             <img src="../assets/red_square.svg" class="imgButton" @click="addDecisionChildNode" />
             <img src="../assets/yellow_circle.svg" class="imgButton" @click="addChanceChildNode" />
             <img src="../assets/green_triangle.svg" class="imgButton" @click="addTerminalChildNode" />
             <div class="vLine"></div>
-            <img src="../assets/info_icon.svg" @click="toggleNodeWindow" class="imgButton" />
+            <img src="../assets/info_icon.svg" class="imgButton" @click="toggleNodeWindow" />
         </div>
     </div>
 </template>
@@ -30,6 +30,9 @@
             addTerminalChildNode() {
                 this.$emit('addTerminalNode');
             },
+            deleteChildNode() {
+                this.$emit('deleteNode');
+            }
         },
         computed: {
             cssProps(){

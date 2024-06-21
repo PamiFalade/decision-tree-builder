@@ -6,6 +6,7 @@
                     @addDecisionNode="addDecisionNode"
                     @addChanceNode="addChanceNode"
                     @addTerminalNode="addTerminalNode"
+                    @deleteNode="deleteNode"
                     :xPos="this.selectedNode.xPos" 
                     :yPos="this.selectedNode.yPos" />
         <Transition>
@@ -34,6 +35,7 @@
                 showNodeWindow: false,
                 showNodePopup: false,
                 selectedNode: {},
+                selectedNodeParent: {},
                 decisionTree: {
                     name: 'CEO',
                     id: 1,
@@ -122,17 +124,21 @@
             toggleShowNodeWindow() {
                 this.showNodeWindow = !this.showNodeWindow;
             }, 
+
             displayNodePopup() {
                 this.showNodePopup = true;
-            }, 
+            },
+
             hideNodePopup() {
                 this.showNodePopup = false;
             },
+
             updateSelectedNode(node) {
                 this.selectedNode = this.bfs(node.data.id);
                 this.selectedNode.xPos = node.x;
                 this.selectedNode.yPos = node.y;
                 
+                this.selectedNodeParent = this.bfs(node.parent.data.id);    // Find the node's parent as well, so that we can delete the selectedNode if needed
                 this.displayNodePopup();
             },
 
@@ -165,7 +171,7 @@
             addDecisionNode() {
                this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
-                    nodeID: `${this.selectedNode.nodeID}` + this.selectedNode.children.length,
+                    id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Decision",
                         expectedValue: 0,
@@ -178,7 +184,7 @@
             addChanceNode() {
                this.selectedNode.children.push({
                     name: "New Chance " + parseInt(this.selectedNode.children.length) + 2,
-                    nodeID: `${this.selectedNode.nodeID}` + this.selectedNode.children.length,
+                    id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Chance",
                         expectedValue: 0,
@@ -191,7 +197,7 @@
             addTerminalNode() {
                this.selectedNode.children.push({
                     name: "New Terminal " + parseInt(this.selectedNode.children.length) + 1,
-                    nodeID: `${this.selectedNode.nodeID}` + this.selectedNode.children.length,
+                    id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Terminal",
                         expectedValue: 0,
@@ -200,6 +206,16 @@
                     children: []
                 });
             },
+
+            deleteNode() {
+                this.selectedNodeParent.children = this.selectedNodeParent.children.filter(node => node.id != this.selectedNode.id);
+                this.selectedNode = {
+                    xPos: 0,
+                    yPos: 0
+                };
+                this.hideNodePopup();
+                console.log(this.selectedNodeParent);
+            }
         },
     }
 

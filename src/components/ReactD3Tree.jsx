@@ -18,13 +18,11 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup }) => {
   // adding children nodes, deleting a node, and showing node data in the NodeWindow
   const handleOnNodeClick = (node) => {
     updateSelectedNode(node);
-    console.log(decisionTree);
+    console.log(node);
   }
   
   const handleOnScreenClick = (e) => {
-    console.log(e);
     if(e.target.nodeName != 'circle'){
-      console.log("yass");
       hideNodePopup();
     }
   }
