@@ -1,6 +1,6 @@
 <template>
      <body>
-        <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :dataKey="d3TreeDataKey"/>
+        <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
@@ -31,7 +31,6 @@
             return {
                 showNodeWindow: false,
                 showNodePopup: false,
-                d3TreeDataKey: 4,
                 selectedNode: {},
                 decisionTree: {
                     name: 'CEO',
@@ -121,15 +120,18 @@
             toggleShowNodeWindow() {
                 this.showNodeWindow = !this.showNodeWindow;
             }, 
-            toggleShowNodePopup() {
-                this.showNodePopup = !this.showNodePopup;
+            displayNodePopup() {
+                this.showNodePopup = true;
             }, 
+            hideNodePopup() {
+                this.showNodePopup = false;
+            },
             updateSelectedNode(node) {
                 this.selectedNode = this.bfs(node.data.id);
                 this.selectedNode.xPos = node.x;
                 this.selectedNode.yPos = node.y;
                 
-                this.toggleShowNodePopup();
+                this.displayNodePopup();
             },
 
             bfs(idToFind){
@@ -158,10 +160,6 @@
                 return nodeToFind;
             },
 
-            reRenderTree() {
-                this.d3TreeDataKey++;
-            },
-
             addDecisionNode() {
                this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
@@ -173,7 +171,6 @@
                     },
                     children: []
                 });
-                this.reRenderTree();
             },
 
             // addChanceNode() {
