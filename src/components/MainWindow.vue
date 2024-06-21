@@ -4,6 +4,8 @@
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
+                    @addChanceNode="addChanceNode"
+                    @addTerminalNode="addTerminalNode"
                     :xPos="this.selectedNode.xPos" 
                     :yPos="this.selectedNode.yPos" />
         <Transition>
@@ -173,31 +175,31 @@
                 });
             },
 
-            // addChanceNode() {
-            //     if(this.selectedNode.children){
-            //         this.selectedNode.children.push({
-            //             nodeName: "New Chance " + this.selectedNode.children.length + 1,
-            //             nodeType: "Chance",
-            //             expectedValue: 0,
-            //             probability: 1.0/this.selectedNode.children.length,
-            //             children: []
-            //         });
-            //         console.log(this.selectedNode);
-            //     }
-            // },
-
-            // addTerminalNode() {
-            //     if(this.selectedNode.children){
-            //         this.selectedNode.children.push({
-            //             nodeName: "New Terminal " + this.selectedNode.children.length + 1,
-            //             nodeType: "Terminal",
-            //             expectedValue: 0,
-            //             probability: 1.0/this.selectedNode.children.length,
-            //             children: undefined
-            //         });
-            //         console.log(this.selectedNode);
-            //     }
-            // },
+            addChanceNode() {
+               this.selectedNode.children.push({
+                    name: "New Chance " + parseInt(this.selectedNode.children.length) + 2,
+                    nodeID: `${this.selectedNode.nodeID}` + this.selectedNode.children.length,
+                    attributes: {
+                        type: "Chance",
+                        expectedValue: 0,
+                        probability: 0,
+                    },
+                    children: []
+                });
+            },
+            
+            addTerminalNode() {
+               this.selectedNode.children.push({
+                    name: "New Terminal " + parseInt(this.selectedNode.children.length) + 1,
+                    nodeID: `${this.selectedNode.nodeID}` + this.selectedNode.children.length,
+                    attributes: {
+                        type: "Terminal",
+                        expectedValue: 0,
+                        probability: 0,
+                    },
+                    children: []
+                });
+            },
         },
     }
 
