@@ -1,14 +1,14 @@
 <template>
      <body>
-        <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :hideNodePopup="hideNodePopup" />
+        <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
                     @addChanceNode="addChanceNode"
                     @addTerminalNode="addTerminalNode"
                     @deleteNode="deleteNode"
-                    :xPos="this.selectedNode.xPos" 
-                    :yPos="this.selectedNode.yPos" />
+                    :xPos="this.xPos" 
+                    :yPos="this.yPos" />
         <Transition>
             <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
         </Transition>
@@ -36,6 +36,8 @@
                 showNodePopup: false,
                 selectedNode: {},
                 selectedNodeParent: {},
+                xPos: 0,
+                yPos: 0,
                 decisionTree: {
                     name: 'CEO',
                     id: 1,
@@ -53,6 +55,7 @@
                             expectedValue: 11,
                             probability: 0.9,
                         },
+                        parentID: undefined,
                         children: [
                         {
                             name: 'Foreman 1',
@@ -70,7 +73,9 @@
                                     type: "Terminal",
                                     expectedValue: 13,
                                     probability: 0.7,
-                                }
+                                },
+                                parentID: undefined,
+
                             },
                             {
                                 name: 'Worker 2',
@@ -79,7 +84,9 @@
                                     type: "Terminal",
                                     expectedValue: 13.5,
                                     probability: 0.65,
-                                }
+                                },
+                                parentID: undefined,
+
                             },
                             ],
                         },
@@ -91,6 +98,7 @@
                                 expectedValue: 14,
                                 probability: 0.6,
                             },
+                            parentID: undefined,
                             children: [
                             {
                                 name: 'Worker 3',
@@ -100,6 +108,7 @@
                                     expectedValue: 15,
                                     probability: 0.5,
                                 },
+                                parentID: undefined,
                             },
                             ],
                         },
@@ -113,13 +122,18 @@
                             expectedValue: 11,
                             probability: 0.9,
                         },
+                        parentID: undefined,
                         children: []
                     }
                     ],
                 },
-                numberOfNodes: 1
             }
         },
+
+        beforeMount() {
+            this.setParentNodes();
+        },
+
         methods: {
             toggleShowNodeWindow() {
                 this.showNodeWindow = !this.showNodeWindow;
@@ -133,16 +147,41 @@
                 this.showNodePopup = false;
             },
 
+            updatePopupCoordinates(xCoord, yCoord){
+                this.xPos = xCoord;
+                this.yPos = yCoord;
+            },
+
             updateSelectedNode(node) {
+                this.selectedNode = this.bfs(node.id);
                 console.log(node);
-                this.selectedNode = this.bfs(node.data.id);
-                this.selectedNode.xPos = node.x;
-                this.selectedNode.yPos = node.y;
                 
-                this.selectedNodeParent = this.bfs(node.parent.data.id);    // Find the node's parent as well, so that we can delete the selectedNode if needed
+                this.selectedNodeParent = this.bfs(node.parentID);    // Find the node's parent as well, so that we can delete the selectedNode if needed
                 this.displayNodePopup();
             },
 
+            // Traverse through the tree breadth-first and set each node's parent using the node ID
+            // Using a reference to the parent node causes an error with the react-d3-tree component
+            setParentNodes() {
+                let queue = [];
+                let traversal = [];
+
+                for(let i=0; i<this.decisionTree.children.length; i++){
+                    this.decisionTree.children[i].parentID = this.decisionTree.id;
+                    queue.push(this.decisionTree.children[i]);
+                }
+
+                for(let i=0; i<queue.length; i++){
+                    traversal.push(`${queue[i].name}, ${queue[i].children?.map(child => child.name)}`);
+                    queue[i].children?.forEach(child => {
+                        child.parentID = queue[i].id
+                        queue.push(child);
+                    });
+                }
+
+            },
+
+            // Used to find nodes by traversing through the tree breadth-first
             bfs(idToFind){
                 if(idToFind === 1){
                     return this.decisionTree;
@@ -211,11 +250,16 @@
             deleteNode() {
                 this.selectedNodeParent.children = this.selectedNodeParent.children.filter(node => node.id != this.selectedNode.id);
                 this.selectedNode = {
-                    xPos: 0,
-                    yPos: 0
+                    name: "",
+                    id: "",
+                    attributes: {
+                        type: "",
+                        expectedValue: 0,
+                        probability: 0,
+                    },
+                    children: []
                 };
                 this.hideNodePopup();
-                console.log(this.selectedNodeParent);
             }
         },
     }

@@ -37,8 +37,8 @@
         computed: {
             cssProps(){
                 return{
-                    '--x-Coordinate': (this.yPos  + 64 - 30) + "px",    // It's this way because of how the d3 tree API does not change the coordinate system for horizontal trees
-                    '--y-Coordinate': (this.xPos  + 376 - 40) + "px"
+                    '--x-Coordinate': (this.xPos - 30) + "px",    // It's this way because of how the d3 tree API does not change the coordinate system for horizontal trees
+                    '--y-Coordinate': (this.yPos - 40) + "px"
                 }
             }
         }

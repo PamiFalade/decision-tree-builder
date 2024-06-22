@@ -8,7 +8,7 @@ import './ReactD3TreeStyles.css';
 // and you want the state, and notifications of any changes, to be "lifted up".
 // However, because of the circumstances (this must be a Vue project; it is not allowed to be a React project. And there is no 
 // Vue.js 3 package for d3-tree), I was forced towards having this component be a child component.
-const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup }) => {
+const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updatePopupCoordinates }) => {
 
 
   // State variable for the tree data
@@ -18,16 +18,18 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup }) => {
   // adding children nodes, deleting a node, and showing node data in the NodeWindow
   const handleOnNodeClick = (node) => {
     updateSelectedNode(node);
-    console.log(node);
   }
-  
-  // When anywhere other than a node is clicked, the Node Popup disappears
+  // Update the click coordinates on every click for when the Node Popup is shown.
+  // When anywhere other than a node is clicked, the Node Popup disappears. 
   const handleOnScreenClick = (e) => {
-    if(e.target.nodeName != 'circle'){
+    updatePopupCoordinates(e.clientX, e.clientY);
+    if(e.target.nodeName != 'circle' && e.target.nodeName != 'rect'){
       hideNodePopup();
     }
   }
-
+  // Returns the appropriate svg element for the node type
+  // The root node is a maroon-colored square, a decision node is a red square, 
+  // a chance node is a yellow circle, and a terminal node is a green triangle.
   const returnNodeShape = (nodeType, nodeDatum) => {
     let nodeShape;
     
@@ -60,7 +62,7 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup }) => {
       </text>
       {nodeDatum.attributes?.expectedValue && (
         <text fill="black" x="20" dy="20" strokeWidth="1">
-          EV: {nodeDatum.attributes?.expectedValue}
+          EV: {nodeDatum.attributes.expectedValue}
         </text>
       )}
     </g>
@@ -75,12 +77,14 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup }) => {
       // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
       <div id="treeWrapper" style={{ width: '100vw', height: '100vh',}} onClick={handleOnScreenClick} >
         <Tree data={treeData}
+          rootNodeClassName="node__root"
+          branchNodeClassName='node__branch'
           pathFunc={"straight"}
           translate={{ x:75, y:300 }}
           collapsible={false}
-          // onNodeClick={(datum) => handleOnNodeClick(datum)}
-
           renderCustomNodeElement={renderSvgNode}
+
+          // onNodeClick={(datum) => handleOnNodeClick(datum)}
           />
       </div>
     );
