@@ -1,0 +1,14 @@
+/* custom-tree.css */
+
+.node__root > circle {
+  fill: red;
+  }
+  
+  .node__branch > circle {
+    content: '../assets/yellow_circle.svg';
+    fill: yellow;
+  }
+  
+  .node__leaf > circle {
+    fill: green;
+  }
