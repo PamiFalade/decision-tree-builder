@@ -40,7 +40,7 @@
                     name: 'CEO',
                     id: 1,
                     attributes: {
-                        type: "root",
+                        type: "Root",
                         expectedValue: 10,
                         probability: 1.0,
                     },
@@ -49,7 +49,7 @@
                         name: 'Manager',
                         id: 2,
                         attributes: {
-                            type: "chance",
+                            type: "Decision",
                             expectedValue: 11,
                             probability: 0.9,
                         },
@@ -58,7 +58,7 @@
                             name: 'Foreman 1',
                             id: 3,
                             attributes: {
-                                type: "chance",
+                                type: "Chance",
                                 expectedValue: 12,
                                 probability: 0.8,
                             },
@@ -67,7 +67,7 @@
                                 name: 'Worker 1',
                                 id: 5,
                                 attributes: {
-                                    type: "terminal",
+                                    type: "Terminal",
                                     expectedValue: 13,
                                     probability: 0.7,
                                 }
@@ -76,7 +76,7 @@
                                 name: 'Worker 2',
                                 id: 6,
                                 attributes: {
-                                    type: "terminal",
+                                    type: "Terminal",
                                     expectedValue: 13.5,
                                     probability: 0.65,
                                 }
@@ -87,7 +87,7 @@
                             name: 'Foreman 2',
                             id: 4,
                             attributes: {
-                                type: "chance",
+                                type: "Chance",
                                 expectedValue: 14,
                                 probability: 0.6,
                             },
@@ -96,7 +96,7 @@
                                 name: 'Worker 3',
                                 id: 7,
                                 attributes: {
-                                    type: "terminal",
+                                    type: "Terminal",
                                     expectedValue: 15,
                                     probability: 0.5,
                                 },
@@ -109,7 +109,7 @@
                         name: 'Manager 2',
                         id: 12,
                         attributes: {
-                            type: "chance",
+                            type: "Chance",
                             expectedValue: 11,
                             probability: 0.9,
                         },
@@ -134,6 +134,7 @@
             },
 
             updateSelectedNode(node) {
+                console.log(node);
                 this.selectedNode = this.bfs(node.data.id);
                 this.selectedNode.xPos = node.x;
                 this.selectedNode.yPos = node.y;

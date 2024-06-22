@@ -21,11 +21,50 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup }) => {
     console.log(node);
   }
   
+  // When anywhere other than a node is clicked, the Node Popup disappears
   const handleOnScreenClick = (e) => {
     if(e.target.nodeName != 'circle'){
       hideNodePopup();
     }
   }
+
+  const returnNodeShape = (nodeType, nodeDatum) => {
+    let nodeShape;
+    
+    if(nodeType === 'Root') { 
+      nodeShape = <rect width="20" height="20" x="-20" y="-8" fill='maroon' onClick={() => { handleOnNodeClick(nodeDatum) }} />
+    }
+
+    else if(nodeType === 'Decision') {
+      nodeShape = <rect width="20" height="20" x="-10" y="-8" fill='red' onClick={() => { handleOnNodeClick(nodeDatum) }} />
+    }
+    
+    else if(nodeType === 'Chance') {
+      nodeShape = <circle r="15" x="-10" fill='yellow' onClick={() => { handleOnNodeClick(nodeDatum) }} />
+    }
+      
+    else if(nodeType === 'Terminal') {
+      nodeShape = <rect width="20" height="20" x="-10" y="-10" fill='green' onClick={() => { handleOnNodeClick(nodeDatum) }} />
+    }
+
+    return nodeShape;
+  }
+
+
+  // Function used to render each of the nodes, based on their type
+  const renderSvgNode = ({ nodeDatum }) => (
+    <g>
+      { returnNodeShape(nodeDatum.attributes?.type, nodeDatum) }
+      <text fill="black" strokeWidth="1" x="20">
+        {nodeDatum.name}
+      </text>
+      {nodeDatum.attributes?.expectedValue && (
+        <text fill="black" x="20" dy="20" strokeWidth="1">
+          EV: {nodeDatum.attributes?.expectedValue}
+        </text>
+      )}
+    </g>
+  );
 
     // useEffect hook to update the treeData when the decisionTree in the MainWindow is updated
     useEffect(() => {
@@ -36,13 +75,13 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup }) => {
       // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
       <div id="treeWrapper" style={{ width: '100vw', height: '100vh',}} onClick={handleOnScreenClick} >
         <Tree data={treeData}
-          rootNodeClassName="node__root"
-          branchNodeClassName="node__branch"
-          leafNodeClassName="node__leaf"
           pathFunc={"straight"}
           translate={{ x:75, y:300 }}
           collapsible={false}
-          onNodeClick={(datum) => handleOnNodeClick(datum)}/>
+          // onNodeClick={(datum) => handleOnNodeClick(datum)}
+
+          renderCustomNodeElement={renderSvgNode}
+          />
       </div>
     );
 }
