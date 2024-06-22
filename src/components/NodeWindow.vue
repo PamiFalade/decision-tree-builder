@@ -5,13 +5,9 @@
 
     const props = defineProps({
         selectedNode: {
-            name: String,
-            attributes: {
-                type: String,
-                expectedValue: Number,
-                probability: Number
-            },
-            children: Array,
+            nodeType: String,
+            nodeName: String,
+            nodeChildren: Array,
         },
     });
 </script>
@@ -19,10 +15,10 @@
 <template>
         <div id="nodeWindow">
             <div class="windowHeader">
-                <img src='../assets/close_icon_black.svg' 
+                <img src='../assets/close_icon.svg' 
                     class="closeButton"
                     @click="closeWindow"/>
-                <h2 class="windowTitle"> {{ selectedNode.name }} </h2>
+                <h2 class="windowTitle"> {{ selectedNode.nodeName }} </h2>
                 <img src="../assets/yellow_circle.svg" class="nodeImg" />
 
             </div>
@@ -36,12 +32,12 @@
                         <th>EV</th>
                         <th>p</th>
                     </tr>
-                    <tr v-for="(childNode, index) in selectedNode.children" :key="index">
+                    <tr v-for="(childNode, index) in selectedNode.nodeChildren" :key="index">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ childNode.attributes.type }}</td>
-                        <td>{{ childNode.name }}</td>
-                        <td>{{ childNode.attributes.expectedValue }}</td>
-                        <td>{{ childNode.attributes.probability }}</td>
+                        <td>{{ childNode.nodeType }}</td>
+                        <td>{{ childNode.nodeName }}</td>
+                        <td>{{ childNode.expectedValue }}</td>
+                        <td>{{ childNode.probability }}</td>
                     </tr>
                 </table>
 
