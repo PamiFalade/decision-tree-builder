@@ -5,8 +5,12 @@
 
     const props = defineProps({
         selectedNode: {
-            nodeType: String,
-            nodeName: String,
+            name: String,
+            attributes: {
+                type: String,
+                expectedValue: Number,
+                probability: Number
+            },
             children: Array,
         },
     });
@@ -18,7 +22,7 @@
                 <img src='../assets/close_icon_black.svg' 
                     class="closeButton"
                     @click="closeWindow"/>
-                <h2 class="windowTitle"> {{ selectedNode.nodeName }} </h2>
+                <h2 class="windowTitle"> {{ selectedNode.name }} </h2>
                 <img src="../assets/yellow_circle.svg" class="nodeImg" />
 
             </div>
@@ -34,10 +38,10 @@
                     </tr>
                     <tr v-for="(childNode, index) in selectedNode.children" :key="index">
                         <td>{{ index + 1 }}</td>
-                        <td>{{ childNode.nodeType }}</td>
-                        <td>{{ childNode.nodeName }}</td>
-                        <td>{{ childNode.expectedValue }}</td>
-                        <td>{{ childNode.probability }}</td>
+                        <td>{{ childNode.attributes.type }}</td>
+                        <td>{{ childNode.name }}</td>
+                        <td>{{ childNode.attributes.expectedValue }}</td>
+                        <td>{{ childNode.attributes.probability }}</td>
                     </tr>
                 </table>
 
