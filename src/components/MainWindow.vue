@@ -147,6 +147,10 @@
         methods: {
             toggleShowNodeWindow() {
                 this.showNodeWindow = !this.showNodeWindow;
+            },
+
+            hideNodeWindow() {
+                this.showNodeWindow = false;
             }, 
 
             displayNodePopup() {
@@ -270,7 +274,7 @@
                     children: []
                 };
                 this.hideNodePopup();
-                this.toggleShowNodeWindow(false);
+                this.hideNodeWindow();
             }
         },
     }

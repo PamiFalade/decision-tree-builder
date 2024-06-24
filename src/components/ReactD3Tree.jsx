@@ -22,7 +22,6 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
   // Update the click coordinates on every click for when the Node Popup is shown.
   // When anywhere other than a node is clicked, the Node Popup disappears. 
   const handleOnScreenClick = (e) => {
-    console.log(e.target);
     updatePopupCoordinates(e.clientX, e.clientY);
     if(e.target.nodeName != 'circle' && e.target.nodeName != 'rect' && e.target.nodeName != 'polygon'){
       hideNodePopup();
