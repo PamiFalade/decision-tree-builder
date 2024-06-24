@@ -1,13 +1,12 @@
 <template>
-    <div class="dot"></div>
-    <div class="popups">
-        <img src="../assets/close_icon_red.svg" />
-        <div id="popupNodeButtons">
-            <img src="../assets/red_square.svg" />
-            <img src="../assets/yellow_circle.svg" />
-            <img src="../assets/green_triangle.svg" />
+    <div class="popups" :style="cssProps" >
+        <img src="../assets/close_icon_red.svg" class="imgButton" v-if="nodeType !='Root'" @click="deleteChildNode" />
+        <div id="popupNodeButtons" v-if="nodeType !='Terminal'">
+            <img src="../assets/red_square.svg" class="imgButton" @click="addDecisionChildNode" />
+            <img src="../assets/yellow_circle.svg" class="imgButton" @click="addChanceChildNode" />
+            <img src="../assets/green_triangle.svg" class="imgButton" @click="addTerminalChildNode" />
             <div class="vLine"></div>
-            <img src="../assets/info_icon.svg" />
+            <img src="../assets/info_icon.svg" class="imgButton" @click="toggleNodeWindow" />
         </div>
     </div>
 </template>
@@ -16,13 +15,31 @@
     export default {
         props: {
             xPos: Number,
-            yPos: Number
+            yPos: Number,
+            nodeType: String
+        },
+        methods: {
+            toggleNodeWindow() {
+                this.$emit('toggleNodeWindow');
+            },
+            addDecisionChildNode() {
+                this.$emit('addDecisionNode');
+            },
+            addChanceChildNode() {
+                this.$emit('addChanceNode');
+            },
+            addTerminalChildNode() {
+                this.$emit('addTerminalNode');
+            },
+            deleteChildNode() {
+                this.$emit('deleteNode');
+            }
         },
         computed: {
             cssProps(){
                 return{
-                    '--x-Coordinate': (this.xPos  + 64) + "px",
-                    '--y-Coordinate': (this.yPos  + 376) + "px"
+                    '--x-Coordinate': (this.xPos - 30) + "px",    // It's this way because of how the d3 tree API does not change the coordinate system for horizontal trees
+                    '--y-Coordinate': (this.yPos - 40) + "px"
                 }
             }
         }
@@ -31,57 +48,49 @@
 
 
 <style scoped>
-.dot{
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background-color: greenyellow;
-    position: absolute;
-    top: 376px;
-    left: 64px;
-    /* top: var(--x-Coordinate); */
-    /* left: var(--y-Coordinate); */
-}
 
-.popups {
-    width: 160px;
-    height: 25px;
-    position: absolute;
-    top: 335px;
-    left: 30px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-}
+    .popups {
+        width: 160px;
+        height: 25px;
+        position: absolute;
+        top: var(--y-Coordinate);
+        left: var(--x-Coordinate);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.popups > * {
-    height: 80%;
-}
+    .popups > * {
+        height: 80%;
+    }
 
-#popupNodeButtons {
-    height: 100%;
-    width: 70%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    background-color: lightgrey;
-    border: 1px solid black;
-    border-radius: 7%;
-    padding: 2px;
-}
+    #popupNodeButtons {
+        height: 100%;
+        width: 70%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        background-color: lightgrey;
+        border: 1px solid black;
+        border-radius: 7%;
+        padding: 2px;
+    }
 
-.vLine {
-    height: 90%;
-    width: 1px;
-    background-color: black;
-    border: solid 1px black;
-}
+    .vLine {
+        height: 90%;
+        width: 1px;
+        background-color: black;
+        border: solid 1px black;
+    }
 
-#popupNodeButtons > * {
-    height: 80%;
-    margin-left: 3px;
-}
+    #popupNodeButtons > * {
+        height: 80%;
+        margin-left: 3px;
+    }
 
+    .imgButton:hover {
+        cursor: pointer;
+    }
 </style>
