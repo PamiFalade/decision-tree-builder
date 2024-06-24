@@ -260,6 +260,7 @@
                     children: []
                 };
                 this.hideNodePopup();
+                this.toggleShowNodeWindow(false);
             }
         },
     }

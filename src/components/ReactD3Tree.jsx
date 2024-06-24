@@ -22,31 +22,34 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
   // Update the click coordinates on every click for when the Node Popup is shown.
   // When anywhere other than a node is clicked, the Node Popup disappears. 
   const handleOnScreenClick = (e) => {
+    console.log(e.target);
     updatePopupCoordinates(e.clientX, e.clientY);
-    if(e.target.nodeName != 'circle' && e.target.nodeName != 'rect'){
+    if(e.target.nodeName != 'circle' && e.target.nodeName != 'rect' && e.target.nodeName != 'polygon'){
       hideNodePopup();
     }
   }
   // Returns the appropriate svg element for the node type
   // The root node is a maroon-colored square, a decision node is a red square, 
   // a chance node is a yellow circle, and a terminal node is a green triangle.
-  const returnNodeShape = (nodeType, nodeDatum) => {
+  const returnNodeShape = (nodeType, nodeInfo) => {
     let nodeShape;
-    
+    let xCoord = nodeInfo.y - (130*nodeInfo.depth + 10*(nodeInfo.depth)); // Depth = 1: -130, Depth = 2: -270, Depth = 3: -410, Depth = 4: -550...
+    let yCoord = nodeInfo.x / 200;
     if(nodeType === 'Root') { 
-      nodeShape = <rect width="20" height="20" x="-20" y="-8" fill='maroon' onClick={() => { handleOnNodeClick(nodeDatum) }} />
+      nodeShape = <rect width="20" height="20" x="-20" y="-8" fill='maroon' />
     }
 
     else if(nodeType === 'Decision') {
-      nodeShape = <rect width="20" height="20" x="-10" y="-8" fill='red' onClick={() => { handleOnNodeClick(nodeDatum) }} />
+      nodeShape = <rect width="20" height="20" x="-10" y="-8" fill='red' />
     }
     
     else if(nodeType === 'Chance') {
-      nodeShape = <circle r="15" x="-10" fill='yellow' onClick={() => { handleOnNodeClick(nodeDatum) }} />
+      nodeShape = <circle r="15" x="-10" fill='yellow' />
     }
       
     else if(nodeType === 'Terminal') {
-      nodeShape = <rect width="20" height="20" x="-10" y="-10" fill='green' onClick={() => { handleOnNodeClick(nodeDatum) }} />
+      let trianglePoints = `${xCoord-10},${yCoord}, ${xCoord+5},${yCoord-10}, ${xCoord+5},${yCoord+10}`;
+      nodeShape = <polygon points={trianglePoints} fill='green'/>
     }
 
     return nodeShape;
@@ -54,9 +57,9 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
 
 
   // Function used to render each of the nodes, based on their type
-  const renderSvgNode = ({ nodeDatum }) => (
-    <g>
-      { returnNodeShape(nodeDatum.attributes?.type, nodeDatum) }
+  const renderSvgNode = ({ hierarchyPointNode, nodeDatum }) => (
+    <g onClick={() => { handleOnNodeClick(nodeDatum) }} >
+      { returnNodeShape(nodeDatum.attributes?.type, hierarchyPointNode) }
       <text fill="black" strokeWidth="1" x="20">
         {nodeDatum.name}
       </text>
