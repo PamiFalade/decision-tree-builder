@@ -1,0 +1,98 @@
+{
+    "treeID": "1234-doremifaso",
+    "title": "Decision Tree #1",
+    "createdDate": "May 31, 2024",
+    "createdBy": "Pamilerin F",
+    "lastModified": "June 24, 2024",
+    "description": "Placeholder data",
+    "decisionTreeNodes": {
+        "name": "CEO",
+        "id": 1,
+        "attributes": {
+            "type": "Root",
+            "expectedValue": 10,
+            "probability": 1.0
+        },
+        "children": [
+            {
+                "name": "Manager",
+                "id": 2,
+                "attributes": {
+                    "type": "Decision",
+                    "expectedValue": 11,
+                    "probability": 0.9
+                },
+                "parentID": null,
+                "children": [
+                    {
+                        "name": "Foreman 1",
+                        "id": 3,
+                        "attributes": {
+                            "type": "Chance",
+                            "expectedValue": 12,
+                            "probability": 0.8
+                        },
+                        "children": [
+                            {
+                                "name": "Worker 1",
+                                "id": 5,
+                                "attributes": {
+                                    "type": "Terminal",
+                                    "expectedValue": 13,
+                                    "probability": 0.7
+                                },
+                                "parentID": null,
+                                "children": []
+                            },
+                            {
+                                "name": "Worker 2",
+                                "id": 6,
+                                "attributes": {
+                                    "type": "Terminal",
+                                    "expectedValue": 13.5,
+                                    "probability": 0.65
+                                },
+                                "parentID": null,
+                                "children": []
+                            }
+                        ]
+                    },
+                    {
+                        "name": "Foreman 2",
+                        "id": 4,
+                        "attributes": {
+                            "type": "Chance",
+                            "expectedValue": 14,
+                            "probability": 0.6
+                        },
+                        "parentID": null,
+                        "children": [
+                            {
+                                "name": "Worker 3",
+                                "id": 7,
+                                "attributes": {
+                                    "type": "Terminal",
+                                    "expectedValue": 15,
+                                    "probability": 0.5
+                                },
+                                "parentID": null,
+                                "children": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "Manager 2",
+                "id": 12,
+                "attributes": {
+                    "type": "Chance",
+                    "expectedValue": 11,
+                    "probability": 0.9
+                },
+                "parentID": null,
+                "children": []
+            }
+        ]
+    }
+}
