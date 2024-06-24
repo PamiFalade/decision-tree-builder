@@ -1,7 +1,7 @@
 <template>
   <div id="mainPage">
-    <TaskBar title="Decision Tree #1"/>
-    <MainWindow />
+    <TaskBar :title="inputData.title"/>
+    <MainWindow :decisionTreeNodes="inputData.decisionTreeNodes" />
   </div>
 </template>
 
@@ -9,12 +9,18 @@
 
   import TaskBar from './components/TaskBar.vue';
   import MainWindow from './components/MainWindow.vue';
+  import json from "./Input_Data.json";
 
   export default {
     name: 'App',
     components: {
       TaskBar,
       MainWindow,
+    },
+    data() {
+      return {
+        inputData: json
+      }
     }
   }
 </script>

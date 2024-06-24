@@ -26,6 +26,18 @@
 
     export default {
         name: 'MainWindow',
+        props: {
+            decisionTreeNodes: {
+                name: String,
+                id: Number,
+                attributes: {
+                    type: String,
+                    expectedValue: Number,
+                    probability: Number
+                },
+                children: Array
+                    }
+        },
         components: {
             NodeWindow,
             Tree: applyReactInVue(DecisionTree),
@@ -48,95 +60,7 @@
                 selectedNodeParent: {},
                 xPos: 0,
                 yPos: 0,
-                decisionTree: {
-                    name: 'CEO',
-                    id: 1,
-                    attributes: {
-                        type: "Root",
-                        expectedValue: 10,
-                        probability: 1.0,
-                    },
-                    children: [
-                    {
-                        name: 'Manager',
-                        id: 2,
-                        attributes: {
-                            type: "Decision",
-                            expectedValue: 11,
-                            probability: 0.9,
-                        },
-                        parentID: undefined,
-                        children: [
-                        {
-                            name: 'Foreman 1',
-                            id: 3,
-                            attributes: {
-                                type: "Chance",
-                                expectedValue: 12,
-                                probability: 0.8,
-                            },
-                            children: [
-                            {
-                                name: 'Worker 1',
-                                id: 5,
-                                attributes: {
-                                    type: "Terminal",
-                                    expectedValue: 13,
-                                    probability: 0.7,
-                                },
-                                parentID: undefined,
-
-                            },
-                            {
-                                name: 'Worker 2',
-                                id: 6,
-                                attributes: {
-                                    type: "Terminal",
-                                    expectedValue: 13.5,
-                                    probability: 0.65,
-                                },
-                                parentID: undefined,
-
-                            },
-                            ],
-                        },
-                        {
-                            name: 'Foreman 2',
-                            id: 4,
-                            attributes: {
-                                type: "Chance",
-                                expectedValue: 14,
-                                probability: 0.6,
-                            },
-                            parentID: undefined,
-                            children: [
-                            {
-                                name: 'Worker 3',
-                                id: 7,
-                                attributes: {
-                                    type: "Terminal",
-                                    expectedValue: 15,
-                                    probability: 0.5,
-                                },
-                                parentID: undefined,
-                            },
-                            ],
-                        },
-                        ],
-                    },
-                    {
-                        name: 'Manager 2',
-                        id: 12,
-                        attributes: {
-                            type: "Chance",
-                            expectedValue: 11,
-                            probability: 0.9,
-                        },
-                        parentID: undefined,
-                        children: []
-                    }
-                    ],
-                },
+                decisionTree: this.decisionTreeNodes,
             }
         },
 
