@@ -1,7 +1,7 @@
 <template>
     <div class="popups" :style="cssProps" >
-        <img src="../assets/close_icon_red.svg" class="imgButton" @click="deleteChildNode" />
-        <div id="popupNodeButtons">
+        <img src="../assets/close_icon_red.svg" class="imgButton" v-if="nodeType !='Root'" @click="deleteChildNode" />
+        <div id="popupNodeButtons" v-if="nodeType !='Terminal'">
             <img src="../assets/red_square.svg" class="imgButton" @click="addDecisionChildNode" />
             <img src="../assets/yellow_circle.svg" class="imgButton" @click="addChanceChildNode" />
             <img src="../assets/green_triangle.svg" class="imgButton" @click="addTerminalChildNode" />
@@ -15,7 +15,8 @@
     export default {
         props: {
             xPos: Number,
-            yPos: Number
+            yPos: Number,
+            nodeType: String
         },
         methods: {
             toggleNodeWindow() {

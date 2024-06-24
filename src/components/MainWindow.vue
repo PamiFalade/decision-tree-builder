@@ -8,7 +8,8 @@
                     @addTerminalNode="addTerminalNode"
                     @deleteNode="deleteNode"
                     :xPos="this.xPos" 
-                    :yPos="this.yPos" />
+                    :yPos="this.yPos"
+                    :nodeType="this.selectedNode.attributes.type" />
         <Transition>
             <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
         </Transition>
@@ -34,7 +35,16 @@
             return {
                 showNodeWindow: false,
                 showNodePopup: false,
-                selectedNode: {},
+                selectedNode: {
+                    name: '',
+                    id: 0,
+                    attributes: {
+                        type: "",
+                        expectedValue: 0,
+                        probability: 0,
+                    },
+                    children: []
+                },
                 selectedNodeParent: {},
                 xPos: 0,
                 yPos: 0,
