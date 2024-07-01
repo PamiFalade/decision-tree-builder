@@ -9,7 +9,7 @@
 
   import TaskBar from './components/TaskBar.vue';
   import MainWindow from './components/MainWindow.vue';
-  import json from "./Input_Data.json";
+  import json from "./data/Input_Data.json";
 
   export default {
     name: 'App',
