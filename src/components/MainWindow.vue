@@ -37,7 +37,8 @@
 
 <template>
     <body>
-        <button id="testButton" @click="toggleShowNodeWindow">Open Window</button>
+        <TreeCanvas />
+        <!-- <button id="testButton" @click="toggleShowNodeWindow">Open Window</button> -->
         <Transition>
             <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
         </Transition>
@@ -46,11 +47,13 @@
 
 <script>
     import NodeWindow from './NodeWindow.vue';
+    import TreeCanvas from './TreeCanvas.vue';
 
     export default {
         name: 'MainWindow',
         components: {
             NodeWindow,
+            TreeCanvas
         },
         data() {
             return {
