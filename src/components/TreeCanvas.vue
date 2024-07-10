@@ -49,7 +49,7 @@ export default {
             svg.call(zoom);
 
             function zoomFunction(event) {
-                let treeComponents = svg.selectAll('node, text, path');
+                let treeComponents = svg.selectAll('.node, text, path');
                 treeComponents.attr('transform', event.transform);
             };
 
