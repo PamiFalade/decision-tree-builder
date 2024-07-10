@@ -40,7 +40,7 @@ export default {
             var textLinks = rootNode.descendants();
 
             let svg = d3.select('#chart').append('svg')
-                    .style('background', 'black') 
+                    .style('background', 'white') 
                     .style('width', '100%')
                     .style('height', '100%')
 
@@ -74,7 +74,7 @@ export default {
                                     .attr('x', d => 0)
                                     .attr('y', d => d.x)
                                     .attr('fill', 'none',)
-                                    .attr('stroke', 'white')
+                                    .attr('stroke', 'black')
                                     .attr('stroke-width', 0);
                                 },
                         function(update){
@@ -185,13 +185,13 @@ export default {
                         .attr('x', (d) => d.y+20)
                         .attr('y', (d) => d.x-30)
                         .attr('font-size', 15)
-                        .attr('fill', 'white');
+                        .attr('fill', 'black');
                     
                     idLabel.transition().duration(1000)
                         .attr('x', (d) => d.y+20)
                         .attr('y', (d) => d.x-10)
                         .attr('font-size', 15)
-                        .attr('fill', 'white');
+                        .attr('fill', 'black');
                 });
             }
             updateText(textLinks);
