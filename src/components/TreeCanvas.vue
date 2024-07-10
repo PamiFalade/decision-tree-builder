@@ -56,36 +56,37 @@ export default {
             //first lets create a path 
             let lines = g.selectAll('path');  
 
+            // Functions for drawing paths
             function line(d, i) {
-                return {
-                    x: d.source.y,
-                    y: d.source.x
-                }
+                return `M${d.source.y},${d.source.x}L${d.target.y},${d.target.x}`
             }
+            function elbow(d, i) {
+               return "M" + d.source.y + "," + d.source.x
+                    + "V" + d.target.x + "H" + d.target.y;
+            }
+            
             function update(data){
                 let group =  g.selectAll('path')
                 .data(data, (d,i) => d.target.data.id) // Unique Identifier for each node
                 .join(
                     function(enter){
                         return enter.append('path')
-                                    .attr('x', d => mouseX)
+                                    .attr('x', d => 0)
                                     .attr('y', d => d.x)
                                     .attr('fill', 'none',)
-                                    .attr('stroke', 'white');
+                                    .attr('stroke', 'white')
+                                    .attr('stroke-width', 0);
                                 },
                         function(update){
                             return update;
                         },
                         function(exit){
                             return exit.call(path => path.transition().duration(300).remove()
-                                                    .attr('d', d3.linkHorizontal()
-                                                                .x(d => mouseX)
-                                                                .y(d =>d.x)));
+                                                    .attr('d', line));
                         }
-                ).call(path => path.transition().duration(1000).attr('d', d3.linkHorizontal()
-                            .x(d => d.y)
-                            .y(d => d.x))
-                            .attr("id", function(d,i){return "path"+i}));
+                ).call(path => path.transition().duration(1000).attr('d', line)
+                            .attr("id", function(d,i){return "path"+i})
+                            .attr('stroke-width', 1));
             }
             update(pathLinks);
 
@@ -96,9 +97,9 @@ export default {
                 .join(
                     function(enter){
                         return enter.append('circle')
-                                    .attr('cx', (d) => mouseX)
+                                    .attr('cx', (d) => d.y)
                                     .attr('cy', d => d.x)
-                                    .attr('r', 12)
+                                    .attr('r', 0)
                                     .attr('fill', (d) => {
                                             if(d.children == undefined){
                                                 return 'red';
@@ -119,7 +120,7 @@ export default {
                         );
                     }
                 )
-                .call(circle => circle.transition().duration(1000).attr('cx', (d)=>d.y))
+                .call(circle => circle.transition().duration(1000).attr('r', 12))
                 .on('mouseover', function(d){
                     d3.select(this)
                         .attr('fill', 'orange')
