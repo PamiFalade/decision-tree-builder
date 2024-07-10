@@ -37,7 +37,7 @@
 
 <template>
      <body>
-        <!-- Tree Component -->
+        <TreeCanvas />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
@@ -55,18 +55,20 @@
 
 <script>
     import NodeWindow from './NodeWindow.vue';
+    import NodePopup from './NodePopup.vue';
     import TreeCanvas from './TreeCanvas.vue';
 
     export default {
         name: 'MainWindow',
         components: {
             NodeWindow,
+            NodePopup,
             TreeCanvas
         },
         data() {
             return {
                 showNodeWindow: false,
-                showNodePopup: true,
+                showNodePopup: false,
                 selectedNode: {
                     name: '',
                     id: 0,
