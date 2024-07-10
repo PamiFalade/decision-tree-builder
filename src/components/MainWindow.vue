@@ -37,7 +37,7 @@
 
 <template>
      <body>
-        <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
+        <!-- Tree Component -->
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
