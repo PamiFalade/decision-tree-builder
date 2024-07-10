@@ -1,9 +1,6 @@
 <template>
-    <div class="mainBody center" id="chart">
-        <!-- <h1>This is the TreeCanvas</h1>
-        <h3 v-for="child in treeData.children">
-            {{ child.name }}
-        </h3> -->
+    <div class="mainBody center" id="canvas">
+
     </div>
 </template>
 
@@ -28,8 +25,15 @@ export default {
             ]
         };
 
-        const drawTree = () => {
-            let mouseX = 0;
+        const drawTree = () => { 
+
+            // Variables for sizing
+            let minScale = 0.5;
+            let maxScale = 16;
+            let scale = 1;
+            let circleRadius = 12;
+            let fontSize = 15;
+
 
             let rootNode = d3.hierarchy(treeData, function(d){
                 return d.children;
@@ -39,10 +43,22 @@ export default {
             var circleLinks = rootNode.descendants();
             var textLinks = rootNode.descendants();
 
-            let svg = d3.select('#chart').append('svg')
+            let svg = d3.select('#canvas').append('svg')
                     .style('background', 'white') 
                     .style('width', '100%')
-                    .style('height', '100%')
+                    .style('height', '100%');
+            
+            // Zoom
+            const zoom = d3.zoom()
+                    .scaleExtent([minScale, maxScale])
+                    .on('zoom', zoomFunction);
+
+            svg.call(zoom);
+
+            function zoomFunction(event) {
+                let treeComponents = svg.selectAll('circle, text, path');
+                treeComponents.attr('transform', event.transform);
+            };
 
             let g = svg.append('g')
                 .attr('transform', 'translate(140,50)');
@@ -120,7 +136,7 @@ export default {
                         );
                     }
                 )
-                .call(circle => circle.transition().duration(1000).attr('r', 12))
+                .call(circle => circle.transition().duration(1000).attr('r', circleRadius))
                 .on('mouseover', function(d){
                     d3.select(this)
                         .attr('fill', 'orange')
@@ -154,14 +170,14 @@ export default {
                                     .attr('class', 'nodeLabel');
 
                         label.append('text')
-                                    .attr('x', d => mouseX)
-                                    .attr('y', d => d.x)
+                                    .attr('x', d => d.y+20)
+                                    .attr('y', d => d.x-30)
                                     .attr('class', 'nodeLabelName')
                                     .text((d) => d.data.name);
                         
                         label.append('text')
-                                    .attr('x', d => mouseX)
-                                    .attr('y', d => d.x+20)
+                                    .attr('x', d => d.y+20)
+                                    .attr('y', d => d.x-10)
                                     .attr('class', 'nodeLabelID')
                                     .text((d) => d.data.id);
 
@@ -188,9 +204,7 @@ export default {
                         .attr('fill', 'black');
                     
                     idLabel.transition().duration(1000)
-                        .attr('x', (d) => d.y+20)
-                        .attr('y', (d) => d.x-10)
-                        .attr('font-size', 15)
+                        .attr('font-size', fontSize)
                         .attr('fill', 'black');
                 });
             }
@@ -216,10 +230,6 @@ export default {
     width: 100%;
     height: 100%;
     background-color: none;
-}
-
-.nodeLabel {
-    color: white;
 }
 
 </style>
