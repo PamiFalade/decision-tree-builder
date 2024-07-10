@@ -8,32 +8,34 @@
 import { ref, onMounted } from 'vue';
 import * as d3 from "d3";
 import setupTree from '../composables/d3Tree';
+import { tree } from 'd3';
 
 export default {
     name: 'TreeCanvas',
-    setup(){
-        const treeData = {
-            name: "Eve",
-            children: [
-                {id: "node1", name: "Cain"},
-                {id: "node2", name: "Seth", children: [{id: "node3", name: "Enos"}, {id: "node4", name: "Noam"}]},
-                {id: "node5", name: "Abel"},
-                {id: "node6", name: "Awan", children: [{id: "node7", name: "Enoch"}]},
-                {id: "node8", name: "Azura", children: [{id: "node9", name: "Zuko"}, {id: "node10", name: "Azula"}]},
-                {id: "node99", name: "The Weeknd"}
-
-            ]
-        };
+    props: {
+        treeData: Object
+    },
+    setup(props){
+        const treeData = props.treeData;
+        // const treeData1 = {
+        //     name: "Eve",
+        //     children: [
+        //         {id: "node1", name: "Cain"},
+        //         {id: "node2", name: "Seth", children: [{id: "node3", name: "Enos"}, {id: "node4", name: "Noam"}]},
+        //         {id: "node5", name: "Abel"},
+        //         {id: "node6", name: "Awan", children: [{id: "node7", name: "Enoch"}]},
+        //         {id: "node8", name: "Azura", children: [{id: "node9", name: "Zuko"}, {id: "node10", name: "Azula"}]},
+        //         {id: "node99", name: "The Weeknd"}
+        //     ]
+        // };
 
         const drawTree = () => { 
 
             // Variables for sizing
             let minScale = 0.5;
             let maxScale = 16;
-            let scale = 1;
             let circleRadius = 12;
             let fontSize = 15;
-
 
             let rootNode = d3.hierarchy(treeData, function(d){
                 return d.children;
@@ -218,7 +220,6 @@ export default {
         })
         
 
-        return { treeData };
     },
 
 }
