@@ -16,18 +16,8 @@ export default {
         treeData: Object
     },
     setup(props){
+
         const treeData = props.treeData;
-        // const treeData1 = {
-        //     name: "Eve",
-        //     children: [
-        //         {id: "node1", name: "Cain"},
-        //         {id: "node2", name: "Seth", children: [{id: "node3", name: "Enos"}, {id: "node4", name: "Noam"}]},
-        //         {id: "node5", name: "Abel"},
-        //         {id: "node6", name: "Awan", children: [{id: "node7", name: "Enoch"}]},
-        //         {id: "node8", name: "Azura", children: [{id: "node9", name: "Zuko"}, {id: "node10", name: "Azula"}]},
-        //         {id: "node99", name: "The Weeknd"}
-        //     ]
-        // };
 
         const drawTree = () => { 
 
@@ -37,6 +27,7 @@ export default {
             let circleRadius = 12;
             let fontSize = 15;
 
+            // For input data to work for d3.hierarchy, it needs to be an object with two properties: name (string) and children (array of nodes)
             let rootNode = d3.hierarchy(treeData, function(d){
                 return d.children;
             });
@@ -58,7 +49,7 @@ export default {
             svg.call(zoom);
 
             function zoomFunction(event) {
-                let treeComponents = svg.selectAll('circle, text, path');
+                let treeComponents = svg.selectAll('node, text, path');
                 treeComponents.attr('transform', event.transform);
             };
 
@@ -67,12 +58,7 @@ export default {
             
             let layout = d3.tree().size([600, 600]);
             layout(rootNode);
-            console.log(rootNode.links());
-            console.log("----------------------");
-            console.log(rootNode.descendants());
             
-            //first lets create a path 
-            let lines = g.selectAll('path');  
 
             // Functions for drawing paths
             function line(d, i) {
@@ -108,25 +94,37 @@ export default {
             }
             update(pathLinks);
 
+            function generateNodeHtml(node) {
+
+                let xCoord = node.y, yCoord = node.x;   // x = node.y and y = node.x because the tree is displayed horizontally
+
+                 // If it's the Root node
+                if(node.data.attributes === undefined){
+                    return `<g> <rect width="20" height="20" x="${xCoord-15}" y="${yCoord-10}" fill="maroon" /> </g>`
+                }
+                // If it's a Decision node
+                else if(node.data.attributes.type === "Decision") {
+                    return `<g> <rect width="20" height="20" x="${xCoord-15}" y="${yCoord-10}" fill="red" /> </g>`
+                }
+                // If it's a Chance node
+                else if(node.data.attributes.type === "Chance") {
+                    return `<g> <circle r="15" cx="${xCoord}" cy="${yCoord}" fill="yellow" /> </g>`
+                }
+                // If it's a Terminal node
+                else if(node.data.attributes.type === "Terminal") {
+                    let trianglePoints = `${xCoord-10},${yCoord},${xCoord+5},${yCoord-10},${xCoord+5},${yCoord+10}`;
+                    return `<g> <polygon points=${trianglePoints} fill='green'/> </g>`;
+                }
+            }
             
-            function updateCircles(data){
-                g.selectAll('circle')
+            function updateNodes(data){
+                g.selectAll('.node')
                 .data(data, (d) => d.data.id) // Unique Identifier for each node
                 .join(
                     function(enter){
-                        return enter.append('circle')
-                                    .attr('cx', (d) => d.y)
-                                    .attr('cy', d => d.x)
-                                    .attr('r', 0)
-                                    .attr('fill', (d) => {
-                                            if(d.children == undefined){
-                                                return 'red';
-                                            }
-                                            return 'green';
-                                        }
-                                    )
-                                    .attr('id', (d, i) => d.data.name)
-                                    .attr('class', "sel");
+                        return enter.append('g') 
+                                .html((d) => generateNodeHtml(d))
+                                .attr('class', 'node')
                     },
                     function(update){
                         return update;
@@ -143,7 +141,9 @@ export default {
                     d3.select(this)
                         .attr('fill', 'orange')
                         .attr('cursor', 'pointer')
-                        .transition().duration(100).attr('r', 16);
+                        .transition().duration(100).attr('r', 16)
+                        .transition().duration(100).attr('width', 10)
+                        .transition().duration(100).attr('height', 10);
                 })
                 .on('mouseout', function(d){
                     d3.select(this)
@@ -160,7 +160,7 @@ export default {
                     console.log(d);
                 });
             }
-            updateCircles(circleLinks);
+            updateNodes(circleLinks);
 
 
             function updateText(data){
