@@ -55,16 +55,18 @@
 
 <script>
     import NodeWindow from './NodeWindow.vue';
+    import NodePopup from './NodePopup.vue';
 
     export default {
         name: 'MainWindow',
         components: {
             NodeWindow,
+            NodePopup
         },
         data() {
             return {
                 showNodeWindow: false,
-                showNodePopup: false,
+                showNodePopup: true,
                 selectedNode: {
                     name: '',
                     id: 0,
@@ -76,8 +78,8 @@
                     children: []
                 },
                 selectedNodeParent: {},
-                xPos: 0,
-                yPos: 0,
+                xPos: 100,
+                yPos: 250,
                 decisionTree: {
                     name: 'CEO',
                     id: 1,
