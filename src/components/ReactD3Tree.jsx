@@ -33,7 +33,7 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
   const returnNodeShape = (nodeType, nodeInfo) => {
     let nodeShape;
     let xCoord = nodeInfo.y - (130*nodeInfo.depth + 10*(nodeInfo.depth)); // Depth = 1: -130, Depth = 2: -270, Depth = 3: -410, Depth = 4: -550...
-    let yCoord = nodeInfo.x / 200;
+    let yCoord = nodeInfo.x / 400;
     if(nodeType === 'Root') { 
       nodeShape = <rect width="20" height="20" x="-20" y="-8" fill='maroon' />
     }
@@ -47,7 +47,7 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
     }
       
     else if(nodeType === 'Terminal') {
-      let trianglePoints = `${xCoord-10},${yCoord}, ${xCoord+5},${yCoord-10}, ${xCoord+5},${yCoord+10}`;
+      let trianglePoints = `${xCoord},${yCoord}, ${xCoord+15},${yCoord-10}, ${xCoord+15},${yCoord+10}`;
       nodeShape = <polygon points={trianglePoints} fill='green'/>
     }
 
@@ -79,14 +79,12 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
       // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
       <div id="treeWrapper" style={{ width: '100vw', height: '100vh',}} onClick={handleOnScreenClick} >
         <Tree data={treeData}
-          rootNodeClassName="node__root"
-          branchNodeClassName='node__branch'
           pathFunc={"straight"}
+          pathClassFunc={() => "link_best_path"}
           translate={{ x:75, y:300 }}
           collapsible={false}
           renderCustomNodeElement={renderSvgNode}
 
-          // onNodeClick={(datum) => handleOnNodeClick(datum)}
           />
       </div>
     );

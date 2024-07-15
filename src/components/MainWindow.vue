@@ -36,7 +36,7 @@
                     probability: Number
                 },
                 children: Array
-                    }
+            }
         },
         components: {
             NodeWindow,
