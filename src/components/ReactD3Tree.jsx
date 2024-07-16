@@ -34,21 +34,33 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
     let nodeShape;
     let xCoord = nodeInfo.y - (130*nodeInfo.depth + 10*(nodeInfo.depth)); // Depth = 1: -130, Depth = 2: -270, Depth = 3: -410, Depth = 4: -550...
     let yCoord = nodeInfo.x / 400;
+
+    // Styling based on if the nodes are on the most profitable branch
+    let width = nodeInfo.data.attributes.onBestPath ? "25" :"20";
+    let height = nodeInfo.data.attributes.onBestPath ? "25" :"20";
+    let r = nodeInfo.data.attributes.onBestPath ? "20" :"15";
+
+    let fill = nodeInfo.data.attributes.onBestPath ? "green" : 
+                      nodeType === "Root" ? "maroon" : 
+                      nodeType === "Decision" ? "red" : 
+                      nodeType === "Chance" ? "yellow" : 
+                      nodeType === "Terminal" ? "#4CBB17" : "none";
+    
     if(nodeType === 'Root') { 
-      nodeShape = <rect width="20" height="20" x="-20" y="-8" fill='maroon' />
+      nodeShape = <rect width={width} height={height} x="-20" y="-8" fill={fill}  />
     }
 
     else if(nodeType === 'Decision') {
-      nodeShape = <rect width="20" height="20" x="-10" y="-8" fill='red' />
+      nodeShape = <rect width={width} height={height} x="-10" y="-8" fill={fill} />
     }
     
     else if(nodeType === 'Chance') {
-      nodeShape = <circle r="15" x="-10" fill='yellow' />
+      nodeShape = <circle r="15" x="-10" fill={fill} />
     }
       
     else if(nodeType === 'Terminal') {
       let trianglePoints = `${xCoord},${yCoord}, ${xCoord+15},${yCoord-10}, ${xCoord+15},${yCoord+10}`;
-      nodeShape = <polygon points={trianglePoints} fill='green'/>
+      nodeShape = <polygon points={trianglePoints} fill={fill} />
     }
 
     return nodeShape;
