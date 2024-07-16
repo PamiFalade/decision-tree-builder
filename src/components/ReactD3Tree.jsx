@@ -70,17 +70,28 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
     </g>
   );
 
-    // useEffect hook to update the treeData when the decisionTree in the MainWindow is updated
-    useEffect(() => {
-      setTreeData({...decisionTree});
-    }, [JSON.stringify(decisionTree)]);
+
+  const getDynamicPathClass = ({ source, target }, orientation) => {
+
+    // If the node is on the best path, style the link between the source and target nodes
+    if (target.data.attributes.onBestPath === true) {
+      return 'link_best_path';
+    }
+
+    return 'normal_link';
+  };
+
+  // useEffect hook to update the treeData when the decisionTree in the MainWindow is updated
+  useEffect(() => {
+    setTreeData({...decisionTree});
+  }, [JSON.stringify(decisionTree)]);
 
   return (
       // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
       <div id="treeWrapper" style={{ width: '100vw', height: '100vh',}} onClick={handleOnScreenClick} >
         <Tree data={treeData}
           pathFunc={"straight"}
-          pathClassFunc={() => "link_best_path"}
+          pathClassFunc={getDynamicPathClass}
           translate={{ x:75, y:300 }}
           collapsible={false}
           renderCustomNodeElement={renderSvgNode}

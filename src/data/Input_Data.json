@@ -11,7 +11,8 @@
         "attributes": {
             "type": "Root",
             "expectedValue": 10,
-            "probability": 1.0
+            "probability": 1.0,
+            "onBestPath": true
         },
         "children": [
             {
@@ -20,7 +21,8 @@
                 "attributes": {
                     "type": "Decision",
                     "expectedValue": 11,
-                    "probability": 0.9
+                    "probability": 0.9,
+                    "onBestPath": true
                 },
                 "parentID": null,
                 "children": [
@@ -30,7 +32,8 @@
                         "attributes": {
                             "type": "Chance",
                             "expectedValue": 12,
-                            "probability": 0.8
+                            "probability": 0.8,
+                            "onBestPath": false
                         },
                         "children": [
                             {
@@ -39,7 +42,8 @@
                                 "attributes": {
                                     "type": "Terminal",
                                     "expectedValue": 13,
-                                    "probability": 0.7
+                                    "probability": 0.7,
+                                    "onBestPath": false
                                 },
                                 "parentID": null,
                                 "children": []
@@ -50,7 +54,8 @@
                                 "attributes": {
                                     "type": "Terminal",
                                     "expectedValue": 13.5,
-                                    "probability": 0.65
+                                    "probability": 0.65,
+                                    "onBestPath": false
                                 },
                                 "parentID": null,
                                 "children": []
@@ -63,7 +68,8 @@
                         "attributes": {
                             "type": "Chance",
                             "expectedValue": 14,
-                            "probability": 0.6
+                            "probability": 0.6,
+                            "onBestPath": true
                         },
                         "parentID": null,
                         "children": [
@@ -73,7 +79,8 @@
                                 "attributes": {
                                     "type": "Terminal",
                                     "expectedValue": 15,
-                                    "probability": 0.5
+                                    "probability": 0.5,
+                                    "onBestPath": true
                                 },
                                 "parentID": null,
                                 "children": []
@@ -88,7 +95,8 @@
                 "attributes": {
                     "type": "Chance",
                     "expectedValue": 11,
-                    "probability": 0.9
+                    "probability": 0.9,
+                    "onBestPath": false
                 },
                 "parentID": null,
                 "children": []
