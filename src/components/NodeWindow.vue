@@ -1,5 +1,5 @@
-<!-- Setting up a two-way bind between the MainWindow and NodeWindow over the shoWindow variable, which will control if the NodeWindow is in view, and for which node -->
 <script setup>
+    import { computed } from 'vue';
     const modelValue = defineModel();
     const classInactive = "inactive";   // Used to switch the class of the node window on the click of the close button
 
@@ -14,6 +14,23 @@
             children: Array,
         },
     });
+
+    const getNodeSvg = computed(() => {
+        let svgPath = "";
+            if(props.selectedNode.attributes.type === "Root"){
+                svgPath = "../../maroon_square.svg"
+            }
+            else if(props.selectedNode.attributes.type === "Decision"){
+                svgPath = "../../red_square.svg"
+            }
+            else if(props.selectedNode.attributes.type === "Chance"){
+                svgPath = "../../yellow_circle.svg"
+            }
+            else if(props.selectedNode.attributes.type === "Terminal"){
+                svgPath = "../../green_triangle.svg"
+            }
+            return svgPath;
+    });
 </script>
 
 <template>
@@ -23,7 +40,7 @@
                     class="closeButton"
                     @click="closeWindow"/>
                 <h2 class="windowTitle"> {{ selectedNode.name }} </h2>
-                <img src="../assets/yellow_circle.svg" class="nodeImg" />
+                <img :src="getNodeSvg" class="nodeImg" />
 
             </div>
 
