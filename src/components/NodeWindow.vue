@@ -56,7 +56,7 @@
                     <tr v-for="(childNode, index) in selectedNode.children" :key="index">
                         <td>{{ index + 1 }}</td>
                         <td>{{ childNode.attributes.type }}</td>
-                        <td class="nameCell" > <input value="childNode.name" /> </td>
+                        <td class="nameCell" > <input v-model="childNode.name" /> </td>
                         <td>{{ childNode.attributes.expectedValue }}</td>
                         <td>{{ childNode.attributes.probability }}</td>
                     </tr>
