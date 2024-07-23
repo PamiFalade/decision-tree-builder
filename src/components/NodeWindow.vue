@@ -56,7 +56,7 @@
                     <tr v-for="(childNode, index) in selectedNode.children" :key="index">
                         <td>{{ index + 1 }}</td>
                         <td>{{ childNode.attributes.type }}</td>
-                        <td>{{ childNode.name }}</td>
+                        <td class="nameCell" > <input value="childNode.name" /> </td>
                         <td>{{ childNode.attributes.expectedValue }}</td>
                         <td>{{ childNode.attributes.probability }}</td>
                     </tr>
@@ -144,7 +144,10 @@ export default {
     }
     td, th {
         border: 1px solid black;
-        padding: 8px;
+        padding: 8px 0px 8px;
+        max-width: 14vw;
+        height: 4vh;
+        align-items: center;
     }
 
     #addNodeButton {
@@ -155,6 +158,28 @@ export default {
         border: 0.3px solid black;
         color: white;
         font-weight: bold;
+    }
+
+    .nameCell {
+        background-color: #E0E0E0;
+    }
+
+    input {
+        width: 90%;
+        height: 100%;
+        background-color: inherit;
+        text-align: center;
+        outline: 0; 
+        border-width: 0px; 
+        border-width: 0 0 0.5px; 
+        border-color: #7B7B7B;
+        font-family: Avenir, Helvetica, Arial, sans-serif;
+        font-size: medium;
+    }
+
+    input:focus {
+        border-width: 0 0 2px; 
+        border-color: #3371FF;
     }
 
 </style>
