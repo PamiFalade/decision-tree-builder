@@ -39,7 +39,7 @@
                 <img src='../assets/close_icon_black.svg' 
                     class="closeButton"
                     @click="closeWindow"/>
-                <h2 class="windowTitle"> {{ selectedNode.name }} </h2>
+                <input id="h2Input" v-model="selectedNode.name" />
                 <img :src="getNodeSvg" class="nodeImg" />
 
             </div>
@@ -56,7 +56,7 @@
                     <tr v-for="(childNode, index) in selectedNode.children" :key="index">
                         <td>{{ index + 1 }}</td>
                         <td>{{ childNode.attributes.type }}</td>
-                        <td class="nameCell" > <input v-model="childNode.name" /> </td>
+                        <td class="editableCell" > <input v-model="childNode.name" /> </td>
                         <td>{{ childNode.attributes.expectedValue }}</td>
                         <td>{{ childNode.attributes.probability }}</td>
                     </tr>
@@ -160,13 +160,11 @@ export default {
         font-weight: bold;
     }
 
-    .nameCell {
+    .editableCell {
         background-color: #E0E0E0;
     }
 
     input {
-        width: 90%;
-        height: 100%;
         background-color: inherit;
         text-align: center;
         outline: 0; 
@@ -174,7 +172,18 @@ export default {
         border-width: 0 0 0.5px; 
         border-color: #7B7B7B;
         font-family: Avenir, Helvetica, Arial, sans-serif;
+    }
+
+    td > input {
+        width: 90%;
+        height: 100%;
         font-size: medium;
+    }
+
+    #h2Input {
+        width: 85%;
+        height: 50%;
+        font-size: xx-large;
     }
 
     input:focus {
