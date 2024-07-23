@@ -47,18 +47,18 @@
             <div class="windowBody">
                 <table>
                     <tr>
-                        <th>#</th>
-                        <th>Type</th>
-                        <th>Name</th>
-                        <th>EV</th>
-                        <th>p</th>
+                        <th id="numCol" >#</th>
+                        <th id="typeCol" >Type</th>
+                        <th id="nameCol" >Name</th>
+                        <th id="evCol" >EV</th>
+                        <th id="probCol">p</th>
                     </tr>
                     <tr v-for="(childNode, index) in selectedNode.children" :key="index">
                         <td>{{ index + 1 }}</td>
                         <td>{{ childNode.attributes.type }}</td>
                         <td class="editableCell" > <input v-model="childNode.name" /> </td>
-                        <td>{{ childNode.attributes.expectedValue }}</td>
-                        <td>{{ childNode.attributes.probability }}</td>
+                        <td class="editableCell" > <input v-model="childNode.attributes.expectedValue" /> </td>
+                        <td class="editableCell" > <input v-model="childNode.attributes.probability" /> </td>
                     </tr>
                 </table>
 
@@ -145,9 +145,24 @@ export default {
     td, th {
         border: 1px solid black;
         padding: 8px 0px 8px;
-        max-width: 14vw;
         height: 4vh;
         align-items: center;
+    }
+    
+    #numCol {
+        width: 5%;
+    }
+
+    #nameCol {
+        max-width: 25%;
+    }
+
+    #evCol {
+        width: 15%;
+    }
+
+    #probCol {
+        width: 10%;
     }
 
     #addNodeButton {
@@ -174,8 +189,13 @@ export default {
         font-family: Avenir, Helvetica, Arial, sans-serif;
     }
 
+    input:focus {
+        border-width: 0 0 2px; 
+        border-color: #3371FF;
+    }
+
     td > input {
-        width: 90%;
+        width: 80%;
         height: 100%;
         font-size: medium;
     }
@@ -184,11 +204,6 @@ export default {
         width: 85%;
         height: 50%;
         font-size: xx-large;
-    }
-
-    input:focus {
-        border-width: 0 0 2px; 
-        border-color: #3371FF;
     }
 
 </style>
