@@ -62,7 +62,26 @@
                     </tr>
                 </table>
 
-                <button id="addNodeButton">Add Nodes</button>
+                <div id="addNodesSection">
+                    <ul>
+                        <div class="addNodeLine" >
+                            <img class="addNodeImg" src="../../red_square.svg" />
+                            <input class="addNodeInput" type="number" value="0" />
+                        </div>
+
+                        <div class="addNodeLine" >
+                            <img class="addNodeImg" src="../../yellow_circle.svg" />
+                            <input class="addNodeInput" type="number" value="0" />
+                        </div>
+
+                        <div class="addNodeLine" >
+                            <img class="addNodeImg" src="../../green_triangle.svg" />
+                            <input class="addNodeInput" type="number" value="0" />
+                        </div>
+                    </ul>
+
+                    <button id="addNodeButton">Add Nodes</button>
+                </div>
             </div>
 
         </div>
@@ -165,16 +184,6 @@ export default {
         width: 10%;
     }
 
-    #addNodeButton {
-        width: 20%;
-        height: 12%;
-        background-color: #3371FF;
-        border-radius: 7%;
-        border: 0.3px solid black;
-        color: white;
-        font-weight: bold;
-    }
-
     .editableCell {
         background-color: #E0E0E0;
     }
@@ -205,5 +214,43 @@ export default {
         height: 50%;
         font-size: xx-large;
     }
+
+    #addNodesSection {
+        width: 50%;
+        height: 40%;
+        border: solid 0.5px black;
+        border-radius: 10%;
+    }
+
+    .addNodeLine {
+        width: 90%;
+        height: 30%;
+        padding: 3px;
+        margin-bottom: 3%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .addNodeImg {
+        width: 15%;
+        margin-right: 12%;
+    }
+
+    .addNodeInput {
+        width: 20%;
+        background-color: white;
+    }
+
+    #addNodeButton {
+        width: 40%;
+        height: auto;
+        background-color: #3371FF;
+        border-radius: 7%;
+        border: 0.3px solid black;
+        color: white;
+        font-weight: bold;
+    }
+
 
 </style>
