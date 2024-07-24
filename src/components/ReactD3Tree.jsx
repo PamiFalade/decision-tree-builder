@@ -57,7 +57,7 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
 
   // Function used to render each of the nodes, based on their type
   const renderSvgNode = ({ hierarchyPointNode, nodeDatum }) => (
-    <g onClick={() => { handleOnNodeClick(nodeDatum) }} >
+    <g onClick={() => { handleOnNodeClick(hierarchyPointNode) }} >
       { returnNodeShape(nodeDatum.attributes?.type, hierarchyPointNode) }
       <text fill="black" strokeWidth="1" x="20">
         {nodeDatum.name}

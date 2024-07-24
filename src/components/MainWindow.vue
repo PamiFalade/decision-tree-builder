@@ -91,10 +91,11 @@
             },
 
             updateSelectedNode(node) {
-                this.selectedNode = this.bfs(node.id);
+                this.selectedNode = this.bfs(node.data.id);
                 console.log(node);
                 
-                this.selectedNodeParent = this.bfs(node.parentID);    // Find the node's parent as well, so that we can delete the selectedNode if needed
+                this.selectedNodeParent = this.bfs(node.parent.data.id);    // Find the node's parent as well, so that we can delete the selectedNode if needed
+                console.log(this.selectedNodeParent);
                 this.displayNodePopup();
             },
 
