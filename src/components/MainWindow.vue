@@ -11,7 +11,7 @@
                     :yPos="this.yPos"
                     :nodeType="this.selectedNode.attributes.type" />
         <Transition>
-            <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" />
+            <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" @addChildren="addChildren"/>
         </Transition>
     </body>
 </template>
@@ -185,7 +185,24 @@
                 });
             },
 
+            // Method for adding children nodes from the NodeWindow
+            addChildren(numNewDecisions, numNewChances, numNewTerminals) {
+                // Add the new decision nodes
+                for(let i=0; i<numNewDecisions; i++){
+                    this.addDecisionNode();
+                }
+                // Add the new chance nodes
+                for(let i=0; i<numNewChances; i++){
+                    this.addChanceNode();
+                }
+                // Add the new terminal nodes
+                for(let i=0; i<numNewTerminals; i++){
+                    this.addTerminalNode();
+                }
+            },
+
             deleteNode() {
+                // TODO: Properly connect this.selectedNodeParent
                 this.selectedNodeParent.children = this.selectedNodeParent.children.filter(node => node.id != this.selectedNode.id);
                 this.selectedNode = {
                     name: "",

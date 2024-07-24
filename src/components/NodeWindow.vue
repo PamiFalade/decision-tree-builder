@@ -2,12 +2,20 @@
     import { ref, computed, onMounted } from 'vue';
 
     // Number of each types of node that will be added to the selectedNode's children
-    const addDecisions = ref(1);
+    const addDecisions = ref(null);
     const addChances = ref(null);
     const addTerminals = ref(null);
 
-    const tester = () => {
-        console.log(addDecisions.value.value);
+    // Emit for when adding children nodes from NodeWindow
+    const emit = defineEmits(['addChildren']);
+
+    // When the "Add Nodes" button is clicked, signal to the MainWindow to add the indicated number of each node
+    const onAddNodes = () => {
+        emit('addChildren', addDecisions.value.value, addChances.value.value, addTerminals.value.value);
+        
+        addDecisions.value.value = 0;
+        addChances.value.value = 0; 
+        addTerminals.value.value = 0;
     }
 
     const props = defineProps({
@@ -54,6 +62,20 @@
             </div>
 
             <div class="windowBody">
+                <ul id="selectedNodeAttributes">
+                    <li>
+                        <p>Type</p>
+                        <p> {{selectedNode.attributes.type}} </p>
+                    </li>
+                    <li>
+                        <p>EV</p>
+                        <input v-model="selectedNode.attributes.expectedValue" />
+                    </li>
+                    <li>
+                        <p>Probability</p>
+                        <input v-model="selectedNode.attributes.probability" />
+                    </li>
+                </ul>
 
                 <div v-if="selectedNode.attributes.type !== 'Terminal'" id="childNodesSection">
                     <table>
@@ -77,7 +99,7 @@
                         <ul>
                             <div class="addNodeLine" >
                                 <img class="addNodeImg" src="../../red_square.svg" />
-                                <input class="addNodeInput" type="number" value="0" min="0" ref="addDecisions" @change="tester" />
+                                <input class="addNodeInput" type="number" value="0" min="0" ref="addDecisions" />
                             </div>
 
                             <div class="addNodeLine" >
@@ -91,7 +113,7 @@
                             </div>
                         </ul>
 
-                        <button id="addNodeButton">Add Nodes</button>
+                        <button id="addNodeButton" @click="onAddNodes">Add Nodes</button>
                     </div>
                 </div>
             </div>
@@ -161,6 +183,16 @@ export default {
         flex-direction: column;
         align-items: center;
     }
+
+    #selectedNodeAttributes {
+        margin-right: 10%;
+        width: 80%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        list-style-type: none;
+    }
+
 
     #childNodesSection {
         width: 100%;
