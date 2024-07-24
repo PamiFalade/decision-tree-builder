@@ -1,7 +1,14 @@
 <script setup>
-    import { computed } from 'vue';
-    const modelValue = defineModel();
-    const classInactive = "inactive";   // Used to switch the class of the node window on the click of the close button
+    import { ref, computed, onMounted } from 'vue';
+
+    // Number of each types of node that will be added to the selectedNode's children
+    const addDecisions = ref(1);
+    const addChances = ref(null);
+    const addTerminals = ref(null);
+
+    const tester = () => {
+        console.log(addDecisions.value.value);
+    }
 
     const props = defineProps({
         selectedNode: {
@@ -31,6 +38,8 @@
             }
             return svgPath;
     });
+
+
 </script>
 
 <template>
@@ -45,42 +54,45 @@
             </div>
 
             <div class="windowBody">
-                <table>
-                    <tr>
-                        <th id="numCol" >#</th>
-                        <th id="typeCol" >Type</th>
-                        <th id="nameCol" >Name</th>
-                        <th id="evCol" >EV</th>
-                        <th id="probCol">p</th>
-                    </tr>
-                    <tr v-for="(childNode, index) in selectedNode.children" :key="index">
-                        <td>{{ index + 1 }}</td>
-                        <td>{{ childNode.attributes.type }}</td>
-                        <td class="editableCell" > <input v-model="childNode.name" /> </td>
-                        <td class="editableCell" > <input v-model="childNode.attributes.expectedValue" /> </td>
-                        <td class="editableCell" > <input v-model="childNode.attributes.probability" /> </td>
-                    </tr>
-                </table>
 
-                <div id="addNodesSection">
-                    <ul>
-                        <div class="addNodeLine" >
-                            <img class="addNodeImg" src="../../red_square.svg" />
-                            <input class="addNodeInput" type="number" value="0" />
-                        </div>
+                <div v-if="selectedNode.attributes.type !== 'Terminal'" id="childNodesSection">
+                    <table>
+                        <tr>
+                            <th id="numCol" >#</th>
+                            <th id="typeCol" >Type</th>
+                            <th id="nameCol" >Name</th>
+                            <th id="evCol" >EV</th>
+                            <th id="probCol">p</th>
+                        </tr>
+                        <tr v-for="(childNode, index) in selectedNode.children" :key="index">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ childNode.attributes.type }}</td>
+                            <td class="editableCell" > <input v-model="childNode.name" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.expectedValue" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.probability" /> </td>
+                        </tr>
+                    </table>
 
-                        <div class="addNodeLine" >
-                            <img class="addNodeImg" src="../../yellow_circle.svg" />
-                            <input class="addNodeInput" type="number" value="0" />
-                        </div>
+                    <div id="addNodesSection">
+                        <ul>
+                            <div class="addNodeLine" >
+                                <img class="addNodeImg" src="../../red_square.svg" />
+                                <input class="addNodeInput" type="number" value="0" min="0" ref="addDecisions" @change="tester" />
+                            </div>
 
-                        <div class="addNodeLine" >
-                            <img class="addNodeImg" src="../../green_triangle.svg" />
-                            <input class="addNodeInput" type="number" value="0" />
-                        </div>
-                    </ul>
+                            <div class="addNodeLine" >
+                                <img class="addNodeImg" src="../../yellow_circle.svg" />
+                                <input class="addNodeInput" type="number" value="0" min="0" ref="addChances"/>
+                            </div>
 
-                    <button id="addNodeButton">Add Nodes</button>
+                            <div class="addNodeLine" >
+                                <img class="addNodeImg" src="../../green_triangle.svg" />
+                                <input class="addNodeInput" type="number" value="0" min="0" ref="addTerminals"/>
+                            </div>
+                        </ul>
+
+                        <button id="addNodeButton">Add Nodes</button>
+                    </div>
                 </div>
             </div>
 
@@ -150,12 +162,16 @@ export default {
         align-items: center;
     }
 
+    #childNodesSection {
+        width: 100%;
+        height: auto;
+    }
+
     table {
         border-collapse: collapse;
-        position: relative;
         right: 5%;
         width: 80%;
-        margin: 5% 0% 10%;
+        margin: 5% 5% 10%;
     }
     th {
         background-color: #000435;
@@ -217,7 +233,8 @@ export default {
 
     #addNodesSection {
         width: 50%;
-        height: 40%;
+        padding: 10px;
+        margin: 0 15% 0;
         border: solid 0.5px black;
         border-radius: 10%;
     }
@@ -251,6 +268,5 @@ export default {
         color: white;
         font-weight: bold;
     }
-
 
 </style>
