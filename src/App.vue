@@ -33,14 +33,17 @@
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+    height: 100vh;
+    width: 100vw;
   }
 
   #mainPage {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 10fr 85fr;

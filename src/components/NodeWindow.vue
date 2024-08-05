@@ -151,7 +151,8 @@ export default {
         display: flex;
         flex-direction: column;
         border-radius: 5%;
-        transition: 0.4s
+        transition: 0.4s;
+        overflow-y: scroll;
     }
 
 

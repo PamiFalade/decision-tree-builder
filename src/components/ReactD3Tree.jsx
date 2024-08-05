@@ -87,7 +87,7 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
 
           />
       </div>
-    );
+  );
 }
 
 export default DecisionTree;
