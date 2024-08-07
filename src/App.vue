@@ -48,6 +48,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: 10fr 85fr;
     row-gap: 0;
+    overflow: hidden;
   }
 
 </style>
