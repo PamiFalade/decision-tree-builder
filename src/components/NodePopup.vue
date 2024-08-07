@@ -1,11 +1,13 @@
 <template>
     <div class="popups" :style="cssProps" >
         <img src="../assets/close_icon_red.svg" class="imgButton" v-if="nodeType !='Root'" @click="deleteChildNode" />
-        <div id="popupNodeButtons" v-if="nodeType !='Terminal'">
-            <img src="../assets/red_square.svg" class="imgButton" @click="addDecisionChildNode" />
-            <img src="../assets/yellow_circle.svg" class="imgButton" @click="addChanceChildNode" />
-            <img src="../assets/green_triangle.svg" class="imgButton" @click="addTerminalChildNode" />
-            <div class="vLine"></div>
+        <div id="popupNodeButtons" >
+            <div id="addNodeButtons" v-if="nodeType !='Terminal'" >
+                <img src="../assets/red_square.svg" class="imgButton" @click="addDecisionChildNode" />
+                <img src="../assets/yellow_circle.svg" class="imgButton" @click="addChanceChildNode" />
+                <img src="../assets/green_triangle.svg" class="imgButton" @click="addTerminalChildNode" />
+                <div class="vLine" v-if="nodeType !='Terminal'" ></div>
+            </div>
             <img src="../assets/info_icon.svg" class="imgButton" @click="toggleNodeWindow" />
         </div>
     </div>
@@ -50,7 +52,7 @@
 <style scoped>
 
     .popups {
-        width: 160px;
+        width: auto;
         height: 25px;
         position: absolute;
         top: var(--y-Coordinate);
@@ -67,7 +69,8 @@
 
     #popupNodeButtons {
         height: 100%;
-        width: 70%;
+        max-width: 80%;
+        margin-left: 20px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -77,6 +80,24 @@
         border-radius: 7%;
         padding: 2px;
     }
+    
+    #addNodeButtons {
+        max-width: 60%;
+        height: 100%;
+        margin-right: 3px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #popupNodeButtons > * {
+        margin-left: 3px;
+    }
+
+    #addNodeButtons > * {
+        margin-left: 3px;
+    }
 
     .vLine {
         height: 90%;
@@ -85,9 +106,8 @@
         border: solid 1px black;
     }
 
-    #popupNodeButtons > * {
-        height: 80%;
-        margin-left: 3px;
+    .imgButton {
+        height: 90%;
     }
 
     .imgButton:hover {
