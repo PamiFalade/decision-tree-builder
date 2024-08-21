@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, computed, onMounted } from 'vue';
+    import { ref, computed } from 'vue';
 
     // Number of each types of node that will be added to the selectedNode's children
     const addDecisions = ref(null);
