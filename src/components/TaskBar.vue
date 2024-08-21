@@ -21,6 +21,10 @@
             <div class="imgBtn">
                 <img class="imgBtn" src="../assets/save_icon.svg"/>
             </div>
+            
+            <button class="testBtn" @click="getAllDecisionTrees">
+                Load Data
+            </button>
         </div>
     </div>
 
@@ -28,28 +32,39 @@
 
 
 <script>
+import DecisionTreeDTO from '../services/DecisionTreeDTO';
 
 export default {
     name: 'TaskBar',
     props: {
         title: String
+    },
+    methods: {
+        async getAllDecisionTrees(){
+            const response = await DecisionTreeDTO.getAllTrees();
+            console.log(response.data);
+        }
     }
 }
 
 </script>
 
 <style>
+.testBtn {
+    background-color: #F3F3F3;
+}
 #mainTaskBar{
     width: 95vw;
     height: 8vh;
     background-color: grey;
     padding: 2vh 3vw;
     align-items: center;
+    justify-content: center;
 }
 
 #taskBarComponents {
     display: grid;
-    grid-template-columns: 1fr 5fr 1fr 1fr;
+    grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
     column-gap: 2vw;
     grid-template-rows: 1fr;
     justify-content: center;
