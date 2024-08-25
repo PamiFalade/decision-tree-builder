@@ -22,7 +22,7 @@
                 <img class="imgBtn" src="../assets/save_icon.svg"/>
             </div>
             
-            <button class="testBtn" @click="getAllDecisionTrees">
+            <button class="testBtn" @click="showDatabaseModal">
                 Load Data
             </button>
         </div>
@@ -32,17 +32,14 @@
 
 
 <script>
-import DecisionTreeDTO from '../services/DecisionTreeDTO';
-
 export default {
     name: 'TaskBar',
     props: {
         title: String
     },
     methods: {
-        async getAllDecisionTrees(){
-            const response = await DecisionTreeDTO.getAllTrees();
-            console.log(response.data);
+        showDatabaseModal(){
+            this.$emit('showDatabaseModal');
         }
     }
 }

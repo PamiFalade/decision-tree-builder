@@ -1,7 +1,7 @@
 import Api from "./Api";
 
 export default {
-    getAllTrees() {
+    async getAllTrees() {
         return Api().get('/decision-trees');
     }
 }

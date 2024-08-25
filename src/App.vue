@@ -1,6 +1,7 @@
 <template>
   <div id="mainPage">
-    <TaskBar :title="inputData.title"/>
+    <TaskBar :title="inputData.title" @showDatabaseModal="showDatabaseModal"/>
+    <LoadDataModal v-show="showModal" @hideDatabaseModal="hideDatabaseModal"/>
     <MainWindow :decisionTreeNodes="inputData.decisionTreeNodes" />
   </div>
 </template>
@@ -9,6 +10,8 @@
 
   import TaskBar from './components/TaskBar.vue';
   import MainWindow from './components/MainWindow.vue';
+  import LoadDataModal from './components/LoadDataModal.vue';
+
   import json from "./data/Starting_Input_Data.json";
 
   export default {
@@ -16,10 +19,21 @@
     components: {
       TaskBar,
       MainWindow,
+      LoadDataModal
     },
     data() {
       return {
-        inputData: json
+        inputData: json,
+        showModal: false
+      }
+    },
+    methods: {
+      showDatabaseModal() {
+        this.showModal = true;
+      },
+
+      hideDatabaseModal() {
+        this.showModal = false;
       }
     }
   }

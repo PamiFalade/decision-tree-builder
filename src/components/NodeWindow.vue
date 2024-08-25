@@ -76,7 +76,7 @@
                         <input v-model="selectedNode.attributes.probability" />
                     </li>
                 </ul>
-
+                
                 <div v-if="selectedNode.attributes.type !== 'Terminal'" id="childNodesSection">
                     <table>
                         <tr>
@@ -139,7 +139,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 
     #nodeWindow {
         position: absolute;
@@ -165,13 +165,6 @@ export default {
         grid-template-rows: 1fr;
         justify-content: center;
         align-items: center;
-    }
-
-    .closeButton {
-        width: 40%;
-    }
-    .closeButton:hover {
-        cursor: pointer;
     }
 
     .nodeImg {
@@ -295,11 +288,8 @@ export default {
     #addNodeButton {
         width: 40%;
         height: auto;
-        background-color: #3371FF;
         border-radius: 7%;
         border: 0.3px solid black;
-        color: white;
-        font-weight: bold;
     }
 
 </style>
