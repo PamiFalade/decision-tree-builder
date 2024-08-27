@@ -7,7 +7,7 @@
         "id": 1,
         "attributes": {
             "type": "Root",
-            "expectedValue": 10,
+            "expectedValue": 82724,
             "probability": 1.0
         },
         "children": []

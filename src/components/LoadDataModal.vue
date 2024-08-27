@@ -4,17 +4,25 @@
             <img src='../assets/close_icon_black.svg' 
                     class="closeButton"
                     @click="closeModal"/>
-            <h3>Load a Decision Tree</h3>
+            <h2>Load a Decision Tree</h2>
         </div>
         
         <ul>
-            <li v-for="decisionTree in databaseRecords" :key="decisionTree.TreeID" >
-                <p> {{ decisionTree.TreeName }} </p>
+            <li v-for="decisionTree in databaseRecords" 
+                    :key="decisionTree.id" 
+                    @click="onDecisionTreeClick($event, decisionTree.id)"
+                    :class="{ selected: decisionTree.id === selectedDecisionTreeId }">
+                <h4 class="treeName treeMenuItems"> {{ decisionTree.tree_name }} </h4>
+                <p class="owner treeMenuItems"> {{ decisionTree.creator_email }} </p>
+                <p class="creationDate treeMenuItems"> {{ decisionTree.created_at }} </p>
             </li>
         </ul>
 
         <div class="footer">
-            <button>
+            <button class="submitButton" 
+                    type="button" 
+                    :disabled="!selectedDecisionTreeId"
+                    @click="loadDecisionTree">
                 Load Tree
             </button>
         </div>
@@ -32,17 +40,35 @@
             // List of Decision Trees that are stored in the database
             let databaseRecords = ref([]);  
 
+            // The decision tree that is loaded from the database
+            const selectedDecisionTreeId = ref(null);
+
+            // Highlight the selected decision tree
+            const onDecisionTreeClick = (event, key) => {
+                selectedDecisionTreeId.value = key;
+            }
+
             // Fetch the list of decision trees in the database when the modal is created
-            onMounted(() => {
-                DecisionTreeDTO.getAllTrees()
-                    .then(response => databaseRecords.value = response.data);
+            onMounted(async() => {
+                await DecisionTreeDTO.getAllTrees()
+                    .then(response => {
+                        console.log(response);
+                        databaseRecords.value = response.data;
+                    });
             });
 
+            // When close button is clicked, emit the event so that the modal will be closed.
             const closeModal = () => {
+                selectedDecisionTreeId.value = null;
                 context.emit('hideDatabaseModal');
             }
 
-            return { databaseRecords, closeModal }
+            // Trigger the load decision tree function in App.vue
+            const loadDecisionTree = () => {
+                context.emit('loadDecisionTree', selectedDecisionTreeId.value);
+            }
+
+            return { databaseRecords, selectedDecisionTreeId, closeModal, onDecisionTreeClick, loadDecisionTree }
         }
 
     }
@@ -64,8 +90,7 @@
 }
 
 .header {
-    height: 15%;
-    background-color: green;
+    height: 10%;
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     justify-content: center;
@@ -74,15 +99,50 @@
 
 ul {
     height: 70%;
+    width: 100%;
+    padding-left: 0;
+    margin-left: 2.5%;
     list-style: none;
     overflow-y: scroll;
-    background-color: blueviolet;
 }
 
 li {
+    width: 95%;
+    height: 25%;
+    margin-bottom: 5%;
+    border-radius: 5px;
+    background-color: #E0E0E0;
+    display: grid;
+    grid-template-rows: 3fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    cursor: pointer;
+}
+
+.selected {
+    border: 1px solid #646cff;
+}
+
+.treeMenuItems {
+    margin-top: 2px;
+    width: 100%;
+    height: 100%;
+}
+
+.treeName {
+    grid-column-end: span 2;
+    align-content: center;
+    /* background-color: red; */
+}
+
+.footer {
+    width: 100%;
+    height: 15%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: row-reverse;
+}
+
+.submitButton {
+    max-height: 50px;
 }
 
 </style>

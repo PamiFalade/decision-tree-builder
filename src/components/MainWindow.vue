@@ -1,5 +1,5 @@
 <template>
-     <body>
+    <body>
         <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
@@ -42,6 +42,11 @@
             NodeWindow,
             Tree: applyReactInVue(DecisionTree),
             NodePopup
+        },
+        watch: {
+            decisionTreeNodes(value) {
+                this.decisionTree = value;
+            }
         },
         data() {
             return {
@@ -91,11 +96,24 @@
             },
 
             updateSelectedNode(node) {
-                this.selectedNode = this.bfs(node.data.id);
+                if(node.data) {                 // If the selected node is the root node
+                    this.selectedNode = {
+                        name: node.data.name,
+                        id: node.data.id,
+                        attributes: {
+                            type: node.data.attributes.type,
+                            expectedValue: node.data.attributes.expectedValue,
+                            probability: node.data.attributes.probability
+                        },
+                        children: node.data.children
+                    }
+                }
+                else {
+                    this.selectedNode = this.bfs(node.data.id);
+                }
                 console.log(node);
                 
                 this.selectedNodeParent = node.parent !== null ? this.bfs(node.parent.data.id) : null;    // Find the node's parent as well, so that we can delete the selectedNode if needed (IFF it's not the root node)
-                console.log(this.selectedNodeParent);
                 this.displayNodePopup();
             },
 
@@ -148,7 +166,7 @@
             },
 
             addDecisionNode() {
-               this.selectedNode.children.push({
+                this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
@@ -161,7 +179,7 @@
             },
 
             addChanceNode() {
-               this.selectedNode.children.push({
+                this.selectedNode.children.push({
                     name: "New Chance " + parseInt(this.selectedNode.children.length) + 2,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
@@ -174,7 +192,7 @@
             },
             
             addTerminalNode() {
-               this.selectedNode.children.push({
+                this.selectedNode.children.push({
                     name: "New Terminal " + parseInt(this.selectedNode.children.length) + 1,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {

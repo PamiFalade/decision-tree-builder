@@ -1,8 +1,8 @@
 <template>
   <div id="mainPage">
-    <TaskBar :title="inputData.title" @showDatabaseModal="showDatabaseModal"/>
-    <LoadDataModal v-show="showModal" @hideDatabaseModal="hideDatabaseModal"/>
-    <MainWindow :decisionTreeNodes="inputData.decisionTreeNodes" />
+    <TaskBar :title="treeTitle" @showDatabaseModal="showDatabaseModal"/>
+    <LoadDataModal v-show="showModal" @hideDatabaseModal="hideDatabaseModal" @loadDecisionTree="loadDecisionTree"/>
+    <MainWindow :decisionTreeNodes="decisionTreeNodes" />
   </div>
 </template>
 
@@ -13,6 +13,7 @@
   import LoadDataModal from './components/LoadDataModal.vue';
 
   import json from "./data/Starting_Input_Data.json";
+import DecisionTreeDTO from './services/DecisionTreeDTO';
 
   export default {
     name: 'App',
@@ -24,6 +25,17 @@
     data() {
       return {
         inputData: json,
+        treeTitle: "New Decision Tree",
+        decisionTreeNodes: {
+          "name": "Root Node",
+          "id": 1,
+          "attributes": {
+              "type": "Root",
+              "expectedValue": 82724,
+              "probability": 1.0
+          },
+          "children": []
+        },
         showModal: false
       }
     },
@@ -34,6 +46,14 @@
 
       hideDatabaseModal() {
         this.showModal = false;
+      },
+
+      async loadDecisionTree(decisionTreeId) {
+        this.showModal = false;
+        const loadedTree = await DecisionTreeDTO.getTree(decisionTreeId);
+        this.treeTitle = loadedTree.data.title;
+        this.decisionTreeNodes = { ...loadedTree.data.decisionTreeNodes };
+        console.log(this.decisionTreeNodes);
       }
     }
   }
