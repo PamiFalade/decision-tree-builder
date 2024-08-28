@@ -1,7 +1,7 @@
 <template>
   <div id="mainPage">
-    <TaskBar :title="treeTitle" @showDatabaseModal="showDatabaseModal"/>
-    <LoadDataModal v-show="showModal" @hideDatabaseModal="hideDatabaseModal" @loadDecisionTree="loadDecisionTree"/>
+    <TaskBar :title="treeTitle" @showDatabaseModal="onShowDatabaseModal" @saveDecisionTree="onSaveDecisionTree"/>
+    <LoadDataModal v-show="showModal" @hideDatabaseModal="onHideDatabaseModal" @loadDecisionTree="onLoadDecisionTree"/>
     <MainWindow :decisionTreeNodes="decisionTreeNodes" />
   </div>
 </template>
@@ -25,7 +25,9 @@ import DecisionTreeDTO from './services/DecisionTreeDTO';
     data() {
       return {
         inputData: json,
+        currentUser: "pamilerin@intern.mudozangl",
         treeTitle: "New Decision Tree",
+        treeDescription: "Practice decision tree saving",
         decisionTreeNodes: {
           "name": "Root Node",
           "id": 1,
@@ -40,20 +42,30 @@ import DecisionTreeDTO from './services/DecisionTreeDTO';
       }
     },
     methods: {
-      showDatabaseModal() {
+      onShowDatabaseModal() {
         this.showModal = true;
       },
 
-      hideDatabaseModal() {
+      onHideDatabaseModal() {
         this.showModal = false;
       },
 
-      async loadDecisionTree(decisionTreeId) {
+      async onLoadDecisionTree(decisionTreeId) {
         this.showModal = false;
         const loadedTree = await DecisionTreeDTO.getTree(decisionTreeId);
         this.treeTitle = loadedTree.data.title;
         this.decisionTreeNodes = { ...loadedTree.data.decisionTreeNodes };
         console.log(this.decisionTreeNodes);
+      },
+
+      async onSaveDecisionTree() {
+        const newDecisionTree = {
+          title: this.treeTitle,
+          createdBy: this.currentUser,
+          description: this.treeDescription,
+          decisionTreeNodes: this.decisionTreeNodes
+        }
+        const savedTree = await DecisionTreeDTO.saveTree(newDecisionTree);
       }
     }
   }

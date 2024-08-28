@@ -18,7 +18,7 @@
                 </div>
             </div>
 
-            <div class="imgBtn">
+            <div class="imgBtn" @click="saveTree">
                 <img class="imgBtn" src="../assets/save_icon.svg"/>
             </div>
             
@@ -40,6 +40,9 @@ export default {
     methods: {
         showDatabaseModal(){
             this.$emit('showDatabaseModal');
+        },
+        saveTree(){
+            this.$emit('saveDecisionTree')
         }
     }
 }

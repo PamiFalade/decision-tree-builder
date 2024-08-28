@@ -156,7 +156,7 @@
             addDecisionNode() {
                 this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
-                    id: this.selectedNode.id,
+                    id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Decision",
                         expectedValue: 0,
@@ -169,7 +169,7 @@
             addChanceNode() {
                 this.selectedNode.children.push({
                     name: "New Chance " + parseInt(this.selectedNode.children.length) + 2,
-                    id: this.selectedNode.id,
+                    id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Chance",
                         expectedValue: 0,
@@ -182,7 +182,7 @@
             addTerminalNode() {
                 this.selectedNode.children.push({
                     name: "New Terminal " + parseInt(this.selectedNode.children.length) + 1,
-                    id: this.selectedNode.id,
+                    id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Terminal",
                         expectedValue: 0,

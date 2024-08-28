@@ -6,8 +6,15 @@ export default {
     },
 
     async getTree(treeID) {
-        const test = await Api().get(`/decision-trees/${treeID}`);
-        console.log(test);
-        return test;
+        return await Api().get(`/decision-trees/${treeID}`);
+    },
+
+    async saveTree(decisionTree) {
+        console.log(decisionTree);
+        await Api().post(`/decision-trees/`, { ...decisionTree })
+            .then(response => {
+                console.log(response);
+            });
+        return;
     }
 }
