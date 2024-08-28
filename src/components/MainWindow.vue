@@ -46,6 +46,8 @@
         watch: {
             decisionTreeNodes(value) {
                 this.decisionTree = value;
+                this.showNodePopup = false;
+                this.showNodeWindow = false;
             }
         },
         data() {
