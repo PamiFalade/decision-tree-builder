@@ -96,21 +96,7 @@
             },
 
             updateSelectedNode(node) {
-                if(node.data) {                 // If the selected node is the root node
-                    this.selectedNode = {
-                        name: node.data.name,
-                        id: node.data.id,
-                        attributes: {
-                            type: node.data.attributes.type,
-                            expectedValue: node.data.attributes.expectedValue,
-                            probability: node.data.attributes.probability
-                        },
-                        children: node.data.children
-                    }
-                }
-                else {
-                    this.selectedNode = this.bfs(node.data.id);
-                }
+                this.selectedNode = this.bfs(node.data.id);
                 console.log(node);
                 
                 this.selectedNodeParent = node.parent !== null ? this.bfs(node.parent.data.id) : null;    // Find the node's parent as well, so that we can delete the selectedNode if needed (IFF it's not the root node)
@@ -140,7 +126,7 @@
 
             // Used to find nodes by traversing through the tree breadth-first
             bfs(idToFind){
-                if(idToFind === 1){
+                if(idToFind === this.decisionTree.id){
                     return this.decisionTree;
                 }
 
@@ -168,7 +154,7 @@
             addDecisionNode() {
                 this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
-                    id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
+                    id: this.selectedNode.id,
                     attributes: {
                         type: "Decision",
                         expectedValue: 0,
@@ -181,7 +167,7 @@
             addChanceNode() {
                 this.selectedNode.children.push({
                     name: "New Chance " + parseInt(this.selectedNode.children.length) + 2,
-                    id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
+                    id: this.selectedNode.id,
                     attributes: {
                         type: "Chance",
                         expectedValue: 0,
@@ -194,7 +180,7 @@
             addTerminalNode() {
                 this.selectedNode.children.push({
                     name: "New Terminal " + parseInt(this.selectedNode.children.length) + 1,
-                    id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
+                    id: this.selectedNode.id,
                     attributes: {
                         type: "Terminal",
                         expectedValue: 0,
@@ -252,7 +238,7 @@
     }
 
      /* Slide-in and slide-out animation for nodeWindow */
-     .v-enter-from {
+    .v-enter-from {
         translate: 150vw 0;
     }
     .v-enter-to {
