@@ -144,13 +144,15 @@ export default {
     #nodeWindow {
         position: absolute;
         bottom: 0;
-        right: -3vw;
+        right: 0;
         background-color: lightgrey;
         width: 35%;
         height: 100%;
         display: flex;
         flex-direction: column;
-        border-radius: 5%;
+        align-items: center;
+        border-top-left-radius: 5%;
+        border-bottom-left-radius: 5%;
         transition: 0.4s;
         overflow-y: scroll;
     }
@@ -179,7 +181,6 @@ export default {
     }
 
     #selectedNodeAttributes {
-        margin-right: 10%;
         width: 80%;
         display: flex;
         flex-wrap: wrap;
@@ -190,6 +191,9 @@ export default {
 
     #childNodesSection {
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         height: auto;
     }
 
