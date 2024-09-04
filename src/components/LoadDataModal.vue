@@ -14,7 +14,7 @@
                     :class="{ selected: decisionTree.id === selectedDecisionTreeId }">
                 <h4 class="treeName treeMenuItems"> {{ decisionTree.tree_name }} </h4>
                 <p class="owner treeMenuItems"> {{ decisionTree.creator_email }} </p>
-                <p class="creationDate treeMenuItems"> {{ decisionTree.created_at }} </p>
+                <p class="creationDate treeMenuItems"> {{ formatDateTime(decisionTree.created_at) }} </p>
             </li>
         </ul>
 
@@ -33,6 +33,8 @@
 <script>
     import { ref, onMounted } from 'vue';
     import DecisionTreeDTO from '../services/DecisionTreeDTO.js';
+    import Utils from '../services/Utils.js';
+import formatDateTime from '../services/Utils.js';
 
     export default {
 
@@ -68,7 +70,7 @@
                 context.emit('loadDecisionTree', selectedDecisionTreeId.value);
             }
 
-            return { databaseRecords, selectedDecisionTreeId, closeModal, onDecisionTreeClick, loadDecisionTree }
+            return { databaseRecords, selectedDecisionTreeId, closeModal, onDecisionTreeClick, loadDecisionTree, formatDateTime }
         }
 
     }
