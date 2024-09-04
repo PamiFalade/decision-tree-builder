@@ -11,7 +11,7 @@
                     :yPos="this.yPos"
                     :nodeType="this.selectedNode.attributes.type" />
         <Transition>
-            <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" @addChildren="addChildren"/>
+            <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" v-model:selectedNodeParent="selectedNodeParent" @closeNodeWindow="toggleShowNodeWindow" @addChildren="addChildren"/>
         </Transition>
     </body>
 </template>
@@ -160,7 +160,7 @@
                     attributes: {
                         type: "Decision",
                         expectedValue: 0,
-                        probability: 0,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
                     },
                     children: []
                 });
@@ -173,7 +173,7 @@
                     attributes: {
                         type: "Chance",
                         expectedValue: 0,
-                        probability: 0,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
                     },
                     children: []
                 });
@@ -186,7 +186,7 @@
                     attributes: {
                         type: "Terminal",
                         expectedValue: 0,
-                        probability: 0,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
                     },
                     children: []
                 });

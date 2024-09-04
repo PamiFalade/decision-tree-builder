@@ -71,7 +71,7 @@
                         <p>EV</p>
                         <input v-model="selectedNode.attributes.expectedValue"  id="nodeWindowEV" name="nodeWindowEV"/>
                     </li>
-                    <li>
+                    <li v-show="selectedNode.attributes.probability">
                         <p>Probability</p>
                         <input v-model="selectedNode.attributes.probability" id="nodeWindowProbability" name="nodeWindowProbability" />
                     </li>
