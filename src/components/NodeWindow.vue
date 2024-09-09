@@ -1,5 +1,5 @@
 <script setup>
-    import { ref, computed, onMounted } from 'vue';
+    import { ref, computed } from 'vue';
 
     // Number of each types of node that will be added to the selectedNode's children
     const addDecisions = ref(null);
@@ -69,14 +69,14 @@
                     </li>
                     <li>
                         <p>EV</p>
-                        <input v-model="selectedNode.attributes.expectedValue" />
+                        <input v-model="selectedNode.attributes.expectedValue"  id="nodeWindowEV" name="nodeWindowEV"/>
                     </li>
-                    <li>
+                    <li v-show="selectedNode.attributes.probability">
                         <p>Probability</p>
-                        <input v-model="selectedNode.attributes.probability" />
+                        <input v-model="selectedNode.attributes.probability" id="nodeWindowProbability" name="nodeWindowProbability" />
                     </li>
                 </ul>
-
+                
                 <div v-if="selectedNode.attributes.type !== 'Terminal'" id="childNodesSection">
                     <table>
                         <tr>
@@ -86,12 +86,12 @@
                             <th id="evCol" >EV</th>
                             <th id="probCol">p</th>
                         </tr>
-                        <tr v-for="(childNode, index) in selectedNode.children" :key="index">
+                        <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
                             <td>{{ index + 1 }}</td>
                             <td>{{ childNode.attributes.type }}</td>
-                            <td class="editableCell" > <input v-model="childNode.name" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.expectedValue" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.probability" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.expectedValue" :id="'nodeWindowChildEV' + childNode.id" :name="'nodeWindowChildEV' + childNode.id" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" /> </td>
                         </tr>
                     </table>
 
@@ -99,17 +99,17 @@
                         <ul>
                             <div class="addNodeLine" >
                                 <img class="addNodeImg" src="../../red_square.svg" />
-                                <input class="addNodeInput" type="number" value="0" min="0" ref="addDecisions" />
+                                <input class="addNodeInput" id="nodeWindowAddDecisions"  name="nodeWindowAddDecisions" type="number" value="0" min="0" ref="addDecisions" />
                             </div>
 
                             <div class="addNodeLine" >
                                 <img class="addNodeImg" src="../../yellow_circle.svg" />
-                                <input class="addNodeInput" type="number" value="0" min="0" ref="addChances"/>
+                                <input class="addNodeInput" id="nodeWindowAddChances" name="nodeWindowAddChances" type="number" value="0" min="0" ref="addChances"/>
                             </div>
 
                             <div class="addNodeLine" >
                                 <img class="addNodeImg" src="../../green_triangle.svg" />
-                                <input class="addNodeInput" type="number" value="0" min="0" ref="addTerminals"/>
+                                <input class="addNodeInput" id="nodeWindowAddTerminals" name="nodeWindowAddTerminals" type="number" value="0" min="0" ref="addTerminals"/>
                             </div>
                         </ul>
 
@@ -139,7 +139,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 
     #nodeWindow {
         position: absolute;
@@ -167,13 +167,6 @@ export default {
         grid-template-rows: 1fr;
         justify-content: center;
         align-items: center;
-    }
-
-    .closeButton {
-        width: 40%;
-    }
-    .closeButton:hover {
-        cursor: pointer;
     }
 
     .nodeImg {
@@ -299,11 +292,8 @@ export default {
     #addNodeButton {
         width: 40%;
         height: auto;
-        background-color: #3371FF;
         border-radius: 7%;
         border: 0.3px solid black;
-        color: white;
-        font-weight: bold;
     }
 
 </style>

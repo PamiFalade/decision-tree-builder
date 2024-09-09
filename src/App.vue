@@ -1,7 +1,8 @@
 <template>
   <div id="mainPage">
-    <TaskBar :title="inputData.title"/>
-    <MainWindow :decisionTreeNodes="inputData.decisionTreeNodes" />
+    <TaskBar :title="treeTitle" @showDatabaseModal="onShowDatabaseModal" @saveDecisionTree="onSaveDecisionTree"/>
+    <LoadDataModal v-show="showModal" @hideDatabaseModal="onHideDatabaseModal" @loadDecisionTree="onLoadDecisionTree"/>
+    <MainWindow :decisionTreeNodes="decisionTreeNodes" />
   </div>
 </template>
 
@@ -9,17 +10,62 @@
 
   import TaskBar from './components/TaskBar.vue';
   import MainWindow from './components/MainWindow.vue';
-  import json from "./data/Input_Data.json";
+  import LoadDataModal from './components/LoadDataModal.vue';
+
+  import json from "./data/Starting_Input_Data.json";
+import DecisionTreeDTO from './services/DecisionTreeDTO';
 
   export default {
     name: 'App',
     components: {
       TaskBar,
       MainWindow,
+      LoadDataModal
     },
     data() {
       return {
-        inputData: json
+        inputData: json,
+        currentUser: "pamilerin@intern.mudozangl",
+        treeTitle: "New Decision Tree",
+        treeDescription: "Practice decision tree saving",
+        decisionTreeNodes: {
+          "name": "Root Node",
+          "id": 1,
+          "attributes": {
+              "type": "Root",
+              "expectedValue": 82724,
+              "probability": 1.0
+          },
+          "children": []
+        },
+        showModal: false
+      }
+    },
+    methods: {
+      onShowDatabaseModal() {
+        this.showModal = true;
+      },
+
+      onHideDatabaseModal() {
+        this.showModal = false;
+      },
+
+      async onLoadDecisionTree(decisionTreeId) {
+        this.showModal = false;
+        const loadedTree = await DecisionTreeDTO.getTree(decisionTreeId);
+        this.treeTitle = loadedTree.data.title;
+        this.decisionTreeNodes = { ...loadedTree.data.decisionTreeNodes };
+        console.log(this.decisionTreeNodes);
+      },
+
+      async onSaveDecisionTree() {
+        const newDecisionTree = {
+          title: this.treeTitle,
+          createdBy: this.currentUser,
+          description: this.treeDescription,
+          decisionTreeNodes: this.decisionTreeNodes
+        }
+        const savedTree = await DecisionTreeDTO.saveTree(newDecisionTree);
       }
     }
   }

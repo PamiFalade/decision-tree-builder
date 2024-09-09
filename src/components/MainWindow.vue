@@ -1,5 +1,5 @@
 <template>
-     <body>
+    <body>
         <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
@@ -11,7 +11,7 @@
                     :yPos="this.yPos"
                     :nodeType="this.selectedNode.attributes.type" />
         <Transition>
-            <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" @closeNodeWindow="toggleShowNodeWindow" @addChildren="addChildren"/>
+            <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" v-model:selectedNodeParent="selectedNodeParent" @closeNodeWindow="toggleShowNodeWindow" @addChildren="addChildren"/>
         </Transition>
     </body>
 </template>
@@ -42,6 +42,13 @@
             NodeWindow,
             Tree: applyReactInVue(DecisionTree),
             NodePopup
+        },
+        watch: {
+            decisionTreeNodes(value) {
+                this.decisionTree = value;
+                this.showNodePopup = false;
+                this.showNodeWindow = false;
+            }
         },
         data() {
             return {
@@ -94,8 +101,7 @@
                 this.selectedNode = this.bfs(node.data.id);
                 console.log(node);
                 
-                this.selectedNodeParent = this.bfs(node.parent.data.id);    // Find the node's parent as well, so that we can delete the selectedNode if needed
-                console.log(this.selectedNodeParent);
+                this.selectedNodeParent = node.parent !== null ? this.bfs(node.parent.data.id) : null;    // Find the node's parent as well, so that we can delete the selectedNode if needed (IFF it's not the root node)
                 this.displayNodePopup();
             },
 
@@ -122,7 +128,7 @@
 
             // Used to find nodes by traversing through the tree breadth-first
             bfs(idToFind){
-                if(idToFind === 1){
+                if(idToFind === this.decisionTree.id){
                     return this.decisionTree;
                 }
 
@@ -148,39 +154,39 @@
             },
 
             addDecisionNode() {
-               this.selectedNode.children.push({
+                this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Decision",
                         expectedValue: 0,
-                        probability: 0,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
                     },
                     children: []
                 });
             },
 
             addChanceNode() {
-               this.selectedNode.children.push({
+                this.selectedNode.children.push({
                     name: "New Chance " + parseInt(this.selectedNode.children.length) + 2,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Chance",
                         expectedValue: 0,
-                        probability: 0,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
                     },
                     children: []
                 });
             },
             
             addTerminalNode() {
-               this.selectedNode.children.push({
+                this.selectedNode.children.push({
                     name: "New Terminal " + parseInt(this.selectedNode.children.length) + 1,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Terminal",
                         expectedValue: 0,
-                        probability: 0,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
                     },
                     children: []
                 });
@@ -234,7 +240,7 @@
     }
 
      /* Slide-in and slide-out animation for nodeWindow */
-     .v-enter-from {
+    .v-enter-from {
         translate: 150vw 0;
     }
     .v-enter-to {

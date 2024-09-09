@@ -1,0 +1,15 @@
+{
+    "title": "Decision Tree #1",
+    "createdBy": "pamilerin@intern.mudozangl",
+    "description": "Placeholder data",
+    "decisionTreeNodes": {
+        "name": "Root Node",
+        "id": 1,
+        "attributes": {
+            "type": "Root",
+            "expectedValue": 82724,
+            "probability": 1.0
+        },
+        "children": []
+    }
+}

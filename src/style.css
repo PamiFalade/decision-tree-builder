@@ -44,7 +44,9 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #3371FF;
+  color: white;
+  font-weight: bold;
   cursor: pointer;
   transition: border-color 0.25s;
 }
@@ -54,6 +56,10 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .card {
@@ -78,4 +84,13 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/******** Custom Button styles ********/
+
+.closeButton {
+  width: 25px;
+}
+.closeButton:hover {
+  cursor: pointer;
 }
