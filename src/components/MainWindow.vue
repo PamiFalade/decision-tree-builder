@@ -1,6 +1,5 @@
 <template>
     <body>
-        <button @click="calculateTreeValues(decisionTreeNodes, 0)">Test</button>
         <button @click="highlightBestDecision(decisionTreeNodes, true)">Test2</button>
         <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
@@ -13,7 +12,12 @@
                     :yPos="this.yPos"
                     :nodeType="this.selectedNode.attributes.type" />
         <Transition>
-            <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" v-model:selectedNodeParent="selectedNodeParent" @closeNodeWindow="toggleShowNodeWindow" @addChildren="addChildren"/>
+            <NodeWindow v-show="showNodeWindow" 
+                        v-model:selectedNode="selectedNode" 
+                        v-model:selectedNodeParent="selectedNodeParent" 
+                        @closeNodeWindow="toggleShowNodeWindow" 
+                        @addChildren="addChildren"
+                        @updateTreeValues="onUpdateTreeValues"/>
         </Transition>
     </body>
 </template>
@@ -112,6 +116,10 @@ import { onUpdated } from 'vue';
                 this.displayNodePopup();
             },
 
+            onUpdateTreeValues() {
+                this.calculateTreeValues(this.decisionTreeNodes, 0);
+            },
+
             // Traverse through the tree breadth-first and set each node's parent using the node ID
             // Using a reference to the parent node causes an error with the react-d3-tree component
             setParentNodes() {
@@ -183,9 +191,6 @@ import { onUpdated } from 'vue';
                                                             .reduce((best, current) => (best && best > current) ? best : current);
                     
                 }
-                if(currentNode.attributes.type === "Root") {
-                    console.log(currentNode);
-                }
             },
 
             // Set the properties that will indicate which nodes are part of the best path, and which ones are part of the worst path
@@ -216,11 +221,6 @@ import { onUpdated } from 'vue';
                     });
                 }
             },
-            
-            updated() {
-                this.calculateTreeValues();
-                this.highlightBestDecision();
-            },
 
             addDecisionNode() {
                 this.selectedNode.children.push({
@@ -235,6 +235,7 @@ import { onUpdated } from 'vue';
                     },
                     children: []
                 });
+                this.onUpdateTreeValues();
             },
             
             addChanceNode() {
@@ -250,6 +251,7 @@ import { onUpdated } from 'vue';
                     },
                     children: []
                 });
+                this.onUpdateTreeValues();
             },
             
             addTerminalNode() {
@@ -265,6 +267,7 @@ import { onUpdated } from 'vue';
                     },
                     children: []
                 });
+                this.onUpdateTreeValues();
             },
 
             // Method for adding children nodes from the NodeWindow
@@ -281,6 +284,7 @@ import { onUpdated } from 'vue';
                 for(let i=0; i<numNewTerminals; i++){
                     this.addTerminalNode();
                 }
+                this.onUpdateTreeValues();
             },
 
             deleteNode() {
@@ -300,6 +304,7 @@ import { onUpdated } from 'vue';
                 };
                 this.hideNodePopup();
                 this.hideNodeWindow();
+                this.onUpdateTreeValues();
             }
         },
     }
