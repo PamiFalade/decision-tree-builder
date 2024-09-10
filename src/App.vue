@@ -33,7 +33,8 @@ import DecisionTreeDTO from './services/DecisionTreeDTO';
           "id": 1,
           "attributes": {
               "type": "Root",
-              "expectedValue": 82724,
+              "yield": 0,
+              "expectedValue": 0,
               "probability": 1.0
           },
           "children": []

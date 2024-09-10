@@ -1,5 +1,6 @@
 <template>
     <body>
+        <button @click="calculateTreeValues(decisionTreeNodes, 0)">Test</button>
         <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
@@ -32,8 +33,9 @@
                 id: Number,
                 attributes: {
                     type: String,
-                    expectedValue: Number,
-                    probability: Number
+                    yield: Number,
+                    probability: Number,
+                    expectedValue: Number
                 },
                 children: Array
             }
@@ -59,8 +61,9 @@
                     id: 0,
                     attributes: {
                         type: "",
-                        expectedValue: 0,
+                        yield: 0,
                         probability: 0,
+                        expectedValue: 0
                     },
                     children: []
                 },
@@ -153,13 +156,44 @@
                 return nodeToFind;
             },
 
+            // Traverses through the tree post-order to aggregate yields and calculate expected values
+            calculateTreeValues(currentNode, accumulatedYield) {
+                // If the node has no children, its expected value is just the accumulated payoffs along its path
+                if(currentNode.children.length === 0){
+                    let expectedValue = parseInt(currentNode.attributes.yield) + accumulatedYield;
+                    currentNode.attributes.expectedValue = expectedValue;
+                    console.log(currentNode);
+                    return;
+                }
+                for(let i=0; i<currentNode.children.length; i++) {
+                    this.calculateTreeValues(currentNode.children[i], accumulatedYield + currentNode.attributes.yield);
+                }
+
+                // If the node is a chance node, its expected value is the weighted average of its children's expected values.
+                if(currentNode.attributes.type === "Chance") {
+                    const childNodes = [...currentNode.children];
+                    const expectedValue = childNodes.reduce((sum, childNode) =>  sum + childNode.attributes.expectedValue * parseFloat(childNode.attributes.probability), 0);
+                    currentNode.attributes.expectedValue = expectedValue;
+                }
+                // Else, the node is not a chance node, or a terminal node (i.e., a decision or root node), its expected value is the highest value of its children
+                else {
+                    let expectedValueList = currentNode.children.map(childNode => childNode.attributes.expectedValue);
+                    currentNode.attributes.expectedValue = Math.max(...expectedValueList);
+                }
+                
+                if(currentNode.attributes.type === "Root") {
+                    console.log(currentNode);
+                }
+            },
+
             addDecisionNode() {
                 this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Decision",
-                        expectedValue: 0,
+                        yield: 0.0,
+                        expectedValue: 0.0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
                     },
                     children: []
@@ -172,7 +206,8 @@
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Chance",
-                        expectedValue: 0,
+                        yield: 0.0,
+                        expectedValue: 0.0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
                     },
                     children: []
@@ -185,7 +220,8 @@
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Terminal",
-                        expectedValue: 0,
+                        yield: 0.0,
+                        expectedValue: 0.0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
                     },
                     children: []
@@ -216,8 +252,9 @@
                     id: "",
                     attributes: {
                         type: "",
-                        expectedValue: 0,
+                        yield: 0,
                         probability: 0,
+                        expectedValue: 0
                     },
                     children: []
                 };

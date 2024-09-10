@@ -23,8 +23,9 @@
             name: String,
             attributes: {
                 type: String,
-                expectedValue: Number,
-                probability: Number
+                yield: Number,
+                probability: Number,
+                expectedValue: Number
             },
             children: Array,
         },
@@ -58,7 +59,6 @@
                     @click="closeWindow"/>
                 <input id="h2Input" v-model="selectedNode.name" />
                 <img :src="getNodeSvg" class="nodeImg" />
-
             </div>
 
             <div class="windowBody">
@@ -68,12 +68,12 @@
                         <p> {{selectedNode.attributes.type}} </p>
                     </li>
                     <li>
-                        <p>EV</p>
-                        <input v-model="selectedNode.attributes.expectedValue"  id="nodeWindowEV" name="nodeWindowEV"/>
+                        <p>Yield</p>
+                        <input v-model="selectedNode.attributes.yield" type="number" id="nodeWindowYield" name="nodeWindowYield"/>
                     </li>
-                    <li v-show="selectedNode.attributes.probability">
+                    <li v-show="selectedNode.attributes.probability >= 0">
                         <p>Probability</p>
-                        <input v-model="selectedNode.attributes.probability" id="nodeWindowProbability" name="nodeWindowProbability" />
+                        <input v-model="selectedNode.attributes.probability" type="number" max="1" id="nodeWindowProbability" name="nodeWindowProbability" />
                     </li>
                 </ul>
                 
@@ -83,14 +83,14 @@
                             <th id="numCol" >#</th>
                             <th id="typeCol" >Type</th>
                             <th id="nameCol" >Name</th>
-                            <th id="evCol" >EV</th>
+                            <th id="yieldCol" >Yield</th>
                             <th id="probCol">p</th>
                         </tr>
                         <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
                             <td>{{ index + 1 }}</td>
                             <td>{{ childNode.attributes.type }}</td>
                             <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.expectedValue" :id="'nodeWindowChildEV' + childNode.id" :name="'nodeWindowChildEV' + childNode.id" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.yield" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" /> </td>
                             <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" /> </td>
                         </tr>
                     </table>
@@ -222,7 +222,7 @@ export default {
         max-width: 25%;
     }
 
-    #evCol {
+    #yieldCol {
         width: 15%;
     }
 
