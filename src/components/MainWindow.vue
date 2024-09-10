@@ -1,7 +1,7 @@
 <template>
     <body>
         <button @click="calculateTreeValues(decisionTreeNodes, 0)">Test</button>
-        <button @click="highlightBestDecision(decisionTreeNodes)">Test2</button>
+        <button @click="highlightBestDecision(decisionTreeNodes, true)">Test2</button>
         <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
@@ -24,6 +24,7 @@
 
     import { applyReactInVue } from 'veaury';
     import DecisionTree from './ReactD3Tree';
+import { onUpdated } from 'vue';
     
 
     export default {
@@ -188,17 +189,16 @@
             },
 
             // Set the properties that will indicate which nodes are part of the best path, and which ones are part of the worst path
-            highlightBestDecision(currentNode) {
+            highlightBestDecision(currentNode, onBestPath) {
                 // Set the node's onBestPath property to true
-                currentNode.attributes.onBestPath = true;
+                currentNode.attributes.onBestPath = onBestPath;
                 if(currentNode.children.length == 0) {
                     return;
                 }
-
                 // At chance nodes, all children are considered part of the "best" path
                 if(currentNode.attributes.type === "Chance") {
                     currentNode.children.forEach(childNode => {
-                        this.highlightBestDecision(childNode);
+                        this.highlightBestDecision(childNode, onBestPath);
                     });
                 }
                 
@@ -208,10 +208,18 @@
                     .reduce((best, current) => (best && best > current) ? best : current );
                     currentNode.children.forEach(childNode => {
                         if(childNode.attributes.expectedValue === bestValue) {
-                            this.highlightBestDecision(childNode);
+                            this.highlightBestDecision(childNode, true);
+                        }
+                        else {
+                            this.highlightBestDecision(childNode, false);
                         }
                     });
                 }
+            },
+            
+            updated() {
+                this.calculateTreeValues();
+                this.highlightBestDecision();
             },
 
             addDecisionNode() {

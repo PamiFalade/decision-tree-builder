@@ -3,7 +3,7 @@
     <div id="mainTaskBar">
         <div id="taskBarComponents">
             <div class="imgBtn">
-                <img src="../assets/clear_icon.svg"/>
+                <img src="../assets/hamburger_icon.svg"/>
             </div>
 
             <div class="imgBtn" @click="saveTree">
