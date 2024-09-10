@@ -189,9 +189,11 @@
 
             // Set the properties that will indicate which nodes are part of the best path, and which ones are part of the worst path
             highlightPaths(currentNode) {
-                console.log(currentNode);
                 // Set the node's onBestPath property to true
                 currentNode.attributes.onBestPath = true;
+                if(currentNode.children.length == 0) {
+                    return;
+                }
 
                 // At chance nodes, all children are considered part of the "best" path
                 if(currentNode.attributes.type === "Chance") {
@@ -201,7 +203,7 @@
                 }
                 
                 // At decision nodes, only the child nodes with the highest expected values are considered to be on the "best" path
-                if(currentNode.attributes.type === "Root") {
+                else {
                     const bestValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
                     .reduce((best, current) => (best && best > current) ? best : current );
                     currentNode.children.forEach(childNode => {

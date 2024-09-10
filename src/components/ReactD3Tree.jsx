@@ -71,22 +71,34 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
   const renderSvgNode = ({ hierarchyPointNode, nodeDatum }) => (
     <g onClick={() => { handleOnNodeClick(hierarchyPointNode) }} >
       { returnNodeShape(nodeDatum.attributes?.type, hierarchyPointNode) }
-      <text fill="black" strokeWidth="1" x="20">
+      <text fontSize="14" fill="black" strokeWidth="1" x="20">
         {nodeDatum.name}
       </text>
-      {nodeDatum.attributes?.yield && !nodeDatum.attributes?.expectedValue && (
-        <text fill="black" x="20" dy="20" strokeWidth="1">
-          Yield: {nodeDatum.attributes.yield}
+      {nodeDatum.attributes?.yield && (
+        <text fontSize="12" fill="black" x="-50" dy="20" strokeWidth="0.5">
+          {nodeDatum.attributes.yield}
+        </text>
+      )}
+      {nodeDatum.attributes?.probability && !nodeDatum.attributes?.expectedValue && (
+        <text fontSize="12" fill="black" x="-50" dy="20" strokeWidth="0.5">
+          {nodeDatum.attributes.yield}
         </text>
       )}
       {nodeDatum.attributes?.expectedValue && (
-        <text fill="black" x="20" dy="20" strokeWidth="1">
+        <text fontSize="14" fill="black" x="20" dy="20" strokeWidth="1">
           EV: {nodeDatum.attributes.expectedValue}
         </text>
       )}
     </g>
   );
 
+    const slantedPathFunc = (linkDatum, orientation) => {
+      const { source, target } = linkDatum;
+
+      return orientation === 'horizontal'
+        ? `M${source.y},${source.x}L${source.y+20},${source.x}L${target.y-40},${target.x}L${target.y},${target.x}`
+        : `M${source.x},${source.y}L${target.x},${target.y}`;
+    };
 
   const getDynamicPathClass = ({ source, target }, orientation) => {
 
@@ -107,7 +119,7 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
       // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
       <div id="treeWrapper" style={{ width: '100vw', height: '100vh',}} onClick={handleOnScreenClick} >
         <Tree data={treeData}
-          pathFunc={"straight"}
+          pathFunc={slantedPathFunc}
           pathClassFunc={getDynamicPathClass}
           translate={{ x:75, y:300 }}
           collapsible={false}

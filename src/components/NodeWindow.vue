@@ -96,7 +96,7 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ childNode.attributes.type }}</td>
                             <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.yield" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="setDefaultInput" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.yield" value="0" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="setDefaultInput" /> </td>
                             <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="setDefaultInput" /> </td>
                         </tr>
                     </table>
