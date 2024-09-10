@@ -31,6 +31,12 @@
         },
     });
 
+    const setDefaultInput = (event) => {
+        if(event.target.value == "") {
+            event.target.value = 0;
+        }
+    }
+
     const getNodeSvg = computed(() => {
         let svgPath = "";
             if(props.selectedNode.attributes.type === "Root"){
@@ -69,11 +75,11 @@
                     </li>
                     <li>
                         <p>Yield</p>
-                        <input v-model="selectedNode.attributes.yield" type="number" id="nodeWindowYield" name="nodeWindowYield"/>
+                        <input v-model="selectedNode.attributes.yield" type="number" id="nodeWindowYield" name="nodeWindowYield" @blur="setDefaultInput" />
                     </li>
                     <li v-show="selectedNode.attributes.probability >= 0">
                         <p>Probability</p>
-                        <input v-model="selectedNode.attributes.probability" type="number" max="1" id="nodeWindowProbability" name="nodeWindowProbability" />
+                        <input v-model="selectedNode.attributes.probability" type="number" max="1" id="nodeWindowProbability" name="nodeWindowProbability" @blur="setDefaultInput" />
                     </li>
                 </ul>
                 
@@ -90,8 +96,8 @@
                             <td>{{ index + 1 }}</td>
                             <td>{{ childNode.attributes.type }}</td>
                             <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.yield" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.yield" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="setDefaultInput" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="setDefaultInput" /> </td>
                         </tr>
                     </table>
 

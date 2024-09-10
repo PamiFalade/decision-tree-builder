@@ -218,23 +218,23 @@
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Decision",
-                        yield: 0.0,
-                        expectedValue: 0.0,
+                        yield: 0,
+                        expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
                         onBestPath: false
                     },
                     children: []
                 });
             },
-
+            
             addChanceNode() {
                 this.selectedNode.children.push({
                     name: "New Chance " + parseInt(this.selectedNode.children.length) + 2,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Chance",
-                        yield: 0.0,
-                        expectedValue: 0.0,
+                        yield: 0,
+                        expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
                         onBestPath: false
                     },
@@ -248,8 +248,8 @@
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Terminal",
-                        yield: 0.0,
-                        expectedValue: 0.0,
+                        yield: 0,
+                        expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
                         onBestPath: false
                     },
