@@ -74,9 +74,14 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
       <text fill="black" strokeWidth="1" x="20">
         {nodeDatum.name}
       </text>
-      {nodeDatum.attributes?.yield && (
+      {nodeDatum.attributes?.yield && !nodeDatum.attributes?.expectedValue && (
         <text fill="black" x="20" dy="20" strokeWidth="1">
           Yield: {nodeDatum.attributes.yield}
+        </text>
+      )}
+      {nodeDatum.attributes?.expectedValue && (
+        <text fill="black" x="20" dy="20" strokeWidth="1">
+          EV: {nodeDatum.attributes.expectedValue}
         </text>
       )}
     </g>

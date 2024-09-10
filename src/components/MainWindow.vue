@@ -1,6 +1,7 @@
 <template>
     <body>
         <button @click="calculateTreeValues(decisionTreeNodes, 0)">Test</button>
+        <button @click="highlightPaths(decisionTreeNodes)">Test2</button>
         <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
@@ -35,7 +36,8 @@
                     type: String,
                     yield: Number,
                     probability: Number,
-                    expectedValue: Number
+                    expectedValue: Number,
+                    onBestPath: Boolean
                 },
                 children: Array
             }
@@ -63,7 +65,8 @@
                         type: "",
                         yield: 0,
                         probability: 0,
-                        expectedValue: 0
+                        expectedValue: 0,
+                        onBestPath: false
                     },
                     children: []
                 },
@@ -162,13 +165,11 @@
                 if(currentNode.children.length === 0){
                     let expectedValue = parseInt(currentNode.attributes.yield) + accumulatedYield;
                     currentNode.attributes.expectedValue = expectedValue;
-                    console.log(currentNode);
                     return;
                 }
                 for(let i=0; i<currentNode.children.length; i++) {
                     this.calculateTreeValues(currentNode.children[i], accumulatedYield + currentNode.attributes.yield);
                 }
-
                 // If the node is a chance node, its expected value is the weighted average of its children's expected values.
                 if(currentNode.attributes.type === "Chance") {
                     const childNodes = [...currentNode.children];
@@ -177,12 +178,37 @@
                 }
                 // Else, the node is not a chance node, or a terminal node (i.e., a decision or root node), its expected value is the highest value of its children
                 else {
-                    let expectedValueList = currentNode.children.map(childNode => childNode.attributes.expectedValue);
-                    currentNode.attributes.expectedValue = Math.max(...expectedValueList);
+                    currentNode.attributes.expectedValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
+                                                            .reduce((best, current) => (best && best > current) ? best : current);
+                    
                 }
-                
                 if(currentNode.attributes.type === "Root") {
                     console.log(currentNode);
+                }
+            },
+
+            // Set the properties that will indicate which nodes are part of the best path, and which ones are part of the worst path
+            highlightPaths(currentNode) {
+                console.log(currentNode);
+                // Set the node's onBestPath property to true
+                currentNode.attributes.onBestPath = true;
+
+                // At chance nodes, all children are considered part of the "best" path
+                if(currentNode.attributes.type === "Chance") {
+                    currentNode.children.forEach(childNode => {
+                        this.highlightPaths(childNode);
+                    });
+                }
+                
+                // At decision nodes, only the child nodes with the highest expected values are considered to be on the "best" path
+                if(currentNode.attributes.type === "Root") {
+                    const bestValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
+                    .reduce((best, current) => (best && best > current) ? best : current );
+                    currentNode.children.forEach(childNode => {
+                        if(childNode.attributes.expectedValue === bestValue) {
+                            this.highlightPaths(childNode);
+                        }
+                    });
                 }
             },
 
@@ -194,7 +220,8 @@
                         type: "Decision",
                         yield: 0.0,
                         expectedValue: 0.0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
+                        onBestPath: false
                     },
                     children: []
                 });
@@ -208,7 +235,8 @@
                         type: "Chance",
                         yield: 0.0,
                         expectedValue: 0.0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
+                        onBestPath: false
                     },
                     children: []
                 });
@@ -222,7 +250,8 @@
                         type: "Terminal",
                         yield: 0.0,
                         expectedValue: 0.0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
+                        onBestPath: false
                     },
                     children: []
                 });
@@ -254,7 +283,8 @@
                         type: "",
                         yield: 0,
                         probability: 0,
-                        expectedValue: 0
+                        expectedValue: 0,
+                        onBestPath: false
                     },
                     children: []
                 };

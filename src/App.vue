@@ -35,7 +35,8 @@ import DecisionTreeDTO from './services/DecisionTreeDTO';
               "type": "Root",
               "yield": 0,
               "expectedValue": 0,
-              "probability": 1.0
+              "probability": 1.0,
+              "onBestPath": false
           },
           "children": []
         },
