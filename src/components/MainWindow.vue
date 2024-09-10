@@ -1,7 +1,7 @@
 <template>
     <body>
         <button @click="calculateTreeValues(decisionTreeNodes, 0)">Test</button>
-        <button @click="highlightPaths(decisionTreeNodes)">Test2</button>
+        <button @click="highlightBestDecision(decisionTreeNodes)">Test2</button>
         <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
@@ -188,7 +188,7 @@
             },
 
             // Set the properties that will indicate which nodes are part of the best path, and which ones are part of the worst path
-            highlightPaths(currentNode) {
+            highlightBestDecision(currentNode) {
                 // Set the node's onBestPath property to true
                 currentNode.attributes.onBestPath = true;
                 if(currentNode.children.length == 0) {
@@ -198,7 +198,7 @@
                 // At chance nodes, all children are considered part of the "best" path
                 if(currentNode.attributes.type === "Chance") {
                     currentNode.children.forEach(childNode => {
-                        this.highlightPaths(childNode);
+                        this.highlightBestDecision(childNode);
                     });
                 }
                 
@@ -208,7 +208,7 @@
                     .reduce((best, current) => (best && best > current) ? best : current );
                     currentNode.children.forEach(childNode => {
                         if(childNode.attributes.expectedValue === bestValue) {
-                            this.highlightPaths(childNode);
+                            this.highlightBestDecision(childNode);
                         }
                     });
                 }

@@ -6,8 +6,11 @@
                 <img src="../assets/clear_icon.svg"/>
             </div>
 
+            <div class="imgBtn" @click="saveTree">
+                <img class="imgBtn" src="../assets/save_icon.svg"/>
+            </div>
+            
             <h2>{{ title }}</h2>
-
 
             <div class="dropdown">
                 <button class="dropbtn">Export</button>
@@ -17,12 +20,8 @@
                     <a href="#">Excel</a>
                 </div>
             </div>
-
-            <div class="imgBtn" @click="saveTree">
-                <img class="imgBtn" src="../assets/save_icon.svg"/>
-            </div>
             
-            <button class="testBtn" @click="showDatabaseModal">
+            <button id="loadBtn" @click="showDatabaseModal">
                 Load Data
             </button>
         </div>
@@ -64,7 +63,7 @@ export default {
 
 #taskBarComponents {
     display: grid;
-    grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 5fr 1fr 1fr;
     column-gap: 2vw;
     grid-template-rows: 1fr;
     justify-content: center;
@@ -140,5 +139,10 @@ export default {
 
 .dropdown:hover .dropbtn {background-color: #3e8e41;}
 /* End styling for export dropdown */
+
+#loadBtn {
+    width: 115px;
+    padding: 16px;
+}
 
 </style>
