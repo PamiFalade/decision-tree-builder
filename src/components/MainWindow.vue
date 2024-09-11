@@ -189,7 +189,6 @@ import { onUpdated } from 'vue';
                 else {
                     currentNode.attributes.expectedValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
                                                             .reduce((best, current) => (best && best > current) ? best : current);
-                    
                 }
             },
 

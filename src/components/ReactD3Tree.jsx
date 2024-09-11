@@ -79,14 +79,16 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
           {nodeDatum.attributes.yield}
         </text>
       )}
-      {nodeDatum.attributes?.probability && !nodeDatum.attributes?.expectedValue && (
-        <text fontSize="12" fill="black" x="-50" dy="20" strokeWidth="0.5">
-          {nodeDatum.attributes.yield}
-        </text>
+      {nodeDatum.attributes?.type !== "Root" && (
+        nodeDatum.attributes?.probability && (
+          <text fontSize="12" fill="lightblue" x="-50" dy="-10" strokeWidth="0.5">
+            {nodeDatum.attributes.probability}
+          </text>
+        )
       )}
       {nodeDatum.attributes?.expectedValue && (
-        <text fontSize="14" fill="black" x="20" dy="20" strokeWidth="1">
-          EV: {nodeDatum.attributes.expectedValue}
+        <text fontSize="14" fill="green" x="20" dy="20" strokeWidth="1">
+          ${Math.round(nodeDatum.attributes.expectedValue * 100)/100}
         </text>
       )}
     </g>
