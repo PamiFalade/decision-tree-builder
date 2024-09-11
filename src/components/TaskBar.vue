@@ -1,5 +1,4 @@
 <template>
-
     <div id="mainTaskBar">
         <div id="taskBarComponents">
             <div class="imgBtn">
@@ -9,8 +8,10 @@
             <div class="imgBtn" @click="saveTree">
                 <img class="imgBtn" src="../assets/save_icon.svg"/>
             </div>
+
+            <!-- <h2>{{ initialTreeTitle }}</h2> -->
             
-            <h2>{{ title }}</h2>
+            <input class="h2Input" v-model="title"/>
 
             <div class="dropdown">
                 <button class="dropbtn">Export</button>
@@ -34,7 +35,20 @@
 export default {
     name: 'TaskBar',
     props: {
-        title: String
+        initialTreeTitle: String
+    },
+    data() {
+        return {
+            title: ""
+        }
+    },
+    mounted(){
+        this.title = this.initialTreeTitle;
+    },
+    watch: {
+        title(value) {
+            this.$emit('updateTreeTitle', value);
+        }
     },
     methods: {
         showDatabaseModal(){
@@ -42,6 +56,10 @@ export default {
         },
         saveTree(){
             this.$emit('saveDecisionTree')
+        },
+        updateTreeTitle(event){
+            console.log(event);
+            this.$emit('updateTreeTitle', event.target.value);
         }
     }
 }

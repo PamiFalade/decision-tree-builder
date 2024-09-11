@@ -1,6 +1,6 @@
 <template>
   <div id="mainPage">
-    <TaskBar :title="treeTitle" @showDatabaseModal="onShowDatabaseModal" @saveDecisionTree="onSaveDecisionTree"/>
+    <TaskBar :initialTreeTitle="treeTitle" @showDatabaseModal="onShowDatabaseModal" @saveDecisionTree="onSaveDecisionTree" @updateTreeTitle="onUpdateTreeTitle"/>
     <LoadDataModal v-show="showModal" @hideDatabaseModal="onHideDatabaseModal" @loadDecisionTree="onLoadDecisionTree"/>
     <MainWindow :decisionTreeNodes="decisionTreeNodes" />
   </div>
@@ -50,6 +50,10 @@ import DecisionTreeDTO from './services/DecisionTreeDTO';
 
       onHideDatabaseModal() {
         this.showModal = false;
+      },
+
+      onUpdateTreeTitle(newTitle) {
+        this.treeTitle = newTitle;
       },
 
       async onLoadDecisionTree(decisionTreeId) {

@@ -67,7 +67,7 @@
                 <img src='../assets/close_icon_black.svg' 
                     class="closeButton"
                     @click="closeWindow"/>
-                <input id="h2Input" v-model="selectedNode.name" />
+                <input class="h2Input" v-model="selectedNode.name" />
                 <img :src="getNodeSvg" class="nodeImg" />
             </div>
 
@@ -263,12 +263,6 @@ export default {
         width: 80%;
         height: 100%;
         font-size: medium;
-    }
-
-    #h2Input {
-        width: 85%;
-        height: 50%;
-        font-size: xx-large;
     }
 
     #addNodesSection {
