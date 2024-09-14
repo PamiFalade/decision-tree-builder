@@ -6,6 +6,8 @@
   stroke-width: 2.5;
 }
 
-.normal_link {
+.link_worst_path {
   fill: red;
+  stroke: red;
+  stroke-width: 2.5;
 }

@@ -1,7 +1,7 @@
 <template>
     <body>
-        <button @click="showBestDecision = !showBestDecision">Test</button>
-        <Tree :decisionTree="decisionTree" :showBestDecision="showBestDecision" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
+        <button @click="highlightWorstPath = !highlightWorstPath">Test</button>
+        <Tree :decisionTree="decisionTree" :highlightBestPath="highlightBestPath" :highlightWorstPath="highlightWorstPath" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
@@ -28,9 +28,7 @@
 
     import { applyReactInVue } from 'veaury';
     import DecisionTree from './ReactD3Tree';
-import { onUpdated } from 'vue';
     
-
     export default {
         name: 'MainWindow',
         props: {
@@ -42,7 +40,8 @@ import { onUpdated } from 'vue';
                     yield: Number,
                     probability: Number,
                     expectedValue: Number,
-                    onBestPath: Boolean
+                    onBestPath: Boolean,
+                    onWorstPath: Boolean
                 },
                 children: Array
             }
@@ -63,7 +62,8 @@ import { onUpdated } from 'vue';
             return {
                 showNodeWindow: false,
                 showNodePopup: false,
-                showBestDecision: false,
+                highlightBestPath: false,
+                highlightWorstPath: true,
                 selectedNode: {
                     name: '',
                     id: 0,
@@ -72,7 +72,8 @@ import { onUpdated } from 'vue';
                         yield: 0,
                         probability: 0,
                         expectedValue: 0,
-                        onBestPath: false
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 },
@@ -120,6 +121,7 @@ import { onUpdated } from 'vue';
             onUpdateTreeValues() {
                 this.calculateTreeValues(this.decisionTreeNodes, 0);
                 this.highlightBestDecision(this.decisionTreeNodes, true);
+                this.highlightWorstDecision(this.decisionTree, true);
             },
 
             // Traverse through the tree breadth-first and set each node's parent using the node ID
@@ -223,6 +225,35 @@ import { onUpdated } from 'vue';
                 }
             },
 
+            // Set the properties that will indicate which nodes are part of the worst path, and which ones are part of the worst path
+            highlightWorstDecision(currentNode, onWorstPath) {
+                // Set the node's onWorstPath property to true
+                currentNode.attributes.onWorstPath = onWorstPath;
+                if(currentNode.children.length == 0) {
+                    return;
+                }
+                // At chance nodes, all children are considered part of the "worst" path
+                if(currentNode.attributes.type === "Chance") {
+                    currentNode.children.forEach(childNode => {
+                        this.highlightWorstDecision(childNode, onWorstPath);
+                    });
+                }
+                
+                // At decision nodes, only the child nodes with the highest expected values are considered to be on the "worst" path
+                else {
+                    const worstValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
+                    .reduce((worst, current) => (worst && worst < current) ? worst : current );
+                    currentNode.children.forEach(childNode => {
+                        if(childNode.attributes.expectedValue === worstValue) {
+                            this.highlightWorstDecision(childNode, true);
+                        }
+                        else {
+                            this.highlightWorstDecision(childNode, false);
+                        }
+                    });
+                }
+            },
+
             addDecisionNode() {
                 this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
@@ -232,7 +263,8 @@ import { onUpdated } from 'vue';
                         yield: 0,
                         expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
-                        onBestPath: false
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 });
@@ -248,7 +280,8 @@ import { onUpdated } from 'vue';
                         yield: 0,
                         expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
-                        onBestPath: false
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 });
@@ -264,7 +297,8 @@ import { onUpdated } from 'vue';
                         yield: 0,
                         expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
-                        onBestPath: false
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 });
@@ -299,7 +333,8 @@ import { onUpdated } from 'vue';
                         yield: 0,
                         probability: 0,
                         expectedValue: 0,
-                        onBestPath: false
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 };
