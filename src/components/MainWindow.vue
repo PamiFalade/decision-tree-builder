@@ -1,7 +1,7 @@
 <template>
     <body>
-        <button @click="highlightBestDecision(decisionTreeNodes, true)">Test2</button>
-        <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
+        <button @click="showBestDecision = !showBestDecision">Test</button>
+        <Tree :decisionTree="decisionTree" :showBestDecision="showBestDecision" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
@@ -63,6 +63,7 @@ import { onUpdated } from 'vue';
             return {
                 showNodeWindow: false,
                 showNodePopup: false,
+                showBestDecision: false,
                 selectedNode: {
                     name: '',
                     id: 0,
@@ -118,6 +119,7 @@ import { onUpdated } from 'vue';
 
             onUpdateTreeValues() {
                 this.calculateTreeValues(this.decisionTreeNodes, 0);
+                this.highlightBestDecision(this.decisionTreeNodes, true);
             },
 
             // Traverse through the tree breadth-first and set each node's parent using the node ID

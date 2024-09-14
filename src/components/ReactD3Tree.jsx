@@ -8,7 +8,7 @@ import './ReactD3TreeStyles.css';
 // and you want the state, and notifications of any changes, to be "lifted up".
 // However, because of the circumstances (this must be a Vue project; it is not allowed to be a React project. And there is no 
 // Vue.js 3 package for d3-tree), I was forced towards having this component be a child component.
-const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updatePopupCoordinates }) => {
+const DecisionTree = ({ decisionTree, showBestDecision, updateSelectedNode, hideNodePopup, updatePopupCoordinates }) => {
 
 
   // State variable for the tree data
@@ -40,7 +40,7 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
     let height = nodeInfo.data.attributes.onBestPath ? "25" :"20";
     let r = nodeInfo.data.attributes.onBestPath ? "20" :"15";
 
-    let fill = nodeInfo.data.attributes.onBestPath ? "green" : 
+    let fill = nodeInfo.data.attributes.onBestPath && showBestDecision ? "green" : 
                       nodeType === "Root" ? "maroon" : 
                       nodeType === "Decision" ? "red" : 
                       nodeType === "Chance" ? "yellow" : 
@@ -105,7 +105,7 @@ const DecisionTree = ({ decisionTree, updateSelectedNode, hideNodePopup, updateP
   const getDynamicPathClass = ({ source, target }, orientation) => {
 
     // If the node is on the best path, style the link between the source and target nodes
-    if (target.data.attributes.onBestPath === true) {
+    if (target.data.attributes.onBestPath === true && showBestDecision) {
       return 'link_best_path';
     }
 
