@@ -9,4 +9,4 @@ const formatDateTime = (date) => {
 }
 
 
-export default formatDateTime;
+export { formatDateTime };

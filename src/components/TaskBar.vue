@@ -1,15 +1,13 @@
 <template>
     <div id="mainTaskBar">
         <div id="taskBarComponents">
-            <div class="imgBtn">
+            <div class="imgBtn" @click="toggleShowSettingsModal">
                 <img src="../assets/hamburger_icon.svg"/>
             </div>
 
             <div class="imgBtn" @click="saveTree">
                 <img class="imgBtn" src="../assets/save_icon.svg"/>
             </div>
-
-            <!-- <h2>{{ initialTreeTitle }}</h2> -->
             
             <input class="h2Input" v-model="title"/>
 
@@ -53,6 +51,9 @@ export default {
     methods: {
         showDatabaseModal(){
             this.$emit('showDatabaseModal');
+        },
+        toggleShowSettingsModal(){
+            this.$emit('toggleShowSettingsModal');
         },
         saveTree(){
             this.$emit('saveDecisionTree')

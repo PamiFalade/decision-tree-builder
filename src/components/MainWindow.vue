@@ -1,6 +1,5 @@
 <template>
     <body>
-        <button @click="highlightWorstPath = !highlightWorstPath">Test</button>
         <Tree :decisionTree="decisionTree" :highlightBestPath="highlightBestPath" :highlightWorstPath="highlightWorstPath" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
@@ -44,7 +43,8 @@
                     onWorstPath: Boolean
                 },
                 children: Array
-            }
+            },
+            highlightOption: String
         },
         components: {
             NodeWindow,
@@ -56,6 +56,20 @@
                 this.decisionTree = value;
                 this.showNodePopup = false;
                 this.showNodeWindow = false;
+            },
+            highlightOption(value) {
+                if(value === "noHighlight") {
+                    this.highlightBestPath = false;
+                    this.highlightWorstPath = false;
+                }
+                else if(value === "highlightMax"){
+                    this.highlightBestPath = true;
+                    this.highlightWorstPath = false;
+                }
+                else if(value === "highlightMin"){
+                    this.highlightBestPath = false;
+                    this.highlightWorstPath = true;
+                }
             }
         },
         data() {
@@ -63,7 +77,7 @@
                 showNodeWindow: false,
                 showNodePopup: false,
                 highlightBestPath: false,
-                highlightWorstPath: true,
+                highlightWorstPath: false,
                 selectedNode: {
                     name: '',
                     id: 0,
