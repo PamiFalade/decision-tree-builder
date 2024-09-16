@@ -7,7 +7,7 @@
     const addTerminals = ref(null);
 
     // Emit for when adding children nodes from NodeWindow
-    const emit = defineEmits(['addChildren']);
+    const emit = defineEmits(['addChildren', 'closeNodeWindow', 'updateTreeValues']);
 
     // When the "Add Nodes" button is clicked, signal to the MainWindow to add the indicated number of each node
     const onAddNodes = () => {
@@ -16,19 +16,30 @@
         addDecisions.value.value = 0;
         addChances.value.value = 0; 
         addTerminals.value.value = 0;
-    }
+    };
 
     const props = defineProps({
         selectedNode: {
             name: String,
             attributes: {
                 type: String,
-                expectedValue: Number,
-                probability: Number
+                yield: Number,
+                probability: Number,
+                expectedValue: Number
             },
             children: Array,
         },
     });
+
+    const onEnteredInput = (event) => {
+        // If the input field is left blank, default the value to 0
+        if(event.target.value == "") {
+            event.target.value = 0;
+        }
+
+        // Emit the event that the tree's node's values have been updated
+        emit('updateTreeValues');
+    }
 
     const getNodeSvg = computed(() => {
         let svgPath = "";
@@ -56,9 +67,8 @@
                 <img src='../assets/close_icon_black.svg' 
                     class="closeButton"
                     @click="closeWindow"/>
-                <input id="h2Input" v-model="selectedNode.name" />
+                <input class="h2Input" v-model="selectedNode.name" />
                 <img :src="getNodeSvg" class="nodeImg" />
-
             </div>
 
             <div class="windowBody">
@@ -68,12 +78,12 @@
                         <p> {{selectedNode.attributes.type}} </p>
                     </li>
                     <li>
-                        <p>EV</p>
-                        <input v-model="selectedNode.attributes.expectedValue"  id="nodeWindowEV" name="nodeWindowEV"/>
+                        <p>Yield</p>
+                        <input v-model="selectedNode.attributes.yield" type="number" id="nodeWindowYield" name="nodeWindowYield" @blur="onEnteredInput" />
                     </li>
-                    <li v-show="selectedNode.attributes.probability">
+                    <li v-show="selectedNode.attributes.probability >= 0">
                         <p>Probability</p>
-                        <input v-model="selectedNode.attributes.probability" id="nodeWindowProbability" name="nodeWindowProbability" />
+                        <input v-model="selectedNode.attributes.probability" type="number" max="1" id="nodeWindowProbability" name="nodeWindowProbability" @blur="onEnteredInput" />
                     </li>
                 </ul>
                 
@@ -83,15 +93,15 @@
                             <th id="numCol" >#</th>
                             <th id="typeCol" >Type</th>
                             <th id="nameCol" >Name</th>
-                            <th id="evCol" >EV</th>
+                            <th id="yieldCol" >Yield</th>
                             <th id="probCol">p</th>
                         </tr>
                         <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
                             <td>{{ index + 1 }}</td>
                             <td>{{ childNode.attributes.type }}</td>
                             <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.expectedValue" :id="'nodeWindowChildEV' + childNode.id" :name="'nodeWindowChildEV' + childNode.id" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.yield" value="0" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="onEnteredInput" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="onEnteredInput" /> </td>
                         </tr>
                     </table>
 
@@ -222,7 +232,7 @@ export default {
         max-width: 25%;
     }
 
-    #evCol {
+    #yieldCol {
         width: 15%;
     }
 
@@ -253,12 +263,6 @@ export default {
         width: 80%;
         height: 100%;
         font-size: medium;
-    }
-
-    #h2Input {
-        width: 85%;
-        height: 50%;
-        font-size: xx-large;
     }
 
     #addNodesSection {

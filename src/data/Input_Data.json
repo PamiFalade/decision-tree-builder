@@ -10,8 +10,10 @@
         "id": 1,
         "attributes": {
             "type": "Root",
-            "expectedValue": 10,
-            "probability": 1.0
+            "yield": 0,
+            "probability": 1.0,
+            "onBestPath": true,
+            "expectedValue": 10
         },
         "children": [
             {
@@ -19,8 +21,10 @@
                 "id": 2,
                 "attributes": {
                     "type": "Decision",
-                    "expectedValue": 11,
-                    "probability": 0.9
+                    "yield": 0,
+                    "probability": 0.9,
+                    "onBestPath": true,
+                    "expectedValue": 11
                 },
                 "parentID": null,
                 "children": [
@@ -29,8 +33,10 @@
                         "id": 3,
                         "attributes": {
                             "type": "Chance",
-                            "expectedValue": 12,
-                            "probability": 0.8
+                            "yield": 0,
+                            "probability": 0.8,
+                            "onBestPath": false,
+                            "expectedValue": 12
                         },
                         "children": [
                             {
@@ -38,8 +44,10 @@
                                 "id": 5,
                                 "attributes": {
                                     "type": "Terminal",
-                                    "expectedValue": 13,
-                                    "probability": 0.7
+                                    "yield": 0,
+                                    "probability": 0.7,
+                                    "onBestPath": false,
+                                    "expectedValue": 13
                                 },
                                 "parentID": null,
                                 "children": []
@@ -49,8 +57,10 @@
                                 "id": 6,
                                 "attributes": {
                                     "type": "Terminal",
-                                    "expectedValue": 13.5,
-                                    "probability": 0.65
+                                    "yield": 0,
+                                    "probability": 0.65,
+                                    "onBestPath": false,
+                                    "expectedValue": 13.5
                                 },
                                 "parentID": null,
                                 "children": []
@@ -62,8 +72,10 @@
                         "id": 4,
                         "attributes": {
                             "type": "Chance",
-                            "expectedValue": 14,
-                            "probability": 0.6
+                            "yield": 0,
+                            "probability": 0.6,
+                            "onBestPath": true,
+                            "expectedValue": 14
                         },
                         "parentID": null,
                         "children": [
@@ -72,8 +84,10 @@
                                 "id": 7,
                                 "attributes": {
                                     "type": "Terminal",
-                                    "expectedValue": 15,
-                                    "probability": 0.5
+                                    "yield": 0,
+                                    "probability": 0.5,
+                                    "onBestPath": true,
+                                    "expectedValue": 15
                                 },
                                 "parentID": null,
                                 "children": []
@@ -87,8 +101,10 @@
                 "id": 12,
                 "attributes": {
                     "type": "Chance",
-                    "expectedValue": 11,
-                    "probability": 0.9
+                    "yield": 0,
+                    "probability": 0.9,
+                    "onBestPath": false,
+                    "expectedValue": 11
                 },
                 "parentID": null,
                 "children": []

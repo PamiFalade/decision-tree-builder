@@ -1,6 +1,6 @@
 <template>
     <body>
-        <Tree :decisionTree="decisionTree" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
+        <Tree :decisionTree="decisionTree" :highlightBestPath="highlightBestPath" :highlightWorstPath="highlightWorstPath" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
@@ -11,7 +11,12 @@
                     :yPos="this.yPos"
                     :nodeType="this.selectedNode.attributes.type" />
         <Transition>
-            <NodeWindow v-show="showNodeWindow" v-model:selectedNode="selectedNode" v-model:selectedNodeParent="selectedNodeParent" @closeNodeWindow="toggleShowNodeWindow" @addChildren="addChildren"/>
+            <NodeWindow v-show="showNodeWindow" 
+                        v-model:selectedNode="selectedNode" 
+                        v-model:selectedNodeParent="selectedNodeParent" 
+                        @closeNodeWindow="toggleShowNodeWindow" 
+                        @addChildren="addChildren"
+                        @updateTreeValues="onUpdateTreeValues"/>
         </Transition>
     </body>
 </template>
@@ -23,7 +28,6 @@
     import { applyReactInVue } from 'veaury';
     import DecisionTree from './ReactD3Tree';
     
-
     export default {
         name: 'MainWindow',
         props: {
@@ -32,11 +36,15 @@
                 id: Number,
                 attributes: {
                     type: String,
+                    yield: Number,
+                    probability: Number,
                     expectedValue: Number,
-                    probability: Number
+                    onBestPath: Boolean,
+                    onWorstPath: Boolean
                 },
                 children: Array
-            }
+            },
+            highlightOption: String
         },
         components: {
             NodeWindow,
@@ -48,19 +56,39 @@
                 this.decisionTree = value;
                 this.showNodePopup = false;
                 this.showNodeWindow = false;
+                this.onUpdateTreeValues();
+            },
+            highlightOption(value) {
+                if(value === "noHighlight") {
+                    this.highlightBestPath = false;
+                    this.highlightWorstPath = false;
+                }
+                else if(value === "highlightMax"){
+                    this.highlightBestPath = true;
+                    this.highlightWorstPath = false;
+                }
+                else if(value === "highlightMin"){
+                    this.highlightBestPath = false;
+                    this.highlightWorstPath = true;
+                }
             }
         },
         data() {
             return {
                 showNodeWindow: false,
                 showNodePopup: false,
+                highlightBestPath: false,
+                highlightWorstPath: false,
                 selectedNode: {
                     name: '',
                     id: 0,
                     attributes: {
                         type: "",
-                        expectedValue: 0,
+                        yield: 0,
                         probability: 0,
+                        expectedValue: 0,
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 },
@@ -103,6 +131,12 @@
                 
                 this.selectedNodeParent = node.parent !== null ? this.bfs(node.parent.data.id) : null;    // Find the node's parent as well, so that we can delete the selectedNode if needed (IFF it's not the root node)
                 this.displayNodePopup();
+            },
+
+            onUpdateTreeValues() {
+                this.calculateTreeValues(this.decisionTreeNodes, 0);
+                this.highlightBestDecision(this.decisionTreeNodes, true);
+                this.highlightWorstDecision(this.decisionTree, true);
             },
 
             // Traverse through the tree breadth-first and set each node's parent using the node ID
@@ -153,30 +187,120 @@
                 return nodeToFind;
             },
 
+            // Traverses through the tree post-order to aggregate yields and calculate expected values
+            calculateTreeValues(currentNode, accumulatedYield) {
+                // If the node has no children, its expected value is just the accumulated payoffs along its path
+                if(currentNode.children.length === 0){
+                    let expectedValue = parseInt(currentNode.attributes.yield) + accumulatedYield;
+                    currentNode.attributes.expectedValue = expectedValue;
+                    return;
+                }
+                for(let i=0; i<currentNode.children.length; i++) {
+                    this.calculateTreeValues(currentNode.children[i], accumulatedYield + currentNode.attributes.yield);
+                }
+                // If the node is a chance node, its expected value is the weighted average of its children's expected values.
+                if(currentNode.attributes.type === "Chance") {
+                    const childNodes = [...currentNode.children];
+                    const expectedValue = childNodes.reduce((sum, childNode) =>  sum + childNode.attributes.expectedValue * parseFloat(childNode.attributes.probability), 0);
+                    currentNode.attributes.expectedValue = expectedValue;
+                }
+                // Else, the node is not a chance node, or a terminal node (i.e., a decision or root node), its expected value is the highest value of its children
+                else {
+                    currentNode.attributes.expectedValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
+                                                            .reduce((best, current) => (best && best > current) ? best : current);
+                }
+            },
+
+            // Set the properties that will indicate which nodes are part of the best path, and which ones are part of the worst path
+            highlightBestDecision(currentNode, onBestPath) {
+                // Set the node's onBestPath property to true
+                currentNode.attributes.onBestPath = onBestPath;
+                if(currentNode.children.length == 0) {
+                    return;
+                }
+                // At chance nodes, all children are considered part of the "best" path
+                if(currentNode.attributes.type === "Chance") {
+                    currentNode.children.forEach(childNode => {
+                        this.highlightBestDecision(childNode, onBestPath);
+                    });
+                }
+                
+                // At decision nodes, only the child nodes with the highest expected values are considered to be on the "best" path
+                else {
+                    const bestValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
+                    .reduce((best, current) => (best && best > current) ? best : current );
+                    currentNode.children.forEach(childNode => {
+                        if(childNode.attributes.expectedValue === bestValue) {
+                            this.highlightBestDecision(childNode, true);
+                        }
+                        else {
+                            this.highlightBestDecision(childNode, false);
+                        }
+                    });
+                }
+            },
+
+            // Set the properties that will indicate which nodes are part of the worst path, and which ones are part of the worst path
+            highlightWorstDecision(currentNode, onWorstPath) {
+                // Set the node's onWorstPath property to true
+                currentNode.attributes.onWorstPath = onWorstPath;
+                if(currentNode.children.length == 0) {
+                    return;
+                }
+                // At chance nodes, all children are considered part of the "worst" path
+                if(currentNode.attributes.type === "Chance") {
+                    currentNode.children.forEach(childNode => {
+                        this.highlightWorstDecision(childNode, onWorstPath);
+                    });
+                }
+                
+                // At decision nodes, only the child nodes with the highest expected values are considered to be on the "worst" path
+                else {
+                    const worstValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
+                    .reduce((worst, current) => (worst && worst < current) ? worst : current );
+                    currentNode.children.forEach(childNode => {
+                        if(childNode.attributes.expectedValue === worstValue) {
+                            this.highlightWorstDecision(childNode, true);
+                        }
+                        else {
+                            this.highlightWorstDecision(childNode, false);
+                        }
+                    });
+                }
+            },
+
             addDecisionNode() {
                 this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Decision",
+                        yield: 0,
                         expectedValue: 0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 });
+                this.onUpdateTreeValues();
             },
-
+            
             addChanceNode() {
                 this.selectedNode.children.push({
                     name: "New Chance " + parseInt(this.selectedNode.children.length) + 2,
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Chance",
+                        yield: 0,
                         expectedValue: 0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 });
+                this.onUpdateTreeValues();
             },
             
             addTerminalNode() {
@@ -185,11 +309,15 @@
                     id: parseInt(`${this.selectedNode.id}` + this.selectedNode.children.length),
                     attributes: {
                         type: "Terminal",
+                        yield: 0,
                         expectedValue: 0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1
+                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 });
+                this.onUpdateTreeValues();
             },
 
             // Method for adding children nodes from the NodeWindow
@@ -206,6 +334,7 @@
                 for(let i=0; i<numNewTerminals; i++){
                     this.addTerminalNode();
                 }
+                this.onUpdateTreeValues();
             },
 
             deleteNode() {
@@ -216,13 +345,17 @@
                     id: "",
                     attributes: {
                         type: "",
-                        expectedValue: 0,
+                        yield: 0,
                         probability: 0,
+                        expectedValue: 0,
+                        onBestPath: false,
+                        onWorstPath: false
                     },
                     children: []
                 };
                 this.hideNodePopup();
                 this.hideNodeWindow();
+                this.onUpdateTreeValues();
             }
         },
     }

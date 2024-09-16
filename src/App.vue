@@ -1,8 +1,13 @@
 <template>
   <div id="mainPage">
-    <TaskBar :title="treeTitle" @showDatabaseModal="onShowDatabaseModal" @saveDecisionTree="onSaveDecisionTree"/>
-    <LoadDataModal v-show="showModal" @hideDatabaseModal="onHideDatabaseModal" @loadDecisionTree="onLoadDecisionTree"/>
-    <MainWindow :decisionTreeNodes="decisionTreeNodes" />
+    <TaskBar :initialTreeTitle="treeTitle" 
+        @showDatabaseModal="onShowDatabaseModal" 
+        @toggleShowSettingsModal="onToggleShowSettingsModal"
+        @saveDecisionTree="onSaveDecisionTree" 
+        @updateTreeTitle="onUpdateTreeTitle"/>
+    <LoadDataModal v-show="showDBModal" @hideDatabaseModal="onHideDatabaseModal" @loadDecisionTree="onLoadDecisionTree"/>
+    <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
+    <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/>
   </div>
 </template>
 
@@ -11,16 +16,18 @@
   import TaskBar from './components/TaskBar.vue';
   import MainWindow from './components/MainWindow.vue';
   import LoadDataModal from './components/LoadDataModal.vue';
+  import SettingsModal from './components/SettingsModal.vue';
 
   import json from "./data/Starting_Input_Data.json";
-import DecisionTreeDTO from './services/DecisionTreeDTO';
+  import DecisionTreeDTO from './services/DecisionTreeDTO';
 
   export default {
     name: 'App',
     components: {
       TaskBar,
       MainWindow,
-      LoadDataModal
+      LoadDataModal,
+      SettingsModal
     },
     data() {
       return {
@@ -33,25 +40,42 @@ import DecisionTreeDTO from './services/DecisionTreeDTO';
           "id": 1,
           "attributes": {
               "type": "Root",
-              "expectedValue": 82724,
-              "probability": 1.0
+              "yield": 0,
+              "expectedValue": 0,
+              "probability": 1.0,
+              "onBestPath": false,
+              "onWorstPath": false
           },
           "children": []
         },
-        showModal: false
+        showDBModal: false,
+        showSettingsModal: false,
+        highlightOption: "none"
       }
     },
     methods: {
       onShowDatabaseModal() {
-        this.showModal = true;
+        this.showDBModal = true;
       },
 
       onHideDatabaseModal() {
-        this.showModal = false;
+        this.showDBModal = false;
+      },
+
+      onToggleShowSettingsModal(){
+        this.showSettingsModal = !this.showSettingsModal;
+      },
+
+      onUpdateTreeTitle(newTitle) {
+        this.treeTitle = newTitle;
+      },
+
+      onSelectHighlightOption(selectedOption){
+        this.highlightOption = selectedOption;
       },
 
       async onLoadDecisionTree(decisionTreeId) {
-        this.showModal = false;
+        this.showDBModal = false;
         const loadedTree = await DecisionTreeDTO.getTree(decisionTreeId);
         this.treeTitle = loadedTree.data.title;
         this.decisionTreeNodes = { ...loadedTree.data.decisionTreeNodes };

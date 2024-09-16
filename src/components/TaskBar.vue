@@ -1,13 +1,15 @@
 <template>
-
     <div id="mainTaskBar">
         <div id="taskBarComponents">
-            <div class="imgBtn">
-                <img src="../assets/clear_icon.svg"/>
+            <div class="imgBtn" @click="toggleShowSettingsModal">
+                <img src="../assets/hamburger_icon.svg"/>
             </div>
 
-            <h2>{{ title }}</h2>
-
+            <div class="imgBtn" @click="saveTree">
+                <img class="imgBtn" src="../assets/save_icon.svg"/>
+            </div>
+            
+            <input class="h2Input" v-model="title"/>
 
             <div class="dropdown">
                 <button class="dropbtn">Export</button>
@@ -17,12 +19,8 @@
                     <a href="#">Excel</a>
                 </div>
             </div>
-
-            <div class="imgBtn" @click="saveTree">
-                <img class="imgBtn" src="../assets/save_icon.svg"/>
-            </div>
             
-            <button class="testBtn" @click="showDatabaseModal">
+            <button id="loadBtn" @click="showDatabaseModal">
                 Load Data
             </button>
         </div>
@@ -35,14 +33,34 @@
 export default {
     name: 'TaskBar',
     props: {
-        title: String
+        initialTreeTitle: String
+    },
+    data() {
+        return {
+            title: ""
+        }
+    },
+    mounted(){
+        this.title = this.initialTreeTitle;
+    },
+    watch: {
+        title(value) {
+            this.$emit('updateTreeTitle', value);
+        }
     },
     methods: {
         showDatabaseModal(){
             this.$emit('showDatabaseModal');
         },
+        toggleShowSettingsModal(){
+            this.$emit('toggleShowSettingsModal');
+        },
         saveTree(){
             this.$emit('saveDecisionTree')
+        },
+        updateTreeTitle(event){
+            console.log(event);
+            this.$emit('updateTreeTitle', event.target.value);
         }
     }
 }
@@ -64,7 +82,7 @@ export default {
 
 #taskBarComponents {
     display: grid;
-    grid-template-columns: 1fr 5fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 5fr 1fr 1fr;
     column-gap: 2vw;
     grid-template-rows: 1fr;
     justify-content: center;
@@ -140,5 +158,10 @@ export default {
 
 .dropdown:hover .dropbtn {background-color: #3e8e41;}
 /* End styling for export dropdown */
+
+#loadBtn {
+    width: 115px;
+    padding: 16px;
+}
 
 </style>

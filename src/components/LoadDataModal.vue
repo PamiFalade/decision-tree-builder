@@ -33,8 +33,7 @@
 <script>
     import { ref, onMounted } from 'vue';
     import DecisionTreeDTO from '../services/DecisionTreeDTO.js';
-    import Utils from '../services/Utils.js';
-import formatDateTime from '../services/Utils.js';
+    import {formatDateTime} from '../services/Utils.js';
 
     export default {
 
