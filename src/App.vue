@@ -40,7 +40,7 @@
           "id": 1,
           "attributes": {
               "type": "Root",
-              "yield": null,
+              "yield": 0,
               "expectedValue": 0,
               "probability": 1.0,
               "onBestPath": false,

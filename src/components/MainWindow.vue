@@ -56,6 +56,7 @@
                 this.decisionTree = value;
                 this.showNodePopup = false;
                 this.showNodeWindow = false;
+                this.onUpdateTreeValues();
             },
             highlightOption(value) {
                 if(value === "noHighlight") {
