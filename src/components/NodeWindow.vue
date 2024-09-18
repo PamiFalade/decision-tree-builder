@@ -25,7 +25,8 @@
                 type: String,
                 yield: Number,
                 probability: Number,
-                expectedValue: Number
+                expectedValue: Number,
+                description: String
             },
             children: Array,
         },
@@ -36,7 +37,6 @@
         if(event.target.value == "") {
             event.target.value = 0;
         }
-
         // Emit the event that the tree's node's values have been updated
         emit('updateTreeValues');
     }
@@ -72,6 +72,9 @@
             </div>
 
             <div class="windowBody">
+                <div id="descriptionArea">
+                    <textarea id="nodeDescription" name="nodeWindowDescription" rows="4" cols="50">{{ selectedNode.attributes.description }}</textarea>
+                </div>
                 <ul id="selectedNodeAttributes">
                     <li>
                         <p>Type</p>
@@ -189,6 +192,11 @@ export default {
         flex-direction: column;
         align-items: center;
     }
+
+    /* #descriptionArea {
+        width: 100%;
+        height: 40%;
+    } */
 
     #selectedNodeAttributes {
         width: 80%;
