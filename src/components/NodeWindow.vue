@@ -73,7 +73,7 @@
 
             <div class="windowBody">
                 <div id="descriptionArea">
-                    <textarea id="nodeDescription" name="nodeWindowDescription" rows="4" cols="50">{{ selectedNode.attributes.description }}</textarea>
+                    <textarea id="nodeDescription" v-model="selectedNode.attributes.description" name="nodeWindowDescription" rows="4" cols="50"></textarea>
                 </div>
                 <ul id="selectedNodeAttributes">
                     <li>
