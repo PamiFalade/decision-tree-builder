@@ -17,6 +17,7 @@
   import MainWindow from './components/MainWindow.vue';
   import LoadDataModal from './components/LoadDataModal.vue';
   import SettingsModal from './components/SettingsModal.vue';
+  import DeleteTreeModal from './components/DeleteTreeModal.vue';
 
   import json from "./data/Starting_Input_Data.json";
   import DecisionTreeDTO from './services/DecisionTreeDTO';
@@ -27,7 +28,7 @@
       TaskBar,
       MainWindow,
       LoadDataModal,
-      SettingsModal
+      SettingsModal,
     },
     data() {
       return {

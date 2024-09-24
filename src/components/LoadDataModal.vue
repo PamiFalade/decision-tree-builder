@@ -1,42 +1,45 @@
 <template>
-    <div class="modalBody">
-        <div class="header">
-            <img src='../assets/close_icon_black.svg' 
-                    class="closeButton"
-                    @click="closeModal"/>
+    <BasicModal size="large">
+        <template v-slot:modalTitle>
             <h2>Load a Decision Tree</h2>
-        </div>
+        </template>
         
-        <ul>
-            <li v-for="decisionTree in databaseRecords" 
-                    :key="decisionTree.id" 
-                    @click="onDecisionTreeClick($event, decisionTree.id)"
-                    :class="{ selected: decisionTree.id === selectedDecisionTreeId }">
-                <h4 class="treeName treeMenuItems"> {{ decisionTree.tree_name }} </h4>
-                <p class="owner treeMenuItems"> {{ decisionTree.creator_email }} </p>
-                <p class="creationDate treeMenuItems"> {{ formatDateTime(decisionTree.created_at) }} </p>
-            </li>
-        </ul>
+        <template v-slot:modalContent>
+            <ul>
+                <li v-for="decisionTree in databaseRecords" 
+                        :key="decisionTree.id" 
+                        @click="onDecisionTreeClick($event, decisionTree.id)"
+                        :class="{ selected: decisionTree.id === selectedDecisionTreeId }">
+                    <h4 class="treeName treeMenuItems"> {{ decisionTree.tree_name }} </h4>
+                    <p class="owner treeMenuItems"> {{ decisionTree.creator_email }} </p>
+                    <p class="creationDate treeMenuItems"> {{ formatDateTime(decisionTree.created_at) }} </p>
+                </li>
+            </ul>
+        </template>
 
-        <div class="footer">
+        <template v-slot:modalFooter>
             <button class="submitButton" 
                     type="button" 
                     :disabled="!selectedDecisionTreeId"
                     @click="loadDecisionTree">
                 Load Tree
             </button>
-        </div>
-
-    </div>
+        </template>
+            
+    </BasicModal>
 </template>
 
 <script>
     import { ref, onMounted } from 'vue';
     import DecisionTreeDTO from '../services/DecisionTreeDTO.js';
     import {formatDateTime} from '../services/Utils.js';
+    import BasicModal from './BasicModal.vue';
 
     export default {
-
+        name: 'LoadDataModal',
+        components: {
+            BasicModal
+        },
         setup(props, context) {
             // List of Decision Trees that are stored in the database
             let databaseRecords = ref([]);  
