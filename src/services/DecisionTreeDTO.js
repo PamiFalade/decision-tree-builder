@@ -16,5 +16,10 @@ export default {
                 console.log(response);
             });
         return;
+    },
+
+    async deleteTree(treeID) {
+        await Api().delete(`/decision-trees/${treeID}`)
+            .then(response => console.log(response));
     }
 }

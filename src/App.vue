@@ -5,7 +5,8 @@
         @toggleShowSettingsModal="onToggleShowSettingsModal"
         @saveDecisionTree="onSaveDecisionTree" 
         @updateTreeTitle="onUpdateTreeTitle"/>
-    <LoadDataModal v-show="showDBModal" @hideDatabaseModal="onHideDatabaseModal" @loadDecisionTree="onLoadDecisionTree"/>
+    <LoadDataModal v-show="showDBModal" :databaseRecords="databaseRecords" @hideModal="handleHideModal" @loadDecisionTree="onLoadDecisionTree" @promptDeleteDecisionTree="onShowDeleteTreeModal"/>
+    <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
     <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
     <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/>
   </div>
@@ -17,6 +18,7 @@
   import MainWindow from './components/MainWindow.vue';
   import LoadDataModal from './components/LoadDataModal.vue';
   import SettingsModal from './components/SettingsModal.vue';
+  import DeleteTreeModal from './components/DeleteTreeModal.vue';
 
   import json from "./data/Starting_Input_Data.json";
   import DecisionTreeDTO from './services/DecisionTreeDTO';
@@ -27,7 +29,8 @@
       TaskBar,
       MainWindow,
       LoadDataModal,
-      SettingsModal
+      SettingsModal,
+      DeleteTreeModal
     },
     data() {
       return {
@@ -48,8 +51,12 @@
           },
           "children": []
         },
+        databaseRecords: [],
         showDBModal: false,
         showSettingsModal: false,
+        showDeleteModal: false,
+        treeToDelete: "",
+        treeIdToDelete: -1,
         highlightOption: "none"
       }
     },
@@ -66,12 +73,46 @@
         this.showSettingsModal = !this.showSettingsModal;
       },
 
+      onShowDeleteTreeModal(tree_id, tree_name){
+        this.showDBModal = false;
+        this.showDeleteModal = true;
+        this.treeIdToDelete = tree_id;
+        this.treeToDelete = tree_name;
+      },
+
+      onHideDeleteModal() {
+        this.showDeleteModal = false;
+        this.showDBModal = true;
+      },
+
       onUpdateTreeTitle(newTitle) {
         this.treeTitle = newTitle;
       },
 
+      onDecisionTreeDeleted() {
+        this.treeIdToDelete = -1;
+        this.treeToDelete = "";
+      },
+
+      handleHideModal() {
+        if(this.showDeleteModal) {
+          this.onHideDeleteModal();
+        }
+        else {
+          this.onHideDatabaseModal();
+        }
+      },
+
       onSelectHighlightOption(selectedOption){
         this.highlightOption = selectedOption;
+      },
+
+      async getAllDecisionTrees() {
+        await DecisionTreeDTO.getAllTrees()
+                    .then(response => {
+                        console.log(response);
+                        this.databaseRecords = response.data;
+        });
       },
 
       async onLoadDecisionTree(decisionTreeId) {
@@ -90,8 +131,19 @@
           decisionTreeNodes: this.decisionTreeNodes
         }
         const savedTree = await DecisionTreeDTO.saveTree(newDecisionTree);
+      },
+
+      async onDeleteDecisionTree() {
+        await DecisionTreeDTO.deleteTree(this.treeIdToDelete);
+        await this.getAllDecisionTrees();
+        this.handleHideModal();
+        this.resetDeleteVariables();
       }
+    },
+    async mounted() {
+      await this.getAllDecisionTrees();
     }
+
   }
 </script>
 
