@@ -132,6 +132,7 @@
           decisionTreeNodes: this.decisionTreeNodes
         }
         const savedTree = await DecisionTreeDTO.saveTree(newDecisionTree);
+        await this.getAllDecisionTrees();
       },
 
       async onDeleteDecisionTree() {
