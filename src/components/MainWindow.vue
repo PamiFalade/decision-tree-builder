@@ -40,7 +40,8 @@
                     probability: Number,
                     expectedValue: Number,
                     onBestPath: Boolean,
-                    onWorstPath: Boolean
+                    onWorstPath: Boolean,
+                    description: String
                 },
                 children: Array
             },
@@ -88,7 +89,8 @@
                         probability: 0,
                         expectedValue: 0,
                         onBestPath: false,
-                        onWorstPath: false
+                        onWorstPath: false,
+                        description: ""
                     },
                     children: []
                 },
@@ -106,6 +108,7 @@
         methods: {
             toggleShowNodeWindow() {
                 this.showNodeWindow = !this.showNodeWindow;
+                console.log(this.selectedNode);
             },
 
             hideNodeWindow() {
@@ -279,7 +282,8 @@
                         expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
                         onBestPath: false,
-                        onWorstPath: false
+                        onWorstPath: false,
+                        description: ""
                     },
                     children: []
                 });
@@ -296,7 +300,8 @@
                         expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
                         onBestPath: false,
-                        onWorstPath: false
+                        onWorstPath: false,
+                        description: ""
                     },
                     children: []
                 });
@@ -313,7 +318,8 @@
                         expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
                         onBestPath: false,
-                        onWorstPath: false
+                        onWorstPath: false,
+                        description: ""
                     },
                     children: []
                 });
@@ -349,7 +355,8 @@
                         probability: 0,
                         expectedValue: 0,
                         onBestPath: false,
-                        onWorstPath: false
+                        onWorstPath: false,
+                        description: ""
                     },
                     children: []
                 };

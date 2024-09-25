@@ -47,7 +47,8 @@
               "expectedValue": 0,
               "probability": 1.0,
               "onBestPath": false,
-              "onWorstPath": false
+              "onWorstPath": false,
+              "description": "New decision tree"
           },
           "children": []
         },
