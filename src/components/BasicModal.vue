@@ -36,14 +36,13 @@ export default {
         const modalRef = ref(null);
 
         onMounted(() => {
-            console.log('mounted');
             modalSize === 'large' ? modalRef.value.classList.add('largeModal') : modalRef.value.classList.add('smallModal');
         });
 
         // When close button is clicked, emit the event so that the modal will be closed.
         const closeModal = () => {
-                context.emit('hideDatabaseModal');
-            }
+            context.emit('hideModal');
+        }
 
         return { closeModal, modalRef };
     }
@@ -55,24 +54,26 @@ export default {
 <style scoped>
 
 .modalCard {
-    width: 50%;
     padding: 3px;
     position: absolute;
     top: 20%;
     left: 25%;
-    padding: 5px;
+    padding: 0 2% 2% 2%;
     border-radius: 2%;
     background-color: lightgrey;
+    border: solid 1px black;
 }
 .largeModal {
     height: 65%;
+    width: 50%;
 }
 .smallModal {
-    height: 35%;
+    height: 25%;
+    width: 40%;
 }
 
 .modalHeader {
-    height: 10%;
+    min-height: 10%;
     display: grid;
     grid-template-columns: 1fr 3fr 1fr;
     justify-content: center;
@@ -80,7 +81,8 @@ export default {
 }
 
 .modalBody {
-    height: 70%;
+    min-height: 50%;
+    max-height: 75%;
     width: 100%;
     padding-left: 0;
     margin-left: 2.5%;
@@ -90,7 +92,7 @@ export default {
 
 .modalActions {
     width: 100%;
-    height: 15%;
+    height: 20%;
     display: flex;
     flex-direction: row-reverse;
 }

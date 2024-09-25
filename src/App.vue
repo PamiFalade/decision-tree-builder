@@ -5,7 +5,8 @@
         @toggleShowSettingsModal="onToggleShowSettingsModal"
         @saveDecisionTree="onSaveDecisionTree" 
         @updateTreeTitle="onUpdateTreeTitle"/>
-    <LoadDataModal v-show="showDBModal" @hideDatabaseModal="onHideDatabaseModal" @loadDecisionTree="onLoadDecisionTree"/>
+    <LoadDataModal v-show="showDBModal" :databaseRecords="databaseRecords" @hideModal="handleHideModal" @loadDecisionTree="onLoadDecisionTree" @promptDeleteDecisionTree="onShowDeleteTreeModal"/>
+    <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
     <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
     <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/>
   </div>
@@ -29,6 +30,7 @@
       MainWindow,
       LoadDataModal,
       SettingsModal,
+      DeleteTreeModal
     },
     data() {
       return {
@@ -49,8 +51,12 @@
           },
           "children": []
         },
+        databaseRecords: [],
         showDBModal: false,
         showSettingsModal: false,
+        showDeleteModal: false,
+        treeToDelete: "",
+        treeIdToDelete: -1,
         highlightOption: "none"
       }
     },
@@ -67,12 +73,41 @@
         this.showSettingsModal = !this.showSettingsModal;
       },
 
+      onShowDeleteTreeModal(tree_id, tree_name){
+        this.showDBModal = false;
+        this.showDeleteModal = true;
+        this.treeIdToDelete = tree_id;
+        this.treeToDelete = tree_name;
+      },
+
+      onHideDeleteModal() {
+        this.showDeleteModal = false;
+        this.showDBModal = true;
+      },
+
       onUpdateTreeTitle(newTitle) {
         this.treeTitle = newTitle;
       },
 
+      handleHideModal() {
+        if(this.showDeleteModal) {
+          this.onHideDeleteModal();
+        }
+        else {
+          this.onHideDatabaseModal();
+        }
+      },
+
       onSelectHighlightOption(selectedOption){
         this.highlightOption = selectedOption;
+      },
+
+      async getAllDecisionTrees() {
+        await DecisionTreeDTO.getAllTrees()
+                    .then(response => {
+                        console.log(response);
+                        this.databaseRecords = response.data;
+        });
       },
 
       async onLoadDecisionTree(decisionTreeId) {
@@ -91,8 +126,17 @@
           decisionTreeNodes: this.decisionTreeNodes
         }
         const savedTree = await DecisionTreeDTO.saveTree(newDecisionTree);
+      },
+
+      async onDeleteDecisionTree() {
+        await DecisionTreeDTO.deleteTree(this.treeIdToDelete);
+        
       }
+    },
+    async mounted() {
+      await this.getAllDecisionTrees();
     }
+
   }
 </script>
 
