@@ -42,7 +42,7 @@ export default {
         const deleteDecisionTree = () => {
             context.emit('deleteDecisionTree');
         }
-        return { closeModal };
+        return { closeModal, deleteDecisionTree };
     }
 }
 

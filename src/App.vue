@@ -89,6 +89,11 @@
         this.treeTitle = newTitle;
       },
 
+      onDecisionTreeDeleted() {
+        this.treeIdToDelete = -1;
+        this.treeToDelete = "";
+      },
+
       handleHideModal() {
         if(this.showDeleteModal) {
           this.onHideDeleteModal();
@@ -130,7 +135,9 @@
 
       async onDeleteDecisionTree() {
         await DecisionTreeDTO.deleteTree(this.treeIdToDelete);
-        
+        await this.getAllDecisionTrees();
+        this.handleHideModal();
+        this.resetDeleteVariables();
       }
     },
     async mounted() {
