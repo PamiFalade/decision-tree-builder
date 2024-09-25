@@ -4,8 +4,14 @@
         @showDatabaseModal="onShowDatabaseModal" 
         @toggleShowSettingsModal="onToggleShowSettingsModal"
         @saveDecisionTree="onSaveDecisionTree" 
-        @updateTreeTitle="onUpdateTreeTitle"/>
-    <LoadDataModal v-show="showDBModal" :databaseRecords="databaseRecords" @hideModal="handleHideModal" @loadDecisionTree="onLoadDecisionTree" @promptDeleteDecisionTree="onShowDeleteTreeModal"/>
+        @updateTreeTitle="onUpdateTreeTitle"
+    />
+    <LoadDataModal v-show="showDBModal" 
+        :databaseRecords="databaseRecords" 
+        @hideModal="handleHideModal" 
+        @loadDecisionTree="onLoadDecisionTree" 
+        @promptDeleteDecisionTree="onShowDeleteTreeModal"
+    />
     <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
     <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
     <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/>
@@ -118,10 +124,12 @@
 
       async onLoadDecisionTree(decisionTreeId) {
         this.showDBModal = false;
-        const loadedTree = await DecisionTreeDTO.getTree(decisionTreeId);
-        this.treeTitle = loadedTree.data.title;
-        this.decisionTreeNodes = { ...loadedTree.data.decisionTreeNodes };
-        console.log(this.decisionTreeNodes);
+        await DecisionTreeDTO.getTree(decisionTreeId)
+          .then(loadedTree => {
+            this.treeTitle = loadedTree.data.title;
+            this.decisionTreeNodes = { ...loadedTree.data.decisionTreeNodes };
+          });
+        console.log(this.treeTitle);
       },
 
       async onSaveDecisionTree() {

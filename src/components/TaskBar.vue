@@ -46,6 +46,9 @@ export default {
     watch: {
         title(value) {
             this.$emit('updateTreeTitle', value);
+        },
+        initialTreeTitle(value) {
+            this.title = value;
         }
     },
     methods: {
