@@ -103,6 +103,32 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
         : `M${source.x},${source.y}L${target.x},${target.y}`;
     };
 
+    const roundedPathFunc = (linkDatum, orientation) => {
+      const { source, target } = linkDatum;
+      let path = '';
+      
+      if(orientation === 'horizontal') {
+        const direction = target.x - source.x < 0 ? 'up' : target.x - source.x > 0 ? 'down' : 'straight';
+        const x1 = source.y - 7;
+        const y1 = source.x;
+        const x2 = target.y;
+        const y2 = target.x;
+
+
+        if(direction === 'up') {
+          path = `M${x1},${y1}L${x1},${y2+20}a20,20 0 0 1 20,-20L${x2},${y2}`;
+        }
+        else if (direction === 'down') {
+          path = `M${x1},${y1}L${x1},${y2-20}a20,20 0 0 0 20,20L${x2},${y2}`;
+        }
+        else if (direction === 'straight') {
+          path = `M${x1},${y1}L${x2},${y2}`
+        }
+      }
+
+      return path;
+    };
+
   const getDynamicPathClass = ({ source, target }, orientation) => {
 
     // If the node is on the best path, style the link between the source and target nodes
@@ -127,7 +153,7 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
       // `<Tree />` will fill width/height of its container; in this case `#treeWrapper`.
       <div id="treeWrapper" style={{ width: '100vw', height: '100vh',}} onClick={handleOnScreenClick} >
         <Tree data={treeData}
-          pathFunc={slantedPathFunc}
+          pathFunc={roundedPathFunc}
           pathClassFunc={getDynamicPathClass}
           translate={{ x:75, y:300 }}
           collapsible={false}
