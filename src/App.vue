@@ -1,21 +1,21 @@
 <template>
-  <div id="mainPage">
-    <TaskBar :initialTreeTitle="treeTitle" 
-        @showDatabaseModal="onShowDatabaseModal" 
-        @toggleShowSettingsModal="onToggleShowSettingsModal"
-        @saveDecisionTree="onSaveDecisionTree" 
-        @updateTreeTitle="onUpdateTreeTitle"
-    />
-    <LoadDataModal v-show="showDBModal" 
-        :databaseRecords="databaseRecords" 
-        @hideModal="handleHideModal" 
-        @loadDecisionTree="onLoadDecisionTree" 
-        @promptDeleteDecisionTree="onShowDeleteTreeModal"
-    />
-    <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
-    <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
-    <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/>
-  </div>
+  <v-app>
+      <TaskBar :initialTreeTitle="treeTitle" 
+          @showDatabaseModal="onShowDatabaseModal" 
+          @toggleShowSettingsModal="onToggleShowSettingsModal"
+          @saveDecisionTree="onSaveDecisionTree" 
+          @updateTreeTitle="onUpdateTreeTitle"
+      />
+      <LoadDataModal v-show="showDBModal" 
+          :databaseRecords="databaseRecords" 
+          @hideModal="handleHideModal" 
+          @loadDecisionTree="onLoadDecisionTree" 
+          @promptDeleteDecisionTree="onShowDeleteTreeModal"
+      />
+      <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
+      <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
+      <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/> -->
+  </v-app>
 </template>
 
 <script>

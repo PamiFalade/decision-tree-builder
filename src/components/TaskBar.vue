@@ -1,43 +1,92 @@
 <template>
-    <div id="mainTaskBar">
-        <div id="taskBarComponents">
-            <div class="imgBtn" @click="toggleShowSettingsModal">
-                <img src="../assets/hamburger_icon.svg"/>
-            </div>
+    <v-app-bar class="px-3 py-4">
 
-            <div class="imgBtn" @click="saveTree">
-                <img class="imgBtn" src="../assets/save_icon.svg"/>
-            </div>
-            
-            <input class="h2Input" v-model="title"/>
+        <v-btn
+            class="mx-2"
+            rounded="xl" 
+            @click="toggleShowSettingsModal">
+            <v-icon size="30" icon="mdi-cog"/>
+        </v-btn>
 
-            <div class="dropdown">
-                <button class="dropbtn">Export</button>
-                <div class="dropdown-content">
-                    <a href="#">PNG</a>
-                    <a href="#">PDF</a>
-                    <a href="#">Excel</a>
+        <v-btn
+            class="mx-2"
+            rounded="xl" 
+            @click="saveTree">
+            <v-icon size="30" icon="mdi-content-save-outline" />
+        </v-btn>
+
+        <v-text-field 
+            class="mx-7 pt-0 title-input"
+            type="input"
+            :readonly="disableEditTitle"
+            v-model="title"
+            >
+            <template v-slot:append-inner >
+                <v-btn class="disableEditTitleBtn" size="x-large" :ripple="false" @click="onClickTitleInput">
+                    <v-icon  v-if="!disableEditTitle" size="30" icon="mdi-pencil" color="black" />
+                    <v-icon  v-else size="30" icon="mdi-pencil" color="grey" />
+                </v-btn> 
+            </template>
+        </v-text-field>
+
+        <v-btn 
+            class="mx-2 bg-green"
+            rounded="md" 
+            @click="">
+            Export
+        </v-btn>
+
+        <v-btn 
+            class="mx-2 bg-blue-darken-2"
+            rounded="md" 
+            @click="showDatabaseModal">
+            Load Tree
+        </v-btn>
+
+        
+        <!-- <div id="mainTaskBar">
+            <div id="taskBarComponents">
+                <div class="imgBtn" @click="toggleShowSettingsModal">
+                    <img src="../assets/hamburger_icon.svg"/>
                 </div>
-            </div>
-            
-            <button id="loadBtn" @click="showDatabaseModal">
-                Load Data
-            </button>
-        </div>
-    </div>
 
+                <div class="imgBtn" @click="saveTree">
+                    <img class="imgBtn" src="../assets/save_icon.svg"/>
+                </div>
+                
+                <input class="h2Input" v-model="title"/>
+
+                <div class="dropdown">
+                    <button class="dropbtn">Export</button>
+                    <div class="dropdown-content">
+                        <a href="#">PNG</a>
+                        <a href="#">PDF</a>
+                        <a href="#">Excel</a>
+                    </div>
+                </div>
+                
+                <button id="loadBtn" @click="showDatabaseModal">
+                    Load Data
+                </button>
+            </div>
+        </div> -->
+    </v-app-bar>
 </template>
 
 
 <script>
 export default {
     name: 'TaskBar',
+    components: {
+
+    },
     props: {
         initialTreeTitle: String
     },
     data() {
         return {
-            title: ""
+            title: "",
+        disableEditTitle: true
         }
     },
     mounted(){
@@ -64,6 +113,9 @@ export default {
         updateTreeTitle(event){
             console.log(event);
             this.$emit('updateTreeTitle', event.target.value);
+        },
+        onClickTitleInput() {
+            this.disableEditTitle = !this.disableEditTitle;
         }
     }
 }
@@ -71,13 +123,19 @@ export default {
 </script>
 
 <style>
-.testBtn {
-    background-color: #F3F3F3;
+
+.title-input input {
+    text-align: center;
+    font-size: xx-large;
 }
+
+.disableEditTitleBtn {
+    height: 100%;
+}
+
 #mainTaskBar{
-    width: 95vw;
+    width: 100vw;
     height: 8vh;
-    background-color: grey;
     padding: 2vh 3vw;
     align-items: center;
     justify-content: center;
