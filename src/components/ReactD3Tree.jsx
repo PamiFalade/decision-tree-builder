@@ -56,7 +56,7 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
     }
     
     else if(nodeType === 'Chance') {
-      nodeShape = <circle r="15" x="-10" fill={fill} />
+      nodeShape = <circle r="15" x="-10" fill={fill} stroke-width={0.5} />
     }
       
     else if(nodeType === 'Terminal') {
@@ -109,11 +109,10 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
       
       if(orientation === 'horizontal') {
         const direction = target.x - source.x < 0 ? 'up' : target.x - source.x > 0 ? 'down' : 'straight';
-        const x1 = source.y - 7;
+        const x1 = source.data.attributes.type === "Root" ? source.y - 7 : source.y;
         const y1 = source.x;
         const x2 = target.y;
         const y2 = target.x;
-
 
         if(direction === 'up') {
           path = `M${x1},${y1}L${x1},${y2+20}a20,20 0 0 1 20,-20L${x2},${y2}`;
@@ -133,7 +132,7 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
 
     // If the node is on the best path, style the link between the source and target nodes
     if (target.data.attributes.onBestPath === true && highlightBestPath) {
-      return 'link_best_path';
+      return 'path link_best_path';
     }
 
     else if(target.data.attributes.onWorstPath === true && highlightWorstPath)
@@ -158,8 +157,7 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
           translate={{ x:75, y:300 }}
           collapsible={false}
           renderCustomNodeElement={renderSvgNode}
-
-          />
+        />
       </div>
   );
 }
