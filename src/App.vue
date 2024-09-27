@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app id="mainPage">
       <TaskBar :initialTreeTitle="treeTitle" 
           @showDatabaseModal="onShowDatabaseModal" 
           @toggleShowSettingsModal="onToggleShowSettingsModal"
@@ -14,17 +14,17 @@
       />
       <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
       <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
-      <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/> -->
+      <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/>
   </v-app>
 </template>
 
 <script>
 
-  import TaskBar from './components/TaskBar.vue';
-  import MainWindow from './components/MainWindow.vue';
-  import LoadDataModal from './components/LoadDataModal.vue';
-  import SettingsModal from './components/SettingsModal.vue';
-  import DeleteTreeModal from './components/DeleteTreeModal.vue';
+  import TaskBar from './views/TaskBar.vue';
+  import MainWindow from './views/MainWindow.vue';
+  import LoadDataModal from './views/LoadDataModal.vue';
+  import SettingsModal from './views/SettingsModal.vue';
+  import DeleteTreeModal from './views/DeleteTreeModal.vue';
 
   import json from "./data/Starting_Input_Data.json";
   import DecisionTreeDTO from './services/DecisionTreeDTO';
@@ -170,12 +170,11 @@
   }
 
   #mainPage {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    overflow-y: hidden;
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: 10fr 85fr;

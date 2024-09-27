@@ -15,19 +15,7 @@
             <v-icon size="30" icon="mdi-content-save-outline" />
         </v-btn>
 
-        <v-text-field 
-            class="mx-7 pt-0 title-input"
-            type="input"
-            :readonly="disableEditTitle"
-            v-model="title"
-            >
-            <template v-slot:append-inner >
-                <v-btn class="disableEditTitleBtn" size="x-large" :ripple="false" @click="onClickTitleInput">
-                    <v-icon  v-if="!disableEditTitle" size="30" icon="mdi-pencil" color="black" />
-                    <v-icon  v-else size="30" icon="mdi-pencil" color="grey" />
-                </v-btn> 
-            </template>
-        </v-text-field>
+        <EditableTitle :inputValue="initialTreeTitle" @textChanged="updateTreeTitle"/>
 
         <v-btn 
             class="mx-2 bg-green"
@@ -43,42 +31,17 @@
             Load Tree
         </v-btn>
 
-        
-        <!-- <div id="mainTaskBar">
-            <div id="taskBarComponents">
-                <div class="imgBtn" @click="toggleShowSettingsModal">
-                    <img src="../assets/hamburger_icon.svg"/>
-                </div>
-
-                <div class="imgBtn" @click="saveTree">
-                    <img class="imgBtn" src="../assets/save_icon.svg"/>
-                </div>
-                
-                <input class="h2Input" v-model="title"/>
-
-                <div class="dropdown">
-                    <button class="dropbtn">Export</button>
-                    <div class="dropdown-content">
-                        <a href="#">PNG</a>
-                        <a href="#">PDF</a>
-                        <a href="#">Excel</a>
-                    </div>
-                </div>
-                
-                <button id="loadBtn" @click="showDatabaseModal">
-                    Load Data
-                </button>
-            </div>
-        </div> -->
     </v-app-bar>
 </template>
 
 
 <script>
+import EditableTitle from '../components/EditableTitle.vue';
+
 export default {
     name: 'TaskBar',
     components: {
-
+        EditableTitle
     },
     props: {
         initialTreeTitle: String
@@ -86,7 +49,6 @@ export default {
     data() {
         return {
             title: "",
-        disableEditTitle: true
         }
     },
     mounted(){
@@ -110,12 +72,9 @@ export default {
         saveTree(){
             this.$emit('saveDecisionTree')
         },
-        updateTreeTitle(event){
-            console.log(event);
-            this.$emit('updateTreeTitle', event.target.value);
-        },
-        onClickTitleInput() {
-            this.disableEditTitle = !this.disableEditTitle;
+        updateTreeTitle(updatedTitle){
+            console.log(updatedTitle);
+            this.$emit('updateTreeTitle', updatedTitle);
         }
     }
 }
@@ -123,15 +82,6 @@ export default {
 </script>
 
 <style>
-
-.title-input input {
-    text-align: center;
-    font-size: xx-large;
-}
-
-.disableEditTitleBtn {
-    height: 100%;
-}
 
 #mainTaskBar{
     width: 100vw;

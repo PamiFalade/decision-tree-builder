@@ -62,8 +62,78 @@
 </script>
 
 <template>
-        <div id="nodeWindow">
-            <div class="windowHeader">
+    <v-card id="nodeWindow">
+        <div class="windowHeader">
+            <img src='../assets/close_icon_black.svg' 
+                class="closeButton"
+                @click="closeWindow"/>
+            <input class="h2Input" v-model="selectedNode.name" />
+            <img :src="getNodeSvg" class="nodeImg" />
+        </div>
+
+        <div class="windowBody">
+            <v-tabs-window v-model="tab">
+                <v-container class="my-5">
+                <v-tabs-window-item value="description">
+                    <v-textarea></v-textarea>
+                </v-tabs-window-item>
+
+                <v-tabs-window-item value="add-children">
+                    <div id="addNodesSection">
+                        <ul>
+                            <div class="addNodeLine" >
+                                <img class="addNodeImg" src="../../red_square.svg" />
+                                <input class="addNodeInput" id="nodeWindowAddDecisions"  name="nodeWindowAddDecisions" type="number" value="0" min="0" ref="addDecisions" />
+                            </div>
+
+                            <div class="addNodeLine" >
+                                <img class="addNodeImg" src="../../yellow_circle.svg" />
+                                <input class="addNodeInput" id="nodeWindowAddChances" name="nodeWindowAddChances" type="number" value="0" min="0" ref="addChances"/>
+                            </div>
+
+                            <div class="addNodeLine" >
+                                <img class="addNodeImg" src="../../green_triangle.svg" />
+                                <input class="addNodeInput" id="nodeWindowAddTerminals" name="nodeWindowAddTerminals" type="number" value="0" min="0" ref="addTerminals"/>
+                            </div>
+                        </ul>
+
+                        <button id="addNodeButton" @click="onAddNodes">Add Nodes</button>
+                    </div>
+                </v-tabs-window-item>
+                
+                <v-tabs-window-item value="table">
+                    <table>
+                        <tr>
+                            <th id="numCol" >#</th>
+                            <th id="typeCol" >Type</th>
+                            <th id="nameCol" >Name</th>
+                            <th id="yieldCol" >Yield</th>
+                            <th id="probCol">p</th>
+                        </tr>
+                        <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
+                            <td>{{ index + 1 }}</td>
+                            <td>{{ childNode.attributes.type }}</td>
+                            <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.yield" value="0" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="onEnteredInput" /> </td>
+                            <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="onEnteredInput" /> </td>
+                        </tr>
+                    </table>
+                </v-tabs-window-item>
+                </v-container>
+            </v-tabs-window>
+        </div>
+            <v-tabs 
+            v-model="tab"
+            bg-color="primary"
+            >
+            <v-tab value="add-children">Add Children</v-tab>
+            <v-tab value="table">Children Table</v-tab>
+            <v-tab value="description">Description</v-tab>
+        </v-tabs>
+
+
+    </v-card>
+            <!-- <div class="windowHeader">
                 <img src='../assets/close_icon_black.svg' 
                     class="closeButton"
                     @click="closeWindow"/>
@@ -129,9 +199,9 @@
                         <button id="addNodeButton" @click="onAddNodes">Add Nodes</button>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-        </div>
+        <!-- </div> -->
 </template>
 
 
@@ -140,6 +210,11 @@
 export default {
     name: 'NodeWindow',
     components: {
+    },
+    data(){
+        return {
+            tab: null
+        }
     },
     methods: {
         closeWindow(){
@@ -160,7 +235,7 @@ export default {
         right: 0;
         background-color: lightgrey;
         width: 35%;
-        height: 100%;
+        height: 85%;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -170,6 +245,14 @@ export default {
         overflow-y: scroll;
     }
 
+
+    .windowBody {
+        height: 85%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
     .windowHeader {
         width: 90%;
@@ -182,21 +265,17 @@ export default {
         align-items: center;
     }
 
+    .v-tabs-window {
+        width: 100%;
+        height: 100%;
+        
+    }
+
+
+
     .nodeImg {
         width: 50%;
     }
-
-    .windowBody {
-        height: 85%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    /* #descriptionArea {
-        width: 100%;
-        height: 40%;
-    } */
 
     #selectedNodeAttributes {
         width: 80%;
