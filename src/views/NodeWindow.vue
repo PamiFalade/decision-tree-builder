@@ -83,58 +83,91 @@ import EditableTitle from '../components/EditableTitle.vue';
         <v-card-title>{{ tab }}</v-card-title>
             <v-tabs-window v-model="tab">
                 <v-container class="my-5">
-                <v-tabs-window-item value="Description">
-                    <v-textarea></v-textarea>
-                </v-tabs-window-item>
+                    <v-tabs-window-item value="Description">
+                        <v-textarea></v-textarea>
+                    </v-tabs-window-item>
 
-                <v-tabs-window-item value="Add Child Nodes">
-                    <div id="addNodesSection">
-                        <ul>
-                            <div class="addNodeLine" >
-                                <img class="addNodeImg" src="../../red_square.svg" />
-                                <input class="addNodeInput" id="nodeWindowAddDecisions"  name="nodeWindowAddDecisions" type="number" value="0" min="0" ref="addDecisions" />
-                            </div>
+                    <v-tabs-window-item class="pa-4"value="Add Child Nodes">
+                        <v-card 
+                            id="add-nodes-section"
+                            class="pa-4 mx-5"
+                            variant="tonal">
+                            <v-card-item>
+                                <v-row class="black-lighten-1" style="height: 80px;">
+                                    <img class="add-node-img" src="../../red_square.svg" />
+                                    <v-spacer />
+                                    <input class="add-node-input" id="nodeWindowAddDecisions"  name="nodeWindowAddDecisions" type="number" value="0" min="0" ref="addDecisions" />
+                                </v-row>
+                                <v-row class="bg-black-lighten-1" style="height: 80px;">
+                                    <img class="add-node-img" src="../../yellow_circle.svg" />
+                                    <v-spacer />
+                                    <input class="add-node-input" id="nodeWindowAddChances"  name="nodeWindowAddChances" type="number" value="0" min="0" ref="addChances" />
+                                </v-row>
+                                <v-row class="bg-black-lighten-1" style="height: 80px;">
+                                    <img class="add-node-img" src="../../green_triangle.svg" />
+                                    <v-spacer />
+                                    <input class="add-node-input" id="nodeWindowAddTerminals"  name="nodeWindowAddTerminals" type="number" value="0" min="0" ref="addTerminals" />
+                                </v-row>
+                                <v-btn
+                                    class="mt-8 mb-2"
+                                    prepend-icon="mdi-plus-circle"
+                                    color="primary"
+                                    :ripple="false"
+                                    @click="onAddNodes"
+                                    >
+                                    Add Nodes
+                                </v-btn>
+                            </v-card-item>
+                        </v-card>
+                        <!-- <div id="addNodesSection">
+                            <ul>
+                                <div class="addNodeLine" >
+                                    <img class="addNodeImg" src="../../red_square.svg" />
+                                    <input class="addNodeInput" id="nodeWindowAddDecisions"  name="nodeWindowAddDecisions" type="number" value="0" min="0" ref="addDecisions" />
+                                </div>
 
-                            <div class="addNodeLine" >
-                                <img class="addNodeImg" src="../../yellow_circle.svg" />
-                                <input class="addNodeInput" id="nodeWindowAddChances" name="nodeWindowAddChances" type="number" value="0" min="0" ref="addChances"/>
-                            </div>
+                                <div class="addNodeLine" >
+                                    <img class="addNodeImg" src="../../yellow_circle.svg" />
+                                    <input class="addNodeInput" id="nodeWindowAddChances" name="nodeWindowAddChances" type="number" value="0" min="0" ref="addChances"/>
+                                </div>
 
-                            <div class="addNodeLine" >
-                                <img class="addNodeImg" src="../../green_triangle.svg" />
-                                <input class="addNodeInput" id="nodeWindowAddTerminals" name="nodeWindowAddTerminals" type="number" value="0" min="0" ref="addTerminals"/>
-                            </div>
-                        </ul>
+                                <div class="addNodeLine" >
+                                    <img class="addNodeImg" src="../../green_triangle.svg" />
+                                    <input class="addNodeInput" id="nodeWindowAddTerminals" name="nodeWindowAddTerminals" type="number" value="0" min="0" ref="addTerminals"/>
+                                </div>
+                            </ul>
 
-                        <button id="addNodeButton" @click="onAddNodes">Add Nodes</button>
-                    </div>
-                </v-tabs-window-item>
-                
-                <v-tabs-window-item value="View Child Nodes">
-                    <table>
-                        <tr>
-                            <th id="numCol" >#</th>
-                            <th id="typeCol" >Type</th>
-                            <th id="nameCol" >Name</th>
-                            <th id="yieldCol" >Yield</th>
-                            <th id="probCol">p</th>
-                        </tr>
-                        <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
-                            <td>{{ index + 1 }}</td>
-                            <td>{{ childNode.attributes.type }}</td>
-                            <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.yield" value="0" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="onEnteredInput" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="onEnteredInput" /> </td>
-                        </tr>
-                    </table>
-                </v-tabs-window-item>
+                            <button id="addNodeButton" @click="onAddNodes">Add Nodes</button>
+                        </div> -->
+                    </v-tabs-window-item>
+                    
+                    <v-tabs-window-item value="View Child Nodes">
+                        <table>
+                            <tr>
+                                <th id="numCol" >#</th>
+                                <th id="typeCol" >Type</th>
+                                <th id="nameCol" >Name</th>
+                                <th id="yieldCol" >Yield</th>
+                                <th id="probCol">p</th>
+                            </tr>
+                            <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
+                                <td>{{ index + 1 }}</td>
+                                <td>{{ childNode.attributes.type }}</td>
+                                <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
+                                <td class="editableCell" > <input v-model="childNode.attributes.yield" value="0" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="onEnteredInput" /> </td>
+                                <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="onEnteredInput" /> </td>
+                            </tr>
+                        </table>
+                    </v-tabs-window-item>
                 </v-container>
             </v-tabs-window>
 
             <v-tabs 
                 v-model="tab"
-                bg-color="primary"
-                grow
+                align-tabs="center"
+                bg-color="white-darken-1"
+                color="black"
+                fixed-tabs
                 >
                 <v-tab value="Add Child Nodes">
                     <v-icon icon="mdi-plus-circle"/>
@@ -262,6 +295,26 @@ export default {
         border-bottom-left-radius: 5%;
         transition: 0.4s;
         overflow-y: scroll;
+    }
+
+    .v-tab-item--selected {
+        background-color: white;
+    }
+    .v-tab-item--selected:focus {
+        outline-width: 0;
+    }
+
+    .add-node-img {
+        width: 20%;
+        height: 50%;
+        margin: 10% 10% 10% 5%;
+    }
+
+    .add-node-input {
+        width: 40%;
+        height: 50%;
+        margin: 10% 5% 10% 10%;
+        border: black 1px solid;
     }
 
 
