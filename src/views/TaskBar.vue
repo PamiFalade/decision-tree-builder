@@ -12,7 +12,7 @@
             class="mx-2"
             icon
             @click="saveTree">
-            <v-icon size="30" icon="mdi-content-save-outline" />
+            <v-icon size="30" icon="mdi-content-save" />
         </v-btn>
 
         <EditableTitle :inputValue="initialTreeTitle" @textChanged="updateTreeTitle"/>

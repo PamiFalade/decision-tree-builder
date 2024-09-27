@@ -75,18 +75,19 @@ import EditableTitle from '../components/EditableTitle.vue';
                 <v-icon size="30" icon="mdi-close"/>
             </v-btn>
 
-            <EditableTitle :inputValue="selectedNode.name" />
+            <EditableTitle :inputValue="selectedNode.name" @textChanged="updateNodeName"/>
 
             <img :src="getNodeSvg" class="nodeImg" />
         </v-toolbar>
 
+        <v-card-title>{{ tab }}</v-card-title>
             <v-tabs-window v-model="tab">
                 <v-container class="my-5">
-                <v-tabs-window-item value="description">
+                <v-tabs-window-item value="Description">
                     <v-textarea></v-textarea>
                 </v-tabs-window-item>
 
-                <v-tabs-window-item value="add-children">
+                <v-tabs-window-item value="Add Child Nodes">
                     <div id="addNodesSection">
                         <ul>
                             <div class="addNodeLine" >
@@ -109,7 +110,7 @@ import EditableTitle from '../components/EditableTitle.vue';
                     </div>
                 </v-tabs-window-item>
                 
-                <v-tabs-window-item value="table">
+                <v-tabs-window-item value="View Child Nodes">
                     <table>
                         <tr>
                             <th id="numCol" >#</th>
@@ -131,13 +132,20 @@ import EditableTitle from '../components/EditableTitle.vue';
             </v-tabs-window>
 
             <v-tabs 
-            v-model="tab"
-            bg-color="primary"
-            >
-            <v-tab value="add-children">Add Children</v-tab>
-            <v-tab value="table">Children Table</v-tab>
-            <v-tab value="description">Description</v-tab>
-        </v-tabs>
+                v-model="tab"
+                bg-color="primary"
+                grow
+                >
+                <v-tab value="Add Child Nodes">
+                    <v-icon icon="mdi-plus-circle"/>
+                </v-tab>
+                <v-tab value="View Child Nodes">
+                    <v-icon icon="mdi-table-large"/>
+                </v-tab>
+                <v-tab value="Description">
+                    <v-icon icon="mdi-text-box"/>
+                </v-tab>
+            </v-tabs>
 
 
     </v-card>
@@ -227,6 +235,9 @@ export default {
     methods: {
         closeWindow(){
             this.$emit('closeNodeWindow');
+        },
+        updateNodeName(updatedNodeName){
+            this.selectedNode.name = updatedNodeName;
         }
     }
 }
