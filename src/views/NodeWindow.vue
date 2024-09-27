@@ -82,15 +82,13 @@ import EditableTitle from '../components/EditableTitle.vue';
 
         <v-card-title>{{ tab }}</v-card-title>
             <v-tabs-window v-model="tab">
-                <v-container class="my-5">
-                    <v-tabs-window-item value="Description">
-                        <v-textarea></v-textarea>
-                    </v-tabs-window-item>
+                <v-container class="my-5 px-5 pt-2">
 
+                    <!-- Add Child Nodes tab -->
                     <v-tabs-window-item class="pa-4"value="Add Child Nodes">
                         <v-card 
                             id="add-nodes-section"
-                            class="pa-4 mx-5"
+                            class="pa-4"
                             variant="tonal">
                             <v-card-item>
                                 <v-row class="black-lighten-1" style="height: 80px;">
@@ -119,46 +117,40 @@ import EditableTitle from '../components/EditableTitle.vue';
                                 </v-btn>
                             </v-card-item>
                         </v-card>
-                        <!-- <div id="addNodesSection">
-                            <ul>
-                                <div class="addNodeLine" >
-                                    <img class="addNodeImg" src="../../red_square.svg" />
-                                    <input class="addNodeInput" id="nodeWindowAddDecisions"  name="nodeWindowAddDecisions" type="number" value="0" min="0" ref="addDecisions" />
-                                </div>
-
-                                <div class="addNodeLine" >
-                                    <img class="addNodeImg" src="../../yellow_circle.svg" />
-                                    <input class="addNodeInput" id="nodeWindowAddChances" name="nodeWindowAddChances" type="number" value="0" min="0" ref="addChances"/>
-                                </div>
-
-                                <div class="addNodeLine" >
-                                    <img class="addNodeImg" src="../../green_triangle.svg" />
-                                    <input class="addNodeInput" id="nodeWindowAddTerminals" name="nodeWindowAddTerminals" type="number" value="0" min="0" ref="addTerminals"/>
-                                </div>
-                            </ul>
-
-                            <button id="addNodeButton" @click="onAddNodes">Add Nodes</button>
-                        </div> -->
                     </v-tabs-window-item>
                     
+                    <!-- Child Nodes Table tab -->
                     <v-tabs-window-item value="View Child Nodes">
-                        <table>
-                            <tr>
-                                <th id="numCol" >#</th>
-                                <th id="typeCol" >Type</th>
-                                <th id="nameCol" >Name</th>
-                                <th id="yieldCol" >Yield</th>
-                                <th id="probCol">p</th>
-                            </tr>
-                            <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
-                                <td>{{ index + 1 }}</td>
-                                <td>{{ childNode.attributes.type }}</td>
-                                <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
-                                <td class="editableCell" > <input v-model="childNode.attributes.yield" value="0" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="onEnteredInput" /> </td>
-                                <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="onEnteredInput" /> </td>
-                            </tr>
-                        </table>
+                        <v-container class="table-container px-2 pt-0">
+                            <table>
+                                <tr>
+                                    <th id="numCol" >#</th>
+                                    <th id="typeCol" >Type</th>
+                                    <th id="nameCol" >Name</th>
+                                    <th id="yieldCol" >Yield</th>
+                                    <th id="probCol">p</th>
+                                </tr>
+                                <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
+                                    <td>{{ index + 1 }}</td>
+                                    <td>{{ childNode.attributes.type }}</td>
+                                    <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
+                                    <td class="editableCell" > <input v-model="childNode.attributes.yield" value="0" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="onEnteredInput" /> </td>
+                                    <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="onEnteredInput" /> </td>
+                                </tr>
+                            </table>
+                        </v-container>
                     </v-tabs-window-item>
+
+                    <!-- Node Description tab -->
+                    <v-tabs-window-item value="Description">
+                        <v-textarea 
+                            bg-color="grey-lighten-2"
+                            v-model="selectedNode.attributes.description"
+                            auto-grow
+                            clearable
+                            ></v-textarea>
+                    </v-tabs-window-item>
+
                 </v-container>
             </v-tabs-window>
 
@@ -182,15 +174,7 @@ import EditableTitle from '../components/EditableTitle.vue';
 
 
     </v-card>
-            <!-- <div class="windowHeader">
-                <img src='../assets/close_icon_black.svg' 
-                    class="closeButton"
-                    @click="closeWindow"/>
-                <input class="h2Input" v-model="selectedNode.name" />
-                <img :src="getNodeSvg" class="nodeImg" />
-            </div>
-
-            <div class="windowBody">
+            <!-- <div class="windowBody">
                 <div id="descriptionArea">
                     <textarea id="nodeDescription" v-model="selectedNode.attributes.description" name="nodeWindowDescription" rows="4" cols="50"></textarea>
                 </div>
@@ -262,7 +246,7 @@ export default {
     },
     data(){
         return {
-            tab: null
+            tab: null,
         }
     },
     methods: {
@@ -366,12 +350,17 @@ export default {
         height: auto;
     }
 
+    .table-container {
+        overflow: scroll;
+        height: 375px;
+    }
+    .table-container th { position: sticky; top: 0; z-index: 1; }
+
     table {
         border-collapse: collapse;
-        right: 5%;
-        width: 80%;
-        margin: 5% 5% 10%;
+        width: 100%;
     }
+    
     th {
         background-color: #000435;
         color: white;
