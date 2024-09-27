@@ -3,14 +3,14 @@
 
         <v-btn
             class="mx-2"
-            rounded="xl" 
+            icon 
             @click="toggleShowSettingsModal">
             <v-icon size="30" icon="mdi-cog"/>
         </v-btn>
 
         <v-btn
             class="mx-2"
-            rounded="xl" 
+            icon
             @click="saveTree">
             <v-icon size="30" icon="mdi-content-save-outline" />
         </v-btn>

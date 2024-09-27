@@ -1,5 +1,6 @@
 <script setup>
     import { ref, computed } from 'vue';
+import EditableTitle from '../components/EditableTitle.vue';
 
     // Number of each types of node that will be added to the selectedNode's children
     const addDecisions = ref(null);
@@ -63,15 +64,22 @@
 
 <template>
     <v-card id="nodeWindow">
-        <div class="windowHeader">
-            <img src='../assets/close_icon_black.svg' 
-                class="closeButton"
-                @click="closeWindow"/>
-            <input class="h2Input" v-model="selectedNode.name" />
-            <img :src="getNodeSvg" class="nodeImg" />
-        </div>
+        <v-toolbar
+            class="py-3 pr-4"
+            extension-height="75"
+            >
+            <v-btn
+                class="mx-2"
+                icon 
+                @click="closeWindow">
+                <v-icon size="30" icon="mdi-close"/>
+            </v-btn>
 
-        <div class="windowBody">
+            <EditableTitle :inputValue="selectedNode.name" />
+
+            <img :src="getNodeSvg" class="nodeImg" />
+        </v-toolbar>
+
             <v-tabs-window v-model="tab">
                 <v-container class="my-5">
                 <v-tabs-window-item value="description">
@@ -121,7 +129,7 @@
                 </v-tabs-window-item>
                 </v-container>
             </v-tabs-window>
-        </div>
+
             <v-tabs 
             v-model="tab"
             bg-color="primary"
@@ -274,7 +282,7 @@ export default {
 
 
     .nodeImg {
-        width: 50%;
+        width: 7.5%;
     }
 
     #selectedNodeAttributes {
