@@ -2,6 +2,7 @@
     import { ref, computed } from 'vue';
 import EditableTitle from '../components/EditableTitle.vue';
 import NodeDescriptionTab from './NodeWindowTabs/NodeDescriptionTab.vue';
+import NodeTable from './NodeWindowTabs/NodeTable.vue';
 
     // Number of each types of node that will be added to the selectedNode's children
     const addDecisions = ref(null);
@@ -34,18 +35,13 @@ import NodeDescriptionTab from './NodeWindowTabs/NodeDescriptionTab.vue';
         },
     });
 
-    const onEnteredInput = (event) => {
-        // If the input field is left blank, default the value to 0
-        if(event.target.value == "") {
-            event.target.value = 0;
-        }
-        // Emit the event that the tree's node's values have been updated
-        emit('updateTreeValues');
-    };
-
     const updateNodeDescription = (updatedText) => {
         props.selectedNode.attributes.description = updatedText;
     };
+
+    const updateTreeValues = () => {
+        emit('updateTreeValues');
+    }
 
     const getNodeSvg = computed(() => {
         let svgPath = "";
@@ -126,35 +122,12 @@ import NodeDescriptionTab from './NodeWindowTabs/NodeDescriptionTab.vue';
                     
                     <!-- Child Nodes Table tab -->
                     <v-tabs-window-item value="View Child Nodes">
-                        <v-container class="table-container px-2 pt-0">
-                            <table>
-                                <tr>
-                                    <th id="numCol" >#</th>
-                                    <th id="typeCol" >Type</th>
-                                    <th id="nameCol" >Name</th>
-                                    <th id="yieldCol" >Yield</th>
-                                    <th id="probCol">p</th>
-                                </tr>
-                                <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
-                                    <td>{{ index + 1 }}</td>
-                                    <td>{{ childNode.attributes.type }}</td>
-                                    <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
-                                    <td class="editableCell" > <input v-model="childNode.attributes.yield" value="0" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="onEnteredInput" /> </td>
-                                    <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="onEnteredInput" /> </td>
-                                </tr>
-                            </table>
-                        </v-container>
+                        <NodeTable :nodes="selectedNode.children" @nodeValueUpdated="updateTreeValues"/>
                     </v-tabs-window-item>
 
                     <!-- Node Description tab -->
                     <v-tabs-window-item value="Description">
                         <NodeDescriptionTab @nodeDescriptionChanged="updateNodeDescription" :nodeDescription="selectedNode.attributes.description" />
-                        <!-- <v-textarea 
-                            bg-color="grey-lighten-2"
-                            v-model="selectedNode.attributes.description"
-                            auto-grow
-                            clearable
-                            ></v-textarea> -->
                     </v-tabs-window-item>
 
                 </v-container>
@@ -178,69 +151,7 @@ import NodeDescriptionTab from './NodeWindowTabs/NodeDescriptionTab.vue';
                 </v-tab>
             </v-tabs>
 
-
     </v-card>
-            <!-- <div class="windowBody">
-                <div id="descriptionArea">
-                    <textarea id="nodeDescription" v-model="selectedNode.attributes.description" name="nodeWindowDescription" rows="4" cols="50"></textarea>
-                </div>
-                <ul id="selectedNodeAttributes">
-                    <li>
-                        <p>Type</p>
-                        <p> {{selectedNode.attributes.type}} </p>
-                    </li>
-                    <li>
-                        <p>Yield</p>
-                        <input v-model="selectedNode.attributes.yield" type="number" id="nodeWindowYield" name="nodeWindowYield" @blur="onEnteredInput" />
-                    </li>
-                    <li v-show="selectedNode.attributes.probability >= 0">
-                        <p>Probability</p>
-                        <input v-model="selectedNode.attributes.probability" type="number" max="1" id="nodeWindowProbability" name="nodeWindowProbability" @blur="onEnteredInput" />
-                    </li>
-                </ul>
-                
-                <div v-if="selectedNode.attributes.type !== 'Terminal'" id="childNodesSection">
-                    <table>
-                        <tr>
-                            <th id="numCol" >#</th>
-                            <th id="typeCol" >Type</th>
-                            <th id="nameCol" >Name</th>
-                            <th id="yieldCol" >Yield</th>
-                            <th id="probCol">p</th>
-                        </tr>
-                        <tr v-for="(childNode, index) in selectedNode.children" :key="childNode.id">
-                            <td>{{ index + 1 }}</td>
-                            <td>{{ childNode.attributes.type }}</td>
-                            <td class="editableCell" > <input v-model="childNode.name" :id="'nodeWindowChildName' + childNode.id" :name="'nodeWindowChildName' + childNode.id" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.yield" value="0" :id="'nodeWindowChildYield' + childNode.id" :name="'nodeWindowChildYield' + childNode.id" @blur="onEnteredInput" /> </td>
-                            <td class="editableCell" > <input v-model="childNode.attributes.probability" :id="'nodeWindowChildProbability' + childNode.id" :name="'nodeWindowChildProbability' + childNode.id" @blur="onEnteredInput" /> </td>
-                        </tr>
-                    </table>
-
-                    <div id="addNodesSection">
-                        <ul>
-                            <div class="addNodeLine" >
-                                <img class="addNodeImg" src="../../red_square.svg" />
-                                <input class="addNodeInput" id="nodeWindowAddDecisions"  name="nodeWindowAddDecisions" type="number" value="0" min="0" ref="addDecisions" />
-                            </div>
-
-                            <div class="addNodeLine" >
-                                <img class="addNodeImg" src="../../yellow_circle.svg" />
-                                <input class="addNodeInput" id="nodeWindowAddChances" name="nodeWindowAddChances" type="number" value="0" min="0" ref="addChances"/>
-                            </div>
-
-                            <div class="addNodeLine" >
-                                <img class="addNodeImg" src="../../green_triangle.svg" />
-                                <input class="addNodeInput" id="nodeWindowAddTerminals" name="nodeWindowAddTerminals" type="number" value="0" min="0" ref="addTerminals"/>
-                            </div>
-                        </ul>
-
-                        <button id="addNodeButton" @click="onAddNodes">Add Nodes</button>
-                    </div>
-                </div>
-            </div> -->
-
-        <!-- </div> -->
 </template>
 
 
@@ -333,8 +244,6 @@ export default {
         
     }
 
-
-
     .nodeImg {
         width: 7.5%;
     }
@@ -356,7 +265,7 @@ export default {
         height: auto;
     }
 
-    .table-container {
+    /* .table-container {
         overflow: scroll;
         height: 375px;
     }
@@ -397,6 +306,7 @@ export default {
     .editableCell {
         background-color: #E0E0E0;
     }
+        */
 
     input {
         background-color: inherit;
@@ -407,7 +317,7 @@ export default {
         border-color: #7B7B7B;
         font-family: Avenir, Helvetica, Arial, sans-serif;
     }
-
+/*
     input:focus {
         border-width: 0 0 2px; 
         border-color: #3371FF;
@@ -417,7 +327,7 @@ export default {
         width: 80%;
         height: 100%;
         font-size: medium;
-    }
+    } */
 
     #addNodesSection {
         width: 50%;
