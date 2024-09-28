@@ -7,19 +7,18 @@
                 <input type="radio" id="noHighlight" 
                     name="highlightPathGroup" 
                     value="noHighlight" 
-                    v-model="noHighlightOption" 
                     @change="checkSelectedHighlight"
                     checked>
             </div>
 
             <div class="highlightOption">
                 <label for="highlightMax">Max</label>
-                <input type="radio" id="highlightMax" name="highlightPathGroup" value="highlightMax" v-model="maxHighlightOption" @change="checkSelectedHighlight">
+                <input type="radio" id="highlightMax" name="highlightPathGroup" value="highlightMax" @change="checkSelectedHighlight">
             </div>
             
             <div class="highlightOption">
                 <label for="highlightMax">Min</label>
-                <input type="radio" id="highlightMin" name="highlightPathGroup" value="highlightMin" v-model="minHighlightOption" @change="checkSelectedHighlight">
+                <input type="radio" id="highlightMin" name="highlightPathGroup" value="highlightMin" @change="checkSelectedHighlight">
             </div>
         </div>
     </div>
