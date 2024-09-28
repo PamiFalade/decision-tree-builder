@@ -1,6 +1,7 @@
 <script setup>
     import { ref, computed } from 'vue';
 import EditableTitle from '../components/EditableTitle.vue';
+import NodeDescriptionTab from './NodeWindowTabs/NodeDescriptionTab.vue';
 
     // Number of each types of node that will be added to the selectedNode's children
     const addDecisions = ref(null);
@@ -40,7 +41,11 @@ import EditableTitle from '../components/EditableTitle.vue';
         }
         // Emit the event that the tree's node's values have been updated
         emit('updateTreeValues');
-    }
+    };
+
+    const updateNodeDescription = (updatedText) => {
+        props.selectedNode.attributes.description = updatedText;
+    };
 
     const getNodeSvg = computed(() => {
         let svgPath = "";
@@ -143,12 +148,13 @@ import EditableTitle from '../components/EditableTitle.vue';
 
                     <!-- Node Description tab -->
                     <v-tabs-window-item value="Description">
-                        <v-textarea 
+                        <NodeDescriptionTab @nodeDescriptionChanged="updateNodeDescription" :nodeDescription="selectedNode.attributes.description" />
+                        <!-- <v-textarea 
                             bg-color="grey-lighten-2"
                             v-model="selectedNode.attributes.description"
                             auto-grow
                             clearable
-                            ></v-textarea>
+                            ></v-textarea> -->
                     </v-tabs-window-item>
 
                 </v-container>
