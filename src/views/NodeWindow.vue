@@ -8,11 +8,6 @@
     // Emit for when adding children nodes from NodeWindow
     const emit = defineEmits(['add', 'closeNodeWindow', 'updateTreeValues']);
 
-    // When the "Add Nodes" button is clicked, signal to the MainWindow to add the indicated number of each node
-    const updateChildNodes = (numDecisions, numChances, numTerminals) => {
-        emit('addChildren', numDecisions, numChances, numTerminals);
-    };
-
     const props = defineProps({
         selectedNode: {
             name: String,
@@ -26,23 +21,28 @@
             children: Array,
         },
     });
-
+    
     const closeWindow = () => {
         emit('closeNodeWindow');
     };
-
+    
     const updateNodeName = (updatedNodeName) => {
         this.selectedNode.name = updatedNodeName;
     };
-
+    
     const updateNodeDescription = (updatedText) => {
         props.selectedNode.attributes.description = updatedText;
+    };
+    
+    // When the "Add Nodes" button is clicked, signal to the MainWindow to add the indicated number of each node
+    const updateChildNodes = (numDecisions, numChances, numTerminals) => {
+        emit('addChildren', numDecisions, numChances, numTerminals);
     };
 
     const updateTreeValues = () => {
         emit('updateTreeValues');
     }
-
+    
     const getNodeSvg = computed(() => {
         let svgPath = "";
             if(props.selectedNode.attributes.type === "Root"){
@@ -81,6 +81,7 @@
         <v-card-title>{{ tab }}</v-card-title>
             <v-tabs-window v-model="tab">
                 <v-container class="my-5 px-5 pt-2">
+
                     <!-- Add Child Nodes tab -->
                     <v-tabs-window-item class="pa-4"value="Add Child Nodes">
                         <AddNodesTab @childrenAdded="updateChildNodes"/>
@@ -90,14 +91,14 @@
                     <v-tabs-window-item value="View Child Nodes">
                         <NodeTable :nodes="selectedNode.children" @nodeValueUpdated="updateTreeValues"/>
                     </v-tabs-window-item>
-
+                    
                     <!-- Node Description tab -->
                     <v-tabs-window-item value="Description">
                         <NodeDescriptionTab @nodeDescriptionChanged="updateNodeDescription" :nodeDescription="selectedNode.attributes.description" />
                     </v-tabs-window-item>
                 </v-container>
             </v-tabs-window>
-
+            
             <v-tabs 
                 v-model="tab"
                 align-tabs="center"
@@ -115,7 +116,18 @@
                     <v-icon icon="mdi-text-box"/>
                 </v-tab>
             </v-tabs>
-
+        
+        <!-- <v-container class="my-5 px-5 pt-2">
+            <v-tabs-window-item v-for="tab in tabs" :key="tab.tab">
+                <component :is="tab.component" ${{ tab.events }}></component>
+            </v-tabs-window-item>
+        </v-container>
+        <v-tabs v-model="tab" background-color="primary" dark>
+            <v-tab v-for="tab in tabs" :key="tab.tab">
+                <v-icon :icon="tab.icon" />
+            </v-tab>
+        </v-tabs> -->
+        
     </v-card>
 </template>
 
