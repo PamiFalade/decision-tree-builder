@@ -9,12 +9,6 @@
           @updateTreeTitle="onUpdateTreeTitle"
           @loadDecisionTree="onLoadDecisionTree"
       />
-      <!-- <LoadDataModal v-show="showDBModal" 
-          :databaseRecords="databaseRecords" 
-          @hideModal="handleHideModal" 
-          @loadDecisionTree="onLoadDecisionTree" 
-          @promptDeleteDecisionTree="onShowDeleteTreeModal"
-      /> -->
       <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
       <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
       <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/>
@@ -76,7 +70,6 @@
       },
 
       onShowDeleteTreeModal(tree_id, tree_name){
-        this.showDBModal = false;
         this.showDeleteModal = true;
         this.treeIdToDelete = tree_id;
         this.treeToDelete = tree_name;
@@ -84,7 +77,6 @@
 
       onHideDeleteModal() {
         this.showDeleteModal = false;
-        this.showDBModal = true;
       },
 
       onUpdateTreeTitle(newTitle) {
@@ -99,9 +91,6 @@
       handleHideModal() {
         if(this.showDeleteModal) {
           this.onHideDeleteModal();
-        }
-        else {
-          this.onHideDatabaseModal();
         }
       },
 
@@ -118,7 +107,6 @@
       },
 
       async onLoadDecisionTree(decisionTreeId) {
-        this.showDBModal = false;
         await DecisionTreeDTO.getTree(decisionTreeId)
           .then(loadedTree => {
             this.treeTitle = loadedTree.data.title;

@@ -22,13 +22,7 @@
                                 height="100"
                                 flat>
                                 <v-row style="height: 40;">
-                                    <v-btn
-                                        class="mx-1"
-                                        icon 
-                                        variant="plain"
-                                        @click="openDialog = false">
-                                        <v-icon color="red" size="20" icon="mdi-trash-can"/>
-                                    </v-btn>
+                                    <DeleteDialog :decisionTreeName="decisionTree.tree_name" />
                                     <v-spacer />
                                     <v-card-title>
                                         {{ decisionTree.tree_name }}
@@ -56,6 +50,7 @@
                 </v-container>
             </v-card>
         </template>
+        
     </DialogTemplate>
 
 </template>
@@ -63,13 +58,15 @@
 <script>
 import { ref } from 'vue';
 
-import DialogTemplate from '../components/DialogTemplate.vue';
-import {formatDateTime} from '../services/Utils.js';
+import DialogTemplate from '../../components/DialogTemplate.vue';
+import {formatDateTime} from '../../services/Utils.js';
+import DeleteDialog from './DeleteDialog.vue';
 
 export default {
     name: 'LoadDataDialog',
     components: {
-        DialogTemplate
+        DialogTemplate,
+        DeleteDialog
     },
     data(){
         return {

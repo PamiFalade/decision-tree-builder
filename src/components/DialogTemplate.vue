@@ -1,10 +1,14 @@
 <template>
     
-    <v-btn
-        text="Open Dialog 20"
-        @click="dialog = true"
-    />
-
+    <div @click="dialog = true">
+        <slot name="activator">
+            <v-btn
+                :text="actionBtnLabel"
+                class="bg-blue-darken-2"
+            />
+        </slot>
+    </div>
+    
     <v-dialog 
         v-model="dialog"
         min-width="600" 
@@ -13,7 +17,7 @@
         max-height="600"
         >
         <v-toolbar
-            class="py-3 pr-4">
+            :class="action === 'delete' ? 'py-3 pr-4 bg-red' : 'py-3 pr-4'">
             <v-btn
                 class="mx-2"
                 icon 
@@ -31,7 +35,7 @@
                 <v-btn 
                     :text="actionBtnLabel || 'Action Btn'" 
                     variant="elevated"
-                    color="blue-darken-1"
+                    :color="action === 'delete' ? 'red' : 'blue-darken-1'"
                     @click="() => {
                         dialog = false;
                         onDialogAction();

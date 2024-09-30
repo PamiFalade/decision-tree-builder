@@ -16,21 +16,13 @@
         </v-btn>
 
         <EditableTitle :inputValue="initialTreeTitle" @textChanged="updateTreeTitle"/>
-
         <v-btn 
             class="mx-2 bg-green"
             rounded="md" 
             @click="">
             Export
         </v-btn>
-
-        <v-btn 
-            class="mx-2 bg-blue-darken-2"
-            rounded="md" 
-            @click="showDatabaseModal">
-            Load Tree
-        </v-btn>
-
+        
         <LoadDataDialog :databaseRecords="databaseRecords" @loadDecisionTree="onLoadDecisionTree"/>
 
     </v-app-bar>
@@ -39,13 +31,13 @@
 
 <script>
 import EditableTitle from '../components/EditableTitle.vue';
-import LoadDataDialog from './LoadDataDialog.vue';
+import LoadDataDialog from './dialogs/LoadDataDialog.vue';
 
 export default {
     name: 'TaskBar',
     components: {
         EditableTitle,
-        LoadDataDialog
+        LoadDataDialog,
     },
     props: {
         initialTreeTitle: String,
