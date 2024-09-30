@@ -23,7 +23,10 @@
             Export
         </v-btn>
         
-        <LoadDataDialog :databaseRecords="databaseRecords" @loadDecisionTree="onLoadDecisionTree"/>
+        <LoadDataDialog 
+            :databaseRecords="databaseRecords" 
+            @loadDecisionTree="onLoadDecisionTree"
+            @deleteDecisionTree="onDeleteDecisionTree"/>
 
     </v-app-bar>
 </template>
@@ -75,6 +78,9 @@ export default {
         },
         onLoadDecisionTree(treeID) {
             this.$emit('loadDecisionTree', treeID);
+        },
+        onDeleteDecisionTree(treeID) {
+            this.$emit('deleteDecisionTree', treeID);
         }
     }
 }

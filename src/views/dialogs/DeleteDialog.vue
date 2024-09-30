@@ -35,7 +35,7 @@ export default {
     props: {
         decisionTreeName: String
     },
-    emits: [],
+    emits: ['deleteDecisionTree'],
     setup(props, context) {
 
         const deleteDecisionTree = () => {

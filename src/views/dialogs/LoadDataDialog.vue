@@ -22,7 +22,9 @@
                                 height="100"
                                 flat>
                                 <v-row style="height: 40;">
-                                    <DeleteDialog :decisionTreeName="decisionTree.tree_name" />
+                                    <DeleteDialog 
+                                        :decisionTreeName="decisionTree.tree_name" 
+                                        @deleteDecisionTree="onDeleteDecisionTree(decisionTree.id)"/>
                                     <v-spacer />
                                     <v-card-title>
                                         {{ decisionTree.tree_name }}
@@ -76,7 +78,7 @@ export default {
     props: {
         databaseRecords: Array
     },
-    emits: ['loadDecisionTree'],
+    emits: ['loadDecisionTree', 'deleteDecisionTree'],
     setup(props, context) {
 
         // The decision tree that is loaded from the database
@@ -87,22 +89,16 @@ export default {
             selectedDecisionTreeId.value = key;
         }
 
-        // When close button is clicked, emit the event so that the modal will be closed.
-        const closeModal = () => {
-            selectedDecisionTreeId.value = null;
-            context.emit('hideDatabaseModal');
-        }
-
         // Trigger the load decision tree function in App.vue
         const loadDecisionTree = (dialogTitle) => {
             context.emit('loadDecisionTree', selectedDecisionTreeId.value);
         }
 
-        const onDeleteTreeClick = (tree_id, tree_name) => {
-            context.emit('promptDeleteDecisionTree', tree_id, tree_name);
+        const onDeleteDecisionTree= (id) => {
+            context.emit('deleteDecisionTree', id);
         }
 
-        return { selectedDecisionTreeId, closeModal, onDecisionTreeClick, loadDecisionTree, formatDateTime, onDeleteTreeClick }
+        return { selectedDecisionTreeId, onDecisionTreeClick, loadDecisionTree, formatDateTime, onDeleteDecisionTree }
     }
 
 }

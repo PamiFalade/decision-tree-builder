@@ -8,6 +8,7 @@
           @saveDecisionTree="onSaveDecisionTree" 
           @updateTreeTitle="onUpdateTreeTitle"
           @loadDecisionTree="onLoadDecisionTree"
+          @deleteDecisionTree="onDeleteDecisionTree"
       />
       <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
       <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
@@ -126,11 +127,9 @@
         await this.getAllDecisionTrees();
       },
 
-      async onDeleteDecisionTree() {
-        await DecisionTreeDTO.deleteTree(this.treeIdToDelete);
+      async onDeleteDecisionTree(treeIdToDelete) {
+        await DecisionTreeDTO.deleteTree(treeIdToDelete);
         await this.getAllDecisionTrees();
-        this.handleHideModal();
-        this.resetDeleteVariables();
       }
     },
     async mounted() {
