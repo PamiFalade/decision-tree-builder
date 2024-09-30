@@ -117,17 +117,6 @@
                 </v-tab>
             </v-tabs>
         
-        <!-- <v-container class="my-5 px-5 pt-2">
-            <v-tabs-window-item v-for="tab in tabs" :key="tab.tab">
-                <component :is="tab.component" ${{ tab.events }}></component>
-            </v-tabs-window-item>
-        </v-container>
-        <v-tabs v-model="tab" background-color="primary" dark>
-            <v-tab v-for="tab in tabs" :key="tab.tab">
-                <v-icon :icon="tab.icon" />
-            </v-tab>
-        </v-tabs> -->
-        
     </v-card>
 </template>
 
