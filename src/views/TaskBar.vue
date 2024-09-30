@@ -31,7 +31,7 @@
             Load Tree
         </v-btn>
 
-        <LoadDataDialog />
+        <LoadDataDialog :databaseRecords="databaseRecords" @loadDecisionTree="onLoadDecisionTree"/>
 
     </v-app-bar>
 </template>
@@ -48,7 +48,8 @@ export default {
         LoadDataDialog
     },
     props: {
-        initialTreeTitle: String
+        initialTreeTitle: String,
+        databaseRecords: Array
     },
     data() {
         return {
@@ -79,6 +80,9 @@ export default {
         updateTreeTitle(updatedTitle){
             console.log(updatedTitle);
             this.$emit('updateTreeTitle', updatedTitle);
+        },
+        onLoadDecisionTree(treeID) {
+            this.$emit('loadDecisionTree', treeID);
         }
     }
 }

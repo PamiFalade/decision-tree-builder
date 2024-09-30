@@ -1,18 +1,11 @@
 <template>
 
-    <DialogTemplate :dialog="openDialog" dialogTitle="Load a Decision Tree" actionBtnLabel="Load Trees">
-        <template v-slot:dialogHeader>
-            <v-toolbar
-                class="py-3 pr-4">
-                <v-btn
-                    class="mx-2"
-                    icon 
-                    @click="openDialog = false">
-                    <v-icon size="30" icon="mdi-close"/>
-                </v-btn>
-                <v-card-title>Open Decision Tree</v-card-title>
-            </v-toolbar>
-        </template>
+    <DialogTemplate 
+        dialogTitle="Load a Decision Tree" 
+        actionBtnLabel="Load Tree" 
+        action="success"
+        :actionEnabled="selectedDecisionTreeId > 0 ? true : false"
+        @dialogAction="loadDecisionTree(dialogTitle)">
 
         <template v-slot:dialogBody>
             <v-card 
@@ -28,7 +21,6 @@
                             <v-card
                                 height="100"
                                 flat>
-
                                 <v-row style="height: 40;">
                                     <v-btn
                                         class="mx-1"
@@ -59,22 +51,6 @@
                                 </v-row>
                                 
                             </v-card>
-                            <!-- <div class="li-header">
-                                <div class="deleteButton" @click="onDeleteTreeClick(decisionTree.id, decisionTree.tree_name)">
-                                    <img src="../assets/trash_icon.svg" />
-                                </div>
-                                <h4 class="treeName treeMenuItems"> {{ decisionTree.tree_name }} </h4>
-                            </div>
-                            <div class="li-metadata">
-                                <div class="treeData">
-                                    <p class="tree-data-values"> {{ decisionTree.creator_email }} </p>
-                                    <h6 class="text-label">Created By</h6>
-                                </div>
-                                <div class="treeData">
-                                    <p class="tree-data-values"> {{ formatDateTime(decisionTree.created_at) }} </p>
-                                    <h6 class="text-label">Created At</h6>
-                                </div>
-                            </div> -->
                         </li>
                     </ul>
                 </v-container>
@@ -97,46 +73,13 @@ export default {
     },
     data(){
         return {
-            databaseRecords: [
-                {
-                    id: 1,
-                    tree_name: 'Barry',
-                    creator_email: 'pamilerin@intern.mudozangl.com',
-                    created_at: '2024-12-09'
-                },
-                {
-                    id: 2,
-                    tree_name: 'Cisco',
-                    creator_email: 'georg.zangl@mudozangl.com',
-                    created_at: '2022-12-09'
-                },
-                {
-                    id: 3,
-                    tree_name: 'Iris',
-                    creator_email: 'damir.gavrat@mudozangl.com',
-                    created_at: '2021-12-09'
-                },
-                {
-                    id: 1,
-                    tree_name: 'Barry',
-                    creator_email: 'Thawne',
-                    created_at: '2024-12-09'
-                },
-                {
-                    id: 2,
-                    tree_name: 'Cisco',
-                    creator_email: 'Frost',
-                    created_at: '2022-12-09'
-                },
-                {
-                    id: 3,
-                    tree_name: 'Iris',
-                    creator_email: 'West',
-                    created_at: '2021-12-09'
-                },
-            ]
+            openDialog: true,
         }
     },
+    props: {
+        databaseRecords: Array
+    },
+    emits: ['loadDecisionTree'],
     setup(props, context) {
 
         // The decision tree that is loaded from the database
@@ -154,7 +97,7 @@ export default {
         }
 
         // Trigger the load decision tree function in App.vue
-        const loadDecisionTree = () => {
+        const loadDecisionTree = (dialogTitle) => {
             context.emit('loadDecisionTree', selectedDecisionTreeId.value);
         }
 

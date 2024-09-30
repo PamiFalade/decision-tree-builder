@@ -1,17 +1,20 @@
 <template>
   <v-app id="mainPage">
-      <TaskBar :initialTreeTitle="treeTitle" 
+      <TaskBar 
+          :initialTreeTitle="treeTitle" 
+          :databaseRecords="databaseRecords"
           @showDatabaseModal="onShowDatabaseModal" 
           @toggleShowSettingsModal="onToggleShowSettingsModal"
           @saveDecisionTree="onSaveDecisionTree" 
           @updateTreeTitle="onUpdateTreeTitle"
+          @loadDecisionTree="onLoadDecisionTree"
       />
-      <LoadDataModal v-show="showDBModal" 
+      <!-- <LoadDataModal v-show="showDBModal" 
           :databaseRecords="databaseRecords" 
           @hideModal="handleHideModal" 
           @loadDecisionTree="onLoadDecisionTree" 
           @promptDeleteDecisionTree="onShowDeleteTreeModal"
-      />
+      /> -->
       <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
       <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
       <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/>
@@ -59,7 +62,6 @@
           "children": []
         },
         databaseRecords: [],
-        showDBModal: false,
         showSettingsModal: false,
         showDeleteModal: false,
         treeToDelete: "",
@@ -68,13 +70,6 @@
       }
     },
     methods: {
-      onShowDatabaseModal() {
-        this.showDBModal = true;
-      },
-
-      onHideDatabaseModal() {
-        this.showDBModal = false;
-      },
 
       onToggleShowSettingsModal(){
         this.showSettingsModal = !this.showSettingsModal;
