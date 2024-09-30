@@ -31,17 +31,21 @@
             Load Tree
         </v-btn>
 
+        <LoadDataDialog />
+
     </v-app-bar>
 </template>
 
 
 <script>
 import EditableTitle from '../components/EditableTitle.vue';
+import LoadDataDialog from './LoadDataDialog.vue';
 
 export default {
     name: 'TaskBar',
     components: {
-        EditableTitle
+        EditableTitle,
+        LoadDataDialog
     },
     props: {
         initialTreeTitle: String

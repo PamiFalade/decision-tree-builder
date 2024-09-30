@@ -1,21 +1,36 @@
 <template>
+    
+    <v-btn
+        text="Open Dialog 20"
+        @click="dialog = true"
+    />
+
     <v-dialog 
         v-model="dialog"
+        min-width="600" 
+        min-height="500"
         max-width="800" 
-        max-height="600" >
+        max-height="600"
+        >
         
-        <v-card title="Dialog 1">
+        <v-card>
 
-        <slot name="cardBody">Dialog Content</slot>
+            <slot name="dialogHeader">
+                <v-card-title>
+                    Dialog Title Example
+                </v-card-title>
+            </slot>
 
-        <v-card-actions>
-            <!-- <v-spacer /> -->
+            <slot name="dialogBody">Dialog Content</slot>
 
-            <v-btn 
-                :text="actionBtnLabel" 
-                variant="primary"
-            />
-        </v-card-actions>
+            <v-card-actions>
+                <!-- <v-spacer /> -->
+
+                <v-btn 
+                    :text="actionBtnLabel || 'Action Btn'" 
+                    variant="outlined"
+                />
+            </v-card-actions>
         
         </v-card>
     </v-dialog>
@@ -25,8 +40,14 @@
 export default {
     name: 'DialogTemplate',
     props: {
-        cardTitle: String,
+        dialog: Boolean,
+        dialogTitle: String,
         actionBtnLabel: String
+    },
+    data() {
+        return {
+            dialog: false
+        }
     },
     setup() {
 
