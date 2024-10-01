@@ -11,7 +11,7 @@
     
     <v-dialog 
         v-model="dialog"
-        min-width="600" 
+        min-width="200" 
         min-height="500"
         max-width="800" 
         max-height="600"
@@ -31,7 +31,7 @@
 
             <slot name="dialogBody">Dialog Content</slot>
 
-            <v-card-actions>
+            <v-card-actions v-show="includeActionBtn">
                 <v-btn 
                     :text="actionBtnLabel || 'Action Btn'" 
                     variant="elevated"
@@ -55,6 +55,7 @@ export default {
     name: 'DialogTemplate',
     props: {
         dialogTitle: String,
+        includeActionBtn: Boolean,
         actionBtnLabel: String,
         action: String,
         actionEnabled: Boolean

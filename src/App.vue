@@ -9,6 +9,7 @@
           @updateTreeTitle="onUpdateTreeTitle"
           @loadDecisionTree="onLoadDecisionTree"
           @deleteDecisionTree="onDeleteDecisionTree"
+          @highlightPath="onSelectHighlightOption"
       />
       <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
       <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
@@ -96,6 +97,7 @@
       },
 
       onSelectHighlightOption(selectedOption){
+        console.log(selectedOption);
         this.highlightOption = selectedOption;
       },
 

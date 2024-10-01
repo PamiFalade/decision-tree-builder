@@ -2,6 +2,7 @@
 
     <DialogTemplate
         :dialogTitle="`Delete '${decisionTreeName}'`"
+        :includeActionBtn="true"
         actionBtnLabel="Delete Tree" 
         action="delete"
         :actionEnabled="true"

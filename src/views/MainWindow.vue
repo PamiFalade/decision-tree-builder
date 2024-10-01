@@ -60,15 +60,15 @@
                 this.onUpdateTreeValues();
             },
             highlightOption(value) {
-                if(value === "noHighlight") {
+                if(value === "highlight-none") {
                     this.highlightBestPath = false;
                     this.highlightWorstPath = false;
                 }
-                else if(value === "highlightMax"){
+                else if(value === "highlight-max"){
                     this.highlightBestPath = true;
                     this.highlightWorstPath = false;
                 }
-                else if(value === "highlightMin"){
+                else if(value === "highlight-min"){
                     this.highlightBestPath = false;
                     this.highlightWorstPath = true;
                 }

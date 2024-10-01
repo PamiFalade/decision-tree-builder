@@ -1,12 +1,7 @@
 <template>
     <v-app-bar class="px-3 py-4">
 
-        <v-btn
-            class="mx-2"
-            icon 
-            @click="toggleShowSettingsModal">
-            <v-icon size="30" icon="mdi-cog"/>
-        </v-btn>
+        <SettingsDialog @highlightPath="onHighlightPath" />
 
         <v-btn
             class="mx-2"
@@ -35,12 +30,14 @@
 <script>
 import EditableTitle from '../components/EditableTitle.vue';
 import LoadDataDialog from './dialogs/LoadDataDialog.vue';
+import SettingsDialog from './dialogs/SettingsDialog.vue';
 
 export default {
     name: 'TaskBar',
     components: {
         EditableTitle,
         LoadDataDialog,
+        SettingsDialog
     },
     props: {
         initialTreeTitle: String,
@@ -81,6 +78,9 @@ export default {
         },
         onDeleteDecisionTree(treeID) {
             this.$emit('deleteDecisionTree', treeID);
+        },
+        onHighlightPath(selectedHighlightOption){
+            this.$emit('highlightPath', selectedHighlightOption);
         }
     }
 }

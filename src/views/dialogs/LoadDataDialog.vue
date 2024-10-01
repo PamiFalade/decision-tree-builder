@@ -2,6 +2,7 @@
 
     <DialogTemplate 
         dialogTitle="Load a Decision Tree" 
+        :includeActionBtn="true"
         actionBtnLabel="Load Tree" 
         action="success"
         :actionEnabled="selectedDecisionTreeId > 0 ? true : false"
