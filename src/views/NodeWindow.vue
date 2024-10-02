@@ -4,6 +4,7 @@
     import NodeDescriptionTab from './NodeWindowTabs/NodeDescriptionTab.vue';
     import NodeTable from './NodeWindowTabs/NodeTable.vue';
     import AddNodesTab from './NodeWindowTabs/AddNodesTab.vue';
+    import EditNodeTab from './NodeWindowTabs/EditNodeTab.vue';
 
     // Emit for when adding children nodes from NodeWindow
     const emit = defineEmits(['add', 'closeNodeWindow', 'updateTreeValues']);
@@ -33,6 +34,12 @@
     const updateNodeDescription = (updatedText) => {
         props.selectedNode.attributes.description = updatedText;
     };
+
+    const updateNodeData = (updatedYield, updatedProbability) => {
+        props.selectedNode.attributes.yield = updatedYield;
+        props.selectedNode.attributes.probability = updatedProbability;
+        updateTreeValues();
+    }
     
     // When the "Add Nodes" button is clicked, signal to the MainWindow to add the indicated number of each node
     const updateChildNodes = (numDecisions, numChances, numTerminals) => {
@@ -82,8 +89,18 @@
             <v-tabs-window v-model="tab">
                 <v-container class="my-5 px-5 pt-2">
 
+                    <!-- Edit Node Data tab -->
+                    <v-tabs-window-item value="Edit Node">
+                        <EditNodeTab 
+                            :type="selectedNode.attributes.type" 
+                            :yield="selectedNode.attributes.yield"
+                            :probability="selectedNode.attributes.probability"
+                            @nodeDataUpdated="updateNodeData"
+                        />
+                    </v-tabs-window-item>
+
                     <!-- Add Child Nodes tab -->
-                    <v-tabs-window-item class="pa-4"value="Add Child Nodes">
+                    <v-tabs-window-item class="pa-4" value="Add Child Nodes">
                         <AddNodesTab @childrenAdded="updateChildNodes"/>
                     </v-tabs-window-item>
                     
@@ -105,7 +122,10 @@
                 bg-color="white-darken-1"
                 color="black"
                 fixed-tabs
-                >
+            >
+                <v-tab value="Edit Node">
+                    <v-icon icon="mdi-pencil" />
+                </v-tab>
                 <v-tab value="Add Child Nodes">
                     <v-icon icon="mdi-plus-circle"/>
                 </v-tab>
