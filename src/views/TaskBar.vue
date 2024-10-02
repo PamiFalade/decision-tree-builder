@@ -11,11 +11,23 @@
         </v-btn>
 
         <EditableTitle :inputValue="initialTreeTitle" @textChanged="updateTreeTitle"/>
+
         <v-btn 
             class="mx-2 bg-green"
             rounded="md" 
-            @click="">
+        >
             Export
+            <v-menu activator="parent" open-on-hover>
+                <v-list>
+                    <v-list-item
+                        key="export-pdf"
+                        title="PDF"
+                        align="center"
+                        @click=""
+                    >
+                    </v-list-item>
+                </v-list>
+            </v-menu>
         </v-btn>
         
         <LoadDataDialog 
