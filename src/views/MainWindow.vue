@@ -280,7 +280,7 @@
                         type: "Decision",
                         yield: 0,
                         expectedValue: 0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? -1 : 0.1,
                         onBestPath: false,
                         onWorstPath: false,
                         description: ""
@@ -298,7 +298,7 @@
                         type: "Chance",
                         yield: 0,
                         expectedValue: 0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? -1 : 0.1,
                         onBestPath: false,
                         onWorstPath: false,
                         description: ""
@@ -316,7 +316,7 @@
                         type: "Terminal",
                         yield: 0,
                         expectedValue: 0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? null : 0.1,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? -1 : 0.1,
                         onBestPath: false,
                         onWorstPath: false,
                         description: ""

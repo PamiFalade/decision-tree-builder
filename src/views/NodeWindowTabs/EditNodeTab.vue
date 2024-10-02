@@ -6,6 +6,7 @@
         control-variant="split"
     />
     <v-number-input 
+        v-if="probability >= 0"
         label="Probability" 
         v-model="node_probability"
         control-variant="split"
@@ -13,10 +14,16 @@
         :max="1"
         :step="0.1"
     />
+    <v-number-input 
+        label="Duration (years)" 
+        v-model="node_time" 
+        control-variant="split"
+        :min="0"
+    />
 </template>
 
 <script>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 
 export default {
     name: 'EditNodeTab',
@@ -29,11 +36,14 @@ export default {
     setup(props, context) {
         const node_yield = ref(null);
         const node_probability = ref(null);
+        const node_time = ref(0);
         const nodeData = [node_yield, node_probability];
 
         watch(props, () => {
+            console.log(props.probability);
             node_yield.value = props.yield;
             node_probability.value = props.probability;
+            node_time.value = 0;
         })
 
         watch(nodeData, () => {
@@ -42,7 +52,7 @@ export default {
 
 
 
-        return { node_yield, node_probability };
+        return { node_yield, node_probability, node_time };
     }
 }
 
