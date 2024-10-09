@@ -1,10 +1,12 @@
 <template>
-
+    
     <v-text-field 
         class="mx-7 pt-1 title-input"
+        :class="disabledStyle"
         type="input"
         :readonly="disableEditTitle"
         v-model="text"
+        @hover="disableEditTitle ? cursor: pointer"
         @input="onTextChange"
         >
         <template v-slot:append-inner >
@@ -24,13 +26,17 @@ export default {
     data() {
         return {
             disableEditTitle: true,
-            text: ""
+            text: "",
+            disabledStyle: "disabled-element"
         }
     },
     watch: {
         inputValue(value) {
             this.text = value;
         },
+        disableEditTitle(value){
+            this.disabledStyle = value ? "disabled-element" : "";
+        }
     },
     mounted() {
         this.text = this.inputValue;
@@ -52,6 +58,11 @@ export default {
 .title-input input {
     text-align: center;
     font-size: xx-large;
+}
+
+.disabled-element input {
+    color: lightgrey;
+    cursor: not-allowed;
 }
 
 .disableEditTitleBtn {
