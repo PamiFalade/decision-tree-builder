@@ -1,5 +1,5 @@
 <template>
-    
+
     <v-text-field 
         class="mx-7 pt-1 title-input"
         :class="disabledStyle"
@@ -61,7 +61,7 @@ export default {
 }
 
 .disabled-element input {
-    color: lightgrey;
+    color: grey;
     cursor: not-allowed;
 }
 
