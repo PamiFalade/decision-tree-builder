@@ -36,12 +36,9 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
     let yCoord = nodeInfo.x / 400;
 
     // Styling based on if the nodes are on the most profitable branch
-    let width = nodeInfo.data.attributes.onBestPath && highlightBestPath ? "40" : "20";
-    let height = nodeInfo.data.attributes.onBestPath && highlightBestPath  ? "40" :"20";
-    let r = nodeInfo.data.attributes.onBestPath && highlightBestPath  ? "21.2132" :"15";
-
-    let xOffsetRoot = nodeInfo.data.attributes.onBestPath && highlightBestPath ? "-25" : "-17";
-    let xOffsetCircle = nodeInfo.data.attributes.onBestPath && highlightBestPath ? "-25" : "-17";
+    let width = nodeInfo.data.attributes.onBestPath ? "25" :"20";
+    let height = nodeInfo.data.attributes.onBestPath ? "25" :"20";
+    let r = nodeInfo.data.attributes.onBestPath ? "20" :"15";
 
     let fill = nodeInfo.data.attributes.onBestPath && highlightBestPath ? "green" : 
                       nodeInfo.data.attributes.onWorstPath && highlightWorstPath ? "red" : 
@@ -51,15 +48,15 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
                       nodeType === "Terminal" ? "#4CBB17" : "none";
     
     if(nodeType === 'Root') { 
-      nodeShape = <rect width={width} height={height} x={xOffsetRoot} y="-8" fill={fill} strokeWidth="1px" />
+      nodeShape = <rect width={width} height={height} x="-20" y="-8" fill={fill}  />
     }
 
     else if(nodeType === 'Decision') {
-      nodeShape = <rect width={width} height={height} x="-10" y="-8" fill={fill} strokeWidth="1px" />
+      nodeShape = <rect width={width} height={height} x="-10" y="-8" fill={fill} />
     }
     
     else if(nodeType === 'Chance') {
-      nodeShape = <circle r={r} x="-40" fill={fill} strokeWidth="1px" />
+      nodeShape = <circle r="15" x="-10" fill={fill} />
     }
       
     else if(nodeType === 'Terminal') {
