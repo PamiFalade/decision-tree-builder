@@ -1,7 +1,7 @@
 <template>
     <v-app-bar class="px-3 py-4">
 
-        <SettingsMenu @highlightPath="onHighlightPath" />
+        <SettingsDialog @highlightPath="onHighlightPath" />
 
         <v-btn
             class="mx-2"
@@ -14,7 +14,7 @@
 
         <v-btn 
             class="mx-2 bg-green"
-            rounded="md"
+            rounded="md" 
         >
             Export
             <v-menu activator="parent" open-on-hover>
@@ -42,14 +42,14 @@
 <script>
 import EditableTitle from '../components/EditableTitle.vue';
 import LoadDataDialog from './dialogs/LoadDataDialog.vue';
-import SettingsMenu from './dialogs/SettingsMenu.vue';
+import SettingsDialog from './dialogs/SettingsDialog.vue';
 
 export default {
     name: 'TaskBar',
     components: {
         EditableTitle,
         LoadDataDialog,
-        SettingsMenu,
+        SettingsDialog
     },
     props: {
         initialTreeTitle: String,

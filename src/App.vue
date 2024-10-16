@@ -3,13 +3,17 @@
       <TaskBar 
           :initialTreeTitle="treeTitle" 
           :databaseRecords="databaseRecords"
-          @saveDecisionTree="onSaveDecisionTree"
+          @showDatabaseModal="onShowDatabaseModal" 
+          @toggleShowSettingsModal="onToggleShowSettingsModal"
+          @saveDecisionTree="onSaveDecisionTree" 
           @updateTreeTitle="onUpdateTreeTitle"
           @loadDecisionTree="onLoadDecisionTree"
           @deleteDecisionTree="onDeleteDecisionTree"
           @highlightPath="onSelectHighlightOption"
       />
+      <DeleteTreeModal :decisionTreeName="treeToDelete" :treeID="treeIdToDelete" v-show="showDeleteModal" @hideModal="handleHideModal" @deleteDecisionTree="onDeleteDecisionTree"/>
       <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
+      <SettingsModal v-show="showSettingsModal" @highlightPath="onSelectHighlightOption"/>
   </v-app>
 </template>
 
@@ -19,6 +23,7 @@
   import MainWindow from './views/MainWindow.vue';
   import LoadDataModal from './views/LoadDataModal.vue';
   import SettingsModal from './views/SettingsModal.vue';
+  import DeleteTreeModal from './views/DeleteTreeModal.vue';
 
   import json from "./data/Starting_Input_Data.json";
   import DecisionTreeDTO from './services/DecisionTreeDTO';
@@ -30,6 +35,7 @@
       MainWindow,
       LoadDataModal,
       SettingsModal,
+      DeleteTreeModal
     },
     data() {
       return {
@@ -61,8 +67,33 @@
     },
     methods: {
 
+      onToggleShowSettingsModal(){
+        this.showSettingsModal = !this.showSettingsModal;
+      },
+
+      onShowDeleteTreeModal(tree_id, tree_name){
+        this.showDeleteModal = true;
+        this.treeIdToDelete = tree_id;
+        this.treeToDelete = tree_name;
+      },
+
+      onHideDeleteModal() {
+        this.showDeleteModal = false;
+      },
+
       onUpdateTreeTitle(newTitle) {
         this.treeTitle = newTitle;
+      },
+
+      onDecisionTreeDeleted() {
+        this.treeIdToDelete = -1;
+        this.treeToDelete = "";
+      },
+
+      handleHideModal() {
+        if(this.showDeleteModal) {
+          this.onHideDeleteModal();
+        }
       },
 
       onSelectHighlightOption(selectedOption){

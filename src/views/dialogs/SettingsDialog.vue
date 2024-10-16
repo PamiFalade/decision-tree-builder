@@ -1,49 +1,45 @@
 <template>
-    <v-menu 
-        v-model="showMenu"
-        :close-on-content-click="false"
+    <DialogTemplate
+        dialogTitle="Settings"
+        :includeActionBtn="false"
     >
-        <template v-slot:activator="{props}">
+        <template v-slot:activator>
             <v-btn
                 class="mx-1"
                 icon 
-                variant="text"
-                v-bind="props">
+                variant="text">
                 <v-icon size="30" color="black" icon="mdi-cog"/>
             </v-btn>
         </template>
 
-        <v-card>
+        <template v-slot:dialogBody>
             <v-container>
-                <v-radio-group v-model="highlightOption" label="Path Highlight Options">
+                <v-radio-group label="Path Highlight Options">
                     <v-radio label="None" value="highlight-none" @change="checkSelectedHighlight"></v-radio>
                     <v-radio label="Max" color="green-darken-2" value="highlight-max" @change="checkSelectedHighlight"></v-radio>
                     <v-radio label="Min" color="red-darken-2" value="highlight-min" @change="checkSelectedHighlight"></v-radio>
                 </v-radio-group>
             </v-container>
-        </v-card>
-
-    </v-menu>
-
+        </template>
+    </DialogTemplate>
 </template>
 
 <script>
-import { ref } from 'vue';
+import DialogTemplate from '../../components/DialogTemplate.vue';
 
 export default {
-    name: 'SettingsMenu',
+    name: 'SettingsDialog',
+    components: {
+        DialogTemplate
+    },
     emits: ['highlightPath'],
     setup(props, context) {
-
-        const showMenu = ref(false);
-
-        const highlightOption = ref("highlight-none");
 
         const checkSelectedHighlight = (event) => {
             context.emit('highlightPath', event.target.value);
         }
 
-        return { showMenu, highlightOption, checkSelectedHighlight }
+        return { checkSelectedHighlight }
     }
 }
 
