@@ -7,7 +7,7 @@
     import EditNodeTab from './NodeWindowTabs/EditNodeTab.vue';
 
     // Emit for when adding children nodes from NodeWindow
-    const emit = defineEmits(['add', 'closeNodeWindow', 'updateTreeValues']);
+    const emit = defineEmits(['addChildren', 'closeNodeWindow', 'updateTreeValues']);
 
     const props = defineProps({
         selectedNode: {
@@ -149,7 +149,7 @@ export default {
     },
     data(){
         return {
-            tab: null,
+            tab: "Description",
         }
     },
     methods: {

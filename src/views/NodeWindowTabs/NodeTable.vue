@@ -40,13 +40,14 @@
 </template>
 
 <script>
+import { ref } from 'vue';
+
 export default {
     name: 'NodeTable',
     props: {
         nodes: Array
     },
     setup(props, context) {
-        const parent = ref(false);
 
         const onEnteredInput = (event) => {
             // If the input field is left blank, default the value to 0
@@ -58,7 +59,7 @@ export default {
         };
 
 
-        return { onEnteredInput, parent };
+        return { onEnteredInput };
     }
 }
 
