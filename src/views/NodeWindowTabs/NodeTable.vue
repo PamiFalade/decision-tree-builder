@@ -46,7 +46,7 @@ export default {
         nodes: Array
     },
     setup(props, context) {
-
+        const parent = ref(false);
 
         const onEnteredInput = (event) => {
             // If the input field is left blank, default the value to 0
@@ -58,7 +58,7 @@ export default {
         };
 
 
-        return { onEnteredInput };
+        return { onEnteredInput, parent };
     }
 }
 

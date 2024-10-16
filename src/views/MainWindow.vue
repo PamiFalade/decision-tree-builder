@@ -101,7 +101,7 @@
             }
         },
 
-        beforeMount() {
+        nount() {
             this.setParentNodes();
         },
 

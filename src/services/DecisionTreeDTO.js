@@ -11,11 +11,9 @@ export default {
 
     async saveTree(decisionTree) {
         console.log(decisionTree);
-        await Api().post(`/decision-trees/`, { ...decisionTree })
-            .then(response => {
-                console.log(response);
-            });
-        return;
+        const response = await Api().post(`/decision-trees/`, { ...decisionTree })
+            .catch(error => console.log(error));
+        return response;
     },
 
     async deleteTree(treeID) {

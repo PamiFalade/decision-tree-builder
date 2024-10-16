@@ -23,7 +23,7 @@
                         key="export-pdf"
                         title="PDF"
                         align="center"
-                        @click=""
+                        @click="onPdfReport"
                     >
                     </v-list-item>
                 </v-list>
@@ -49,7 +49,7 @@ export default {
     components: {
         EditableTitle,
         LoadDataDialog,
-        SettingsMenu
+        SettingsMenu,
     },
     props: {
         initialTreeTitle: String,
@@ -71,6 +71,7 @@ export default {
             this.title = value;
         }
     },
+    emits: ['updateTreeTitle', 'showDatabaseModal', 'toggleShowSettingsModal', 'saveDecisionTree', 'updateTreeTitle', 'loadDecisionTree', 'deleteDecisionTree', 'highlightPath', 'generatePdfReport'],
     methods: {
         showDatabaseModal(){
             this.$emit('showDatabaseModal');
@@ -79,10 +80,9 @@ export default {
             this.$emit('toggleShowSettingsModal');
         },
         saveTree(){
-            this.$emit('saveDecisionTree')
+            this.$emit('saveDecisionTree');
         },
         updateTreeTitle(updatedTitle){
-            console.log(updatedTitle);
             this.$emit('updateTreeTitle', updatedTitle);
         },
         onLoadDecisionTree(treeID) {
@@ -93,6 +93,9 @@ export default {
         },
         onHighlightPath(selectedHighlightOption){
             this.$emit('highlightPath', selectedHighlightOption);
+        },
+        onPdfReport(){
+            this.$emit('generatePdfReport');
         }
     }
 }
