@@ -1,6 +1,6 @@
 <template>
     <body>
-        <Tree :decisionTree="decisionTree" :highlightBestPath="highlightBestPath" :highlightWorstPath="highlightWorstPath" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
+        <Tree :decisionTree="decisionTree" :highlightBestPath="highlightBestPath" :highlightMaxiMax="highlightMaxiMax" :highlightWorstPath="highlightWorstPath" :highlightMiniMin="highlightMiniMin" :updateSelectedNode="updateSelectedNode" :updatePopupCoordinates="updatePopupCoordinates" :hideNodePopup="hideNodePopup" />
         <NodePopup v-show="showNodePopup" 
                     @toggleNodeWindow="toggleShowNodeWindow" 
                     @addDecisionNode="addDecisionNode"
@@ -39,8 +39,10 @@
                     yield: Number,
                     probability: Number,
                     expectedValue: Number,
-                    onBestPath: Boolean,
-                    onWorstPath: Boolean,
+                    max: Boolean,
+                    maximax: Boolean,
+                    min: Boolean,
+                    minimin: Boolean,
                     description: String
                 },
                 children: Array
@@ -63,14 +65,32 @@
                 if(value === "highlight-none") {
                     this.highlightBestPath = false;
                     this.highlightWorstPath = false;
+                    this.highlightMaxiMax = false;
+                    this.highlightMiniMin = false;
                 }
                 else if(value === "highlight-max"){
                     this.highlightBestPath = true;
                     this.highlightWorstPath = false;
+                    this.highlightMaxiMax = false;
+                    this.highlightMiniMin = false;
+                }
+                else if(value === "highlight-maxiMax"){
+                    this.highlightBestPath = false;
+                    this.highlightWorstPath = false;
+                    this.highlightMaxiMax = true;
+                    this.highlightMiniMin = false;
                 }
                 else if(value === "highlight-min"){
                     this.highlightBestPath = false;
                     this.highlightWorstPath = true;
+                    this.highlightMaxiMax = false;
+                    this.highlightMiniMin = false;
+                }
+                else if(value === "highlight-miniMin"){
+                    this.highlightBestPath = false;
+                    this.highlightWorstPath = false;
+                    this.highlightMaxiMax = false;
+                    this.highlightMiniMin = true;
                 }
             }
         },
@@ -79,7 +99,9 @@
                 showNodeWindow: false,
                 showNodePopup: false,
                 highlightBestPath: false,
+                highlightMaxiMax: false,
                 highlightWorstPath: false,
+                highlightMiniMin: false,
                 selectedNode: {
                     name: '',
                     id: 0,
@@ -88,8 +110,10 @@
                         yield: 0,
                         probability: 0,
                         expectedValue: 0,
-                        onBestPath: false,
-                        onWorstPath: false,
+                        max: false,
+                        maxiMax: false,
+                        min: false,
+                        miniMin: false,
                         description: ""
                     },
                     children: []
@@ -101,7 +125,7 @@
             }
         },
 
-        nount() {
+        mount() {
             this.setParentNodes();
         },
 
@@ -139,7 +163,9 @@
             onUpdateTreeValues() {
                 this.calculateTreeValues(this.decisionTreeNodes, 0);
                 this.highlightBestDecision(this.decisionTreeNodes, true);
+                this.highlightBestOutcome(this.decisionTreeNodes, true);
                 this.highlightWorstDecision(this.decisionTree, true);
+                this.highlightWorstOutcome(this.decisionTreeNodes, true);
             },
 
             // Traverse through the tree breadth-first and set each node's parent using the node ID
@@ -214,10 +240,10 @@
                 }
             },
 
-            // Set the properties that will indicate which nodes are part of the best path, and which ones are part of the worst path
+            // Set the properties that will indicate which nodes are part of the best path
             highlightBestDecision(currentNode, onBestPath) {
                 // Set the node's onBestPath property to true
-                currentNode.attributes.onBestPath = onBestPath;
+                currentNode.attributes.max = onBestPath;
                 if(currentNode.children.length == 0) {
                     return;
                 }
@@ -243,10 +269,31 @@
                 }
             },
 
+            // Set the properties that will indicate which nodes are part of the most optimal branch
+            highlightBestOutcome(currentNode, onBestOutcome) {
+                // Set the node's onBestOutcome property to true
+                currentNode.attributes.maxiMax = onBestOutcome;
+                if(currentNode.children.length == 0) {
+                    return;
+                }
+                
+                // At every node, you're picking the node with the highest expected value
+                const bestValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
+                    .reduce((best, current) => (best && best > current) ? best : current );
+                currentNode.children.forEach(childNode => {
+                    if(childNode.attributes.expectedValue === bestValue && currentNode.attributes.maxiMax === true) {
+                        this.highlightBestOutcome(childNode, true);
+                    }
+                    else {
+                        this.highlightBestOutcome(childNode, false);
+                    }
+                });
+            },
+
             // Set the properties that will indicate which nodes are part of the worst path, and which ones are part of the worst path
             highlightWorstDecision(currentNode, onWorstPath) {
                 // Set the node's onWorstPath property to true
-                currentNode.attributes.onWorstPath = onWorstPath;
+                currentNode.attributes.min = onWorstPath;
                 if(currentNode.children.length == 0) {
                     return;
                 }
@@ -272,6 +319,27 @@
                 }
             },
 
+            // Set the properties that will indicate which nodes are part of the least optimal branch
+            highlightWorstOutcome(currentNode, onWorstOutcome) {
+                // Set the node's onWorstOutcome property to true
+                currentNode.attributes.miniMin = onWorstOutcome;
+                if(currentNode.children.length == 0) {
+                    return;
+                }
+                
+                // At every node, you're picking the node with the lowest expected value
+                const worstValue = currentNode.children.map(childNode => childNode.attributes.expectedValue)
+                    .reduce((worst, current) => (worst && worst < current) ? worst : current );
+                    currentNode.children.forEach(childNode => {
+                        if(childNode.attributes.expectedValue === worstValue && currentNode.attributes.miniMin === true) {
+                            this.highlightWorstOutcome(childNode, true);
+                        }
+                        else {
+                            this.highlightWorstOutcome(childNode, false);
+                        }
+                    });
+            },
+
             addDecisionNode() {
                 this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
@@ -281,8 +349,10 @@
                         yield: 0,
                         expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? -1 : 0.1,
-                        onBestPath: false,
-                        onWorstPath: false,
+                        max: false,
+                        maxiMax: false,
+                        min: false,
+                        miniMin: false,
                         description: ""
                     },
                     children: []
@@ -299,8 +369,10 @@
                         yield: 0,
                         expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? -1 : 0.1,
-                        onBestPath: false,
-                        onWorstPath: false,
+                        max: false,
+                        maxiMax: false,
+                        min: false,
+                        miniMin: false,
                         description: ""
                     },
                     children: []
@@ -317,8 +389,10 @@
                         yield: 0,
                         expectedValue: 0,
                         probability: this.selectedNode.attributes.type !== "Chance" ? -1 : 0.1,
-                        onBestPath: false,
-                        onWorstPath: false,
+                        max: false,
+                        maxiMax: false,
+                        min: false,
+                        miniMin: false,
                         description: ""
                     },
                     children: []
@@ -354,8 +428,10 @@
                         yield: 0,
                         probability: 0,
                         expectedValue: 0,
-                        onBestPath: false,
-                        onWorstPath: false,
+                        max: false,
+                        maxiMax: false,
+                        min: false,
+                        miniMin: false,
                         description: ""
                     },
                     children: []

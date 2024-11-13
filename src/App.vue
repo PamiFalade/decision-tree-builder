@@ -8,8 +8,10 @@
           @loadDecisionTree="onLoadDecisionTree"
           @deleteDecisionTree="onDeleteDecisionTree"
           @highlightPath="onSelectHighlightOption"
+          @generatePdfReport="onGeneratePdfReport"
       />
       <MainWindow :decisionTreeNodes="decisionTreeNodes" :highlightOption="highlightOption"/>
+      <Snackbar :snackbar="snackbar" @close-snackbar="snackbar=false" text="this is a test"/>
   </v-app>
 </template>
 
@@ -18,8 +20,11 @@
   import TaskBar from './views/TaskBar.vue';
   import MainWindow from './views/MainWindow.vue';
 
-  import json from "./data/Starting_Input_Data.json";
+  import newTree from "./data/Starting_Input_Data.json";
   import DecisionTreeDTO from './services/DecisionTreeDTO';
+  import pdfGenerator from './composables/generatePDF';
+
+  import { ref } from 'vue';
 
   export default {
     name: 'App',
@@ -29,41 +34,53 @@
     },
     data() {
       return {
-        inputData: json,
         currentUser: "pamilerin@intern.mudozangl",
-        treeTitle: "New Decision Tree",
         treeDescription: "Practice decision tree saving",
-        decisionTreeNodes: {
-          "name": "Root Node",
-          "id": 1,
-          "attributes": {
-              "type": "Root",
-              "yield": 0,
-              "expectedValue": 0,
-              "probability": 1.0,
-              "onBestPath": false,
-              "onWorstPath": false,
-              "description": "New decision tree"
-          },
-          "children": []
-        },
-        databaseRecords: [],
-        showSettingsModal: false,
-        showDeleteModal: false,
-        highlightOption: "none"
+        databaseRecords: []
       }
     },
-    methods: {
+    setup() {
+      const treeTitle = ref("New Decision Tree");
+      const onUpdateTreeTitle = (newTitle) => {
+        treeTitle.value = newTitle;
+      };
 
-      onUpdateTreeTitle(newTitle) {
-        this.treeTitle = newTitle;
-      },
+      const decisionTreeNodes = ref({
+        "name": "Root Node",
+        "id": 1,
+        "attributes": {
+            "type": "Root",
+            "yield": 0,
+            "expectedValue": 0,
+            "probability": 1.0,
+            "max": false,
+            "maxiMax": false,
+            "min": false,
+            "miniMin": false,
+            "description": "New decision tree"
+        },
+        "children": []
+      });
       
-      onSelectHighlightOption(selectedOption){
+      const highlightOption = ref("none");
+      const onSelectHighlightOption = (selectedOption) => {
         console.log(selectedOption);
-        this.highlightOption = selectedOption;
-      },
+        highlightOption.value = selectedOption;
+      };
+      const snackbar = ref(false);
+      
+      
+      // Generating PDFs
+      const { generatePDF } = pdfGenerator(treeTitle.value, decisionTreeNodes.value);
+      const onGeneratePdfReport = () => {
+        generatePDF();
+        console.log("Generated PDF");
+      };
 
+      return { treeTitle, onUpdateTreeTitle, decisionTreeNodes, highlightOption, onSelectHighlightOption, onGeneratePdfReport }
+    },
+    
+    methods: {
       async getAllDecisionTrees() {
         await DecisionTreeDTO.getAllTrees()
                     .then(response => {
@@ -89,6 +106,7 @@
           decisionTreeNodes: this.decisionTreeNodes
         }
         const savedTree = await DecisionTreeDTO.saveTree(newDecisionTree);
+
         await this.getAllDecisionTrees();
       },
 

@@ -47,6 +47,7 @@ export default {
     props: {
         nodes: Array
     },
+    emits: ['nodeValueUpdated'],
     setup(props, context) {
 
         const onEnteredInput = (event) => {

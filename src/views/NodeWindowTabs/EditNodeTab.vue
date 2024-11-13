@@ -40,7 +40,6 @@ export default {
         const nodeData = [node_yield, node_probability];
 
         watch(props, () => {
-            console.log(props.probability);
             node_yield.value = props.yield;
             node_probability.value = props.probability;
             node_time.value = 0;

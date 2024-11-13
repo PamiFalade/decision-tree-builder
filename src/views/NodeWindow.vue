@@ -88,6 +88,10 @@
         <v-card-title>{{ tab }}</v-card-title>
             <v-tabs-window v-model="tab">
                 <v-container class="my-5 px-5 pt-2">
+                    <!-- Add Child Nodes tab -->
+                    <v-tabs-window-item class="pa-4" value="Add Child Nodes">
+                        <AddNodesTab @childrenAdded="updateChildNodes"/>
+                    </v-tabs-window-item>
 
                     <!-- Edit Node Data tab -->
                     <v-tabs-window-item value="Edit Node">
@@ -97,11 +101,6 @@
                             :probability="selectedNode.attributes.probability"
                             @nodeDataUpdated="updateNodeData"
                         />
-                    </v-tabs-window-item>
-
-                    <!-- Add Child Nodes tab -->
-                    <v-tabs-window-item class="pa-4" value="Add Child Nodes">
-                        <AddNodesTab @childrenAdded="updateChildNodes"/>
                     </v-tabs-window-item>
                     
                     <!-- Child Nodes Table tab -->
@@ -123,11 +122,11 @@
                 color="black"
                 fixed-tabs
             >
-                <v-tab value="Edit Node">
-                    <v-icon icon="mdi-pencil" />
-                </v-tab>
                 <v-tab value="Add Child Nodes">
                     <v-icon icon="mdi-plus-circle"/>
+                </v-tab>
+                <v-tab value="Edit Node">
+                    <v-icon icon="mdi-pencil" />
                 </v-tab>
                 <v-tab value="View Child Nodes">
                     <v-icon icon="mdi-table-large"/>
@@ -149,7 +148,7 @@ export default {
     },
     data(){
         return {
-            tab: "Description",
+            tab: "",
         }
     },
     methods: {

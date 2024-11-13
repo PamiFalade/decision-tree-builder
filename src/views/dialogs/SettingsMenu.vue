@@ -17,8 +17,10 @@
             <v-container>
                 <v-radio-group v-model="highlightOption" label="Path Highlight Options">
                     <v-radio label="None" value="highlight-none" @change="checkSelectedHighlight"></v-radio>
-                    <v-radio label="Max" color="green-darken-2" value="highlight-max" @change="checkSelectedHighlight"></v-radio>
-                    <v-radio label="Min" color="red-darken-2" value="highlight-min" @change="checkSelectedHighlight"></v-radio>
+                    <v-radio label="Max" color="green-darken-1" value="highlight-max" @change="checkSelectedHighlight"></v-radio>
+                    <v-radio label="Maxi-Max" color="green-darken-4" value="highlight-maxiMax" @change="checkSelectedHighlight"></v-radio>
+                    <v-radio label="Min" color="red-darken-1" value="highlight-min" @change="checkSelectedHighlight"></v-radio>
+                    <v-radio label="Mini-Min" color="red-darken-4" value="highlight-miniMin" @change="checkSelectedHighlight"></v-radio>
                 </v-radio-group>
             </v-container>
         </v-card>

@@ -14,7 +14,7 @@
 
         <v-btn 
             class="mx-2 bg-green"
-            rounded="md" 
+            rounded="md"
         >
             Export
             <v-menu activator="parent" open-on-hover>

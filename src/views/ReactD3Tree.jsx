@@ -8,7 +8,7 @@ import './ReactD3TreeStyles.css';
 // and you want the state, and notifications of any changes, to be "lifted up".
 // However, because of the circumstances (this must be a Vue project; it is not allowed to be a React project. And there is no 
 // Vue.js 3 package for d3-tree), I was forced towards having this component be a child component.
-const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, updateSelectedNode, hideNodePopup, updatePopupCoordinates }) => {
+const DecisionTree = ({ decisionTree, highlightBestPath, highlightMaxiMax, highlightWorstPath, highlightMiniMin, updateSelectedNode, hideNodePopup, updatePopupCoordinates }) => {
 
 
   // State variable for the tree data
@@ -36,12 +36,14 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
     let yCoord = nodeInfo.x / 400;
 
     // Styling based on if the nodes are on the most profitable branch
-    let width = nodeInfo.data.attributes.onBestPath ? "25" :"20";
-    let height = nodeInfo.data.attributes.onBestPath ? "25" :"20";
-    let r = nodeInfo.data.attributes.onBestPath ? "20" :"15";
+    let width = nodeInfo.data.attributes.max ? "25" :"20";
+    let height = nodeInfo.data.attributes.max ? "25" :"20";
+    let r = nodeInfo.data.attributes.max ? "20" :"15";
+    
+    console.log(nodeInfo.data.attributes.miniMin, highlightMiniMin);
 
-    let fill = nodeInfo.data.attributes.onBestPath && highlightBestPath ? "green" : 
-                      nodeInfo.data.attributes.onWorstPath && highlightWorstPath ? "red" : 
+    let fill = (nodeInfo.data.attributes.max && highlightBestPath) || (nodeInfo.data.attributes.maxiMax && highlightMaxiMax) ? "green" : 
+                      (nodeInfo.data.attributes.min && highlightWorstPath) || (nodeInfo.data.attributes.miniMin && highlightMiniMin) ? "red" : 
                       nodeType === "Root" ? "maroon" : 
                       nodeType === "Decision" ? "red" : 
                       nodeType === "Chance" ? "yellow" : 
@@ -131,11 +133,11 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightWorstPath, upd
   const getDynamicPathClass = ({ source, target }, orientation) => {
 
     // If the node is on the best path, style the link between the source and target nodes
-    if (target.data.attributes.onBestPath === true && highlightBestPath) {
+    if (target.data.attributes.max === true && highlightBestPath || target.data.attributes.maxiMax === true && highlightMaxiMax) {
       return 'link_best_path';
     }
 
-    else if(target.data.attributes.onWorstPath === true && highlightWorstPath)
+    else if(target.data.attributes.min === true && highlightWorstPath)
     {
       return 'link_worst_path';
     }

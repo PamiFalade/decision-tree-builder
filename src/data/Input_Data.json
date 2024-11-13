@@ -12,7 +12,8 @@
             "type": "Root",
             "yield": 0,
             "probability": 1.0,
-            "onBestPath": true,
+            "max": true,
+            "maxiMax": false,
             "expectedValue": 10
         },
         "children": [
@@ -23,7 +24,8 @@
                     "type": "Decision",
                     "yield": 0,
                     "probability": 0.9,
-                    "onBestPath": true,
+                    "max": true,
+                    "maxiMax": false,
                     "expectedValue": 11
                 },
                 "parentID": null,
@@ -35,7 +37,8 @@
                             "type": "Chance",
                             "yield": 0,
                             "probability": 0.8,
-                            "onBestPath": false,
+                            "max": false,
+                            "maxiMax": false,
                             "expectedValue": 12
                         },
                         "children": [
@@ -46,7 +49,8 @@
                                     "type": "Terminal",
                                     "yield": 0,
                                     "probability": 0.7,
-                                    "onBestPath": false,
+                                    "max": false,
+                                    "maxiMax": false,
                                     "expectedValue": 13
                                 },
                                 "parentID": null,
@@ -59,7 +63,8 @@
                                     "type": "Terminal",
                                     "yield": 0,
                                     "probability": 0.65,
-                                    "onBestPath": false,
+                                    "max": false,
+                                    "maxiMax": false,
                                     "expectedValue": 13.5
                                 },
                                 "parentID": null,
@@ -74,7 +79,8 @@
                             "type": "Chance",
                             "yield": 0,
                             "probability": 0.6,
-                            "onBestPath": true,
+                            "max": true,
+                            "maxiMax": false,
                             "expectedValue": 14
                         },
                         "parentID": null,
@@ -86,7 +92,8 @@
                                     "type": "Terminal",
                                     "yield": 0,
                                     "probability": 0.5,
-                                    "onBestPath": true,
+                                    "max": true,
+                                    "maxiMax": false,
                                     "expectedValue": 15
                                 },
                                 "parentID": null,
@@ -103,7 +110,8 @@
                     "type": "Chance",
                     "yield": 0,
                     "probability": 0.9,
-                    "onBestPath": false,
+                    "max": false,
+                    "maxiMax": false,
                     "expectedValue": 11
                 },
                 "parentID": null,
