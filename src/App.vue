@@ -71,9 +71,9 @@
       
       
       // Generating PDFs
-      const { generatePDF } = pdfGenerator(treeTitle.value, decisionTreeNodes.value);
+      const { generatePDF } = pdfGenerator(decisionTreeNodes.value);
       const onGeneratePdfReport = () => {
-        generatePDF();
+        generatePDF(treeTitle.value);
         console.log("Generated PDF");
       };
 

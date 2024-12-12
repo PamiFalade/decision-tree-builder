@@ -40,8 +40,6 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightMaxiMax, highl
     let height = nodeInfo.data.attributes.max ? "25" :"20";
     let r = nodeInfo.data.attributes.max ? "20" :"15";
     
-    console.log(nodeInfo.data.attributes.miniMin, highlightMiniMin);
-
     let fill = (nodeInfo.data.attributes.max && highlightBestPath) || (nodeInfo.data.attributes.maxiMax && highlightMaxiMax) ? "green" : 
                       (nodeInfo.data.attributes.min && highlightWorstPath) || (nodeInfo.data.attributes.miniMin && highlightMiniMin) ? "red" : 
                       nodeType === "Root" ? "maroon" : 
@@ -137,7 +135,7 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightMaxiMax, highl
       return 'link_best_path';
     }
 
-    else if(target.data.attributes.min === true && highlightWorstPath)
+    else if(target.data.attributes.min === true && highlightWorstPath || target.data.attributes.miniMin === true && highlightMiniMin)
     {
       return 'link_worst_path';
     }

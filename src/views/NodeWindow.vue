@@ -28,7 +28,8 @@
     };
     
     const updateNodeName = (updatedNodeName) => {
-        this.selectedNode.name = updatedNodeName;
+        props.selectedNode.name = updatedNodeName;
+        console.log(props.selectedNode);
     };
     
     const updateNodeDescription = (updatedText) => {
