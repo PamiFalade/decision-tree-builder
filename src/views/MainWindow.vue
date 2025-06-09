@@ -345,7 +345,6 @@
                 let automaticProbabilities = [];
                 let remainingAutoProbability = 1;
                 selectedNode.children.forEach(node => {
-                    console.log(node.attributes.editedProbability);
                     if(node.attributes.editedProbability == false) {
                         automaticProbabilities.push(node);
                     }
@@ -378,6 +377,7 @@
                     children: []
                 });
                 this.onUpdateTreeValues();
+                this.updateChildProbabilities(this.selectedNode);
             },
             
             addChanceNode() {
@@ -399,6 +399,7 @@
                     children: []
                 });
                 this.onUpdateTreeValues();
+                this.updateChildProbabilities(this.selectedNode);
             },
             
             addTerminalNode() {
@@ -420,6 +421,7 @@
                     children: []
                 });
                 this.onUpdateTreeValues();
+                this.updateChildProbabilities(this.selectedNode);
             },
 
             // Method for adding children nodes from the NodeWindow
@@ -437,6 +439,7 @@
                     this.addTerminalNode();
                 }
                 this.onUpdateTreeValues();
+                this.updateChildProbabilities(this.selectedNode);
             },
 
             deleteNode() {

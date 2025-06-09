@@ -82,8 +82,8 @@ const DecisionTree = ({ decisionTree, highlightBestPath, highlightMaxiMax, highl
       )}
       {nodeDatum.attributes?.type !== "Root" && (
         nodeDatum.attributes?.probability >= 0 && (
-          <text fontSize="12" fill="lightblue" x="-50" dy="-10" strokeWidth="0.5">
-            {nodeDatum.attributes.probability}
+          <text fontSize="12" fill="lightblue" stroke={nodeDatum.attributes.editedProbability ? "black" : "#646D74"} x="-50" dy="-10" strokeWidth="0.5">
+            {nodeDatum.attributes.probability.toFixed(5)}
           </text>
         )
       )}

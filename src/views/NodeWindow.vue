@@ -43,7 +43,7 @@
             props.selectedNode.attributes.editedProbability = true;
         }
         props.selectedNode.attributes.probability = updatedProbability;
-        // console.log(props.selectedNode.attributes); // TODO: Delete this
+
         updateTreeValues();
     }
     
@@ -96,7 +96,7 @@
                 <v-container class="my-5 px-5 pt-2">
                     <!-- Add Child Nodes tab -->
                     <v-tabs-window-item class="pa-4" value="Add Child Nodes">
-                        <AddNodesTab @childrenAdded="updateChildNodes"/>
+                        <AddNodesTab :isTerminalNode="selectedNode.attributes.type=='Terminal'" @childrenAdded="updateChildNodes"/>
                     </v-tabs-window-item>
 
                     <!-- Edit Node Data tab -->

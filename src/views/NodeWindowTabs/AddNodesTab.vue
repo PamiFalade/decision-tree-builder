@@ -2,7 +2,8 @@
     <v-card 
         id="add-nodes-section"
         class="pa-4"
-        variant="tonal">
+        variant="tonal"
+        v-if="!isTerminalNode">
         <v-card-item>
             <v-row class="black-lighten-1" style="height: 80px;">
                 <img class="add-node-img" src="../../assets/red_square.svg" />
@@ -30,7 +31,9 @@
             </v-btn>
         </v-card-item>
     </v-card>
-
+    <h2 v-else>
+        Cannot add children to a terminal node
+    </h2>
 </template>
 
 <script>
@@ -38,6 +41,9 @@ import { ref } from 'vue';
 
 export default {
     name: 'AddNodesTab',
+    props: {
+        isTerminalNode: Boolean
+    },
     setup(props, context) {
         // Number of each types of node that will be added to the selectedNode's children
         const addDecisions = ref(null);
