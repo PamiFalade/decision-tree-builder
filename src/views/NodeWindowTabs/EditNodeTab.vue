@@ -35,7 +35,7 @@ export default {
     emits: ['nodeDataUpdated'],
     setup(props, context) {
         const node_yield = ref(null);
-        const node_probability = ref(null);
+        const node_probability = ref(props.probability);
         const node_time = ref(0);
         const nodeData = [node_yield, node_probability];
 

@@ -16,6 +16,7 @@
                 type: String,
                 yield: Number,
                 probability: Number,
+                editedProbability: Boolean,
                 expectedValue: Number,
                 description: String
             },
@@ -38,7 +39,11 @@
 
     const updateNodeData = (updatedYield, updatedProbability) => {
         props.selectedNode.attributes.yield = updatedYield;
+        if(props.selectedNode.attributes.probability != updatedProbability) {
+            props.selectedNode.attributes.editedProbability = true;
+        }
         props.selectedNode.attributes.probability = updatedProbability;
+        // console.log(props.selectedNode.attributes); // TODO: Delete this
         updateTreeValues();
     }
     

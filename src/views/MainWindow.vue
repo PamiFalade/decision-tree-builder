@@ -109,6 +109,7 @@
                         type: "",
                         yield: 0,
                         probability: 0,
+                        editedProbability: false,
                         expectedValue: 0,
                         max: false,
                         maxiMax: false,
@@ -132,7 +133,6 @@
         methods: {
             toggleShowNodeWindow() {
                 this.showNodeWindow = !this.showNodeWindow;
-                console.log(this.selectedNode);
             },
 
             hideNodeWindow() {
@@ -154,14 +154,13 @@
 
             updateSelectedNode(node) {
                 this.selectedNode = this.bfs(node.data.id);
-                console.log(node);
-                
                 this.selectedNodeParent = node.parent !== null ? this.bfs(node.parent.data.id) : null;    // Find the node's parent as well, so that we can delete the selectedNode if needed (IFF it's not the root node)
                 this.displayNodePopup();
             },
 
             onUpdateTreeValues() {
                 this.calculateTreeValues(this.decisionTreeNodes, 0);
+                this.updateChildProbabilities(this.selectedNodeParent);
                 this.highlightBestDecision(this.decisionTreeNodes, true);
                 this.highlightBestOutcome(this.decisionTreeNodes, true);
                 this.highlightWorstDecision(this.decisionTree, true);
@@ -188,7 +187,7 @@
                 }
 
             },
-
+            
             // Used to find nodes by traversing through the tree breadth-first
             bfs(idToFind){
                 if(idToFind === this.decisionTree.id){
@@ -340,6 +339,26 @@
                     });
             },
 
+
+            // Automatically update probabilities of children nodes
+            updateChildProbabilities(selectedNode) {
+                let automaticProbabilities = [];
+                let remainingAutoProbability = 1;
+                selectedNode.children.forEach(node => {
+                    console.log(node.attributes.editedProbability);
+                    if(node.attributes.editedProbability == false) {
+                        automaticProbabilities.push(node);
+                    }
+                    else {
+                        remainingAutoProbability -= node.attributes.probability;
+                    }
+                });
+
+                automaticProbabilities.forEach(node => {
+                    node.attributes.probability = remainingAutoProbability / automaticProbabilities.length;
+                });
+            },
+            
             addDecisionNode() {
                 this.selectedNode.children.push({
                     name: "New Decision " + parseInt(this.selectedNode.children.length) + 3,
@@ -348,7 +367,8 @@
                         type: "Decision",
                         yield: 0,
                         expectedValue: 0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? -1 : 0.1,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? -1 : null,
+                        editedProbability: false,
                         max: false,
                         maxiMax: false,
                         min: false,
@@ -368,7 +388,8 @@
                         type: "Chance",
                         yield: 0,
                         expectedValue: 0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? -1 : 0.1,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? -1 : null,
+                        editedProbability: false,
                         max: false,
                         maxiMax: false,
                         min: false,
@@ -388,7 +409,8 @@
                         type: "Terminal",
                         yield: 0,
                         expectedValue: 0,
-                        probability: this.selectedNode.attributes.type !== "Chance" ? -1 : 0.1,
+                        probability: this.selectedNode.attributes.type !== "Chance" ? -1 : null,
+                        editedProbability: false,
                         max: false,
                         maxiMax: false,
                         min: false,
@@ -427,6 +449,7 @@
                         type: "",
                         yield: 0,
                         probability: 0,
+                        editedProbability: false,
                         expectedValue: 0,
                         max: false,
                         maxiMax: false,
